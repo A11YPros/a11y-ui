@@ -100,7 +100,6 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         disabled={isDisabled}
         onClick={onClick}
         onKeyDown={handleKeyDown}
-        aria-disabled={isDisabled}
         {...ariaProps}
       >
         {loading && (

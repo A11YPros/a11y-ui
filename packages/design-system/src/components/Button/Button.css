@@ -110,7 +110,7 @@
 .btn--secondary {
   background-color: var(--color-neutral-100, #f5f5f5);
   color: var(--color-secondary-text-inverse, #525252);
-  border-color: var(--color-border-default, #bbbbbb);
+  border-color: var(--color-border-default, #767676);
 }
 
 .btn--secondary:hover:not(:disabled) {
