@@ -38,3 +38,7 @@ Thumbs.db
 
 # Local Netlify folder
 .netlify
+
+# Agents
+.claude
+.github
