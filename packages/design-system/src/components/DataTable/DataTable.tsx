@@ -264,9 +264,7 @@ export function DataTable<T extends Record<string, any>>({
                   }
                 }}
                 className={`data-table-row ${isSelected ? 'data-table-row--selected' : ''} ${isFocused ? 'data-table-row--focused' : ''}`}
-                tabIndex={0}
                 aria-selected={selectable ? isSelected : undefined}
-                onKeyDown={(e) => handleKeyDown(e, rowId, index)}
                 onClick={() => {
                   if (selectable) {
                     handleSelectRow(rowId)
