@@ -28,9 +28,6 @@ export default function ComponentsPage() {
             <Link href="/components/table">Data Table</Link>
           </li>
           <li>
-            <Link href="/components/toast">Toast</Link>
-          </li>
-          <li>
             <Link href="/components/tabs">Tabs</Link>
           </li>
         </ul>

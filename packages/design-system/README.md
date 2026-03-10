@@ -86,8 +86,6 @@ function App() {
 - **Modal** - Accessible modal dialog with focus trap
 - **Tabs** - Keyboard-navigable tab component
 - **DataTable** - Accessible data table with sorting
-- **Toast** - Accessible toast notification system
-- **ToastProvider** - Context provider for toast notifications
 
 ### Hooks
 
@@ -285,37 +283,6 @@ function App() {
         <Button onClick={() => setIsOpen(false)}>Confirm</Button>
       </Modal>
     </>
-  );
-}
-```
-
-### Toast Notifications
-
-```tsx
-import { ToastProvider, useToast, Button } from '@a11ypros/a11y-ui-components';
-
-function App() {
-  return (
-    <ToastProvider>
-      <MyComponent />
-    </ToastProvider>
-  );
-}
-
-function MyComponent() {
-  const { addToast } = useToast();
-
-  return (
-    <Button
-      onClick={() =>
-        addToast({
-          message: 'Action completed successfully!',
-          type: 'success',
-        })
-      }
-    >
-      Show Toast
-    </Button>
   );
 }
 ```
