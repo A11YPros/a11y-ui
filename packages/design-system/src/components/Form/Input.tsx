@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import { generateId, combineAriaDescribedBy } from '../../utils/aria'
+import { combineAriaDescribedBy } from '../../utils/aria'
 import './Input.css'
 
 export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {

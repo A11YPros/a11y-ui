@@ -9,16 +9,21 @@ export interface CheckboxProps extends Omit<React.InputHTMLAttributes<HTMLInputE
    * Label for the checkbox
    */
   label?: string
-  
+
   /**
    * Error message to display
    */
   error?: string
-  
+
   /**
    * Helper text to display
    */
   helperText?: string
+
+  /**
+   * Indeterminate state for the checkbox
+   */
+  indeterminate?: boolean
 }
 
 /**
@@ -48,6 +53,7 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
       helperText,
       className = '',
       'aria-describedby': ariaDescribedBy,
+      indeterminate,
       ...props
     },
     ref
@@ -56,6 +62,12 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
     const finalId = id || `checkbox-${checkboxId}`
     const errorId = error ? `${finalId}-error` : undefined
     const helperId = helperText ? `${finalId}-helper` : undefined
+
+    React.useEffect(() => {
+      if (ref && 'current' in ref && ref.current) {
+        ref.current.indeterminate = indeterminate ?? false
+      }
+    }, [indeterminate, ref])
 
     const describedBy = combineAriaDescribedBy(
       ariaDescribedBy,

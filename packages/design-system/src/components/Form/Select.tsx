@@ -2,7 +2,6 @@
 
 import React from 'react'
 import { combineAriaDescribedBy } from '../../utils/aria'
-import { createArrowKeyHandler, isActivationKey } from '../../utils/keyboard'
 import './Select.css'
 
 export interface SelectOption {
@@ -84,17 +83,6 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
       helperId
     )
 
-    const handleKeyDown = React.useCallback(
-      (event: React.KeyboardEvent<HTMLSelectElement>) => {
-        // Arrow keys are handled natively by select
-        // But we can add custom handling if needed
-        if (props.onKeyDown) {
-          props.onKeyDown(event)
-        }
-      },
-      [props.onKeyDown]
-    )
-
     const classes = [
       'form-select',
       error && 'form-select--error',
@@ -122,7 +110,6 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
           className={classes}
           aria-invalid={error ? true : undefined}
           aria-describedby={describedBy}
-          onKeyDown={handleKeyDown}
           required={props.required ? true : undefined}
           {...props}
         >
