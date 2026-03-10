@@ -1,9 +1,9 @@
 'use client'
 
-import React, { useState, useRef, useCallback } from 'react'
+import React, { useEffect, useRef, useCallback } from 'react'
 import { useAriaLive } from '../../hooks/useAriaLive'
-import { createArrowKeyHandler, isNavigationKey } from '../../utils/keyboard'
 import { Checkbox } from '../Form/Checkbox'
+import { TableRow } from './TableRow'
 import './DataTable.css'
 
 export interface DataTableColumn<T> {
@@ -74,9 +74,8 @@ export interface DataTableProps<T> {
  * 
  * WCAG Compliance:
  * - 1.3.1 Info and Relationships: Semantic table structure
- * - 2.1.1 Keyboard: Arrow keys, Home/End navigation
  * - 4.1.2 Name, Role, Value: Proper ARIA attributes
- * - 4.1.3 Status Messages: Sort announcements
+ * - 4.1.3 Status Messages: Sort and Select announcements
  * 
  * @example
  * ```tsx
@@ -100,15 +99,18 @@ export function DataTable<T extends Record<string, any>>({
   caption,
   className = '',
 }: DataTableProps<T>) {
-  const [focusedRow, setFocusedRow] = useState<string | null>(null)
-  const tableRef = useRef<HTMLTableElement>(null)
-  const rowRefs = useRef<Map<string, HTMLTableRowElement>>(new Map())
+  const toggleAllInputRef = useRef<HTMLInputElement>(null);
 
   // Announce sort changes
   const sortAnnouncement = sortConfig
     ? `Sorted by ${columns.find((c) => c.key === sortConfig.column)?.header || sortConfig.column}, ${sortConfig.direction === 'asc' ? 'ascending' : 'descending'}`
     : undefined
-  useAriaLive(sortAnnouncement, 'polite')
+  useAriaLive(sortAnnouncement, 'polite');
+
+  const selectedCountAnnouncement = selectable
+    ? `${selectedRows.length} of ${data.length} rows selected`
+    : undefined
+  useAriaLive(selectedCountAnnouncement, 'polite');
 
   const handleSelectAll = useCallback(() => {
     if (!onSelectionChange) return
@@ -119,7 +121,8 @@ export function DataTable<T extends Record<string, any>>({
     } else {
       onSelectionChange(data.map(getRowId))
     }
-  }, [data, selectedRows, onSelectionChange, getRowId])
+  }, [data, selectedRows, onSelectionChange]);
+
 
   const handleSelectRow = useCallback(
     (rowId: string) => {
@@ -150,48 +153,18 @@ export function DataTable<T extends Record<string, any>>({
     [onSortChange, sortConfig, columns]
   )
 
-  const handleKeyDown = useCallback(
-    (event: React.KeyboardEvent<HTMLTableRowElement>, rowId: string, index: number) => {
-      const row = rowRefs.current.get(rowId)
-      if (!row) return
+  const allSelected = data.length > 0 && selectedRows.length === data.length;
+  const someSelected = selectedRows.length > 0 && selectedRows.length < data.length;
 
-      if (isNavigationKey(event.key)) {
-        event.preventDefault()
-
-        let newIndex = index
-        switch (event.key) {
-          case 'ArrowDown':
-            newIndex = Math.min(index + 1, data.length - 1)
-            break
-          case 'ArrowUp':
-            newIndex = Math.max(index - 1, 0)
-            break
-          case 'Home':
-            newIndex = 0
-            break
-          case 'End':
-            newIndex = data.length - 1
-            break
-        }
-
-        const newRowId = getRowId(data[newIndex])
-        setFocusedRow(newRowId)
-        rowRefs.current.get(newRowId)?.focus()
-      } else if (event.key === ' ' && selectable) {
-        event.preventDefault()
-        handleSelectRow(rowId)
-      }
-    },
-    [data, selectable, handleSelectRow, getRowId]
-  )
-
-  const allSelected = data.length > 0 && selectedRows.length === data.length
-  const someSelected = selectedRows.length > 0 && selectedRows.length < data.length
+    useEffect(() => {
+	    if (toggleAllInputRef.current) {
+	      toggleAllInputRef.current.indeterminate = someSelected;
+	    }
+  	}, [someSelected]);
 
   return (
     <div className={['data-table-wrapper', className].filter(Boolean).join(' ')}>
       <table
-        ref={tableRef}
         className="data-table"
         aria-label={caption}
       >
@@ -201,10 +174,12 @@ export function DataTable<T extends Record<string, any>>({
             {selectable && (
               <th scope="col" className="data-table-header data-table-header--checkbox">
                 <Checkbox
+                  ref={toggleAllInputRef}
                   checked={allSelected}
                   aria-label="Select all rows"
                   onChange={handleSelectAll}
                   aria-checked={allSelected ? 'true' : someSelected ? 'mixed' : 'false'}
+                  className={someSelected ? 'indeterminate' : ''}
                 />
               </th>
             )}
@@ -251,42 +226,18 @@ export function DataTable<T extends Record<string, any>>({
           {data.map((row, index) => {
             const rowId = getRowId(row)
             const isSelected = selectedRows.includes(rowId)
-            const isFocused = focusedRow === rowId
 
             return (
-              <tr
+              <TableRow
                 key={rowId}
-                ref={(el) => {
-                  if (el) {
-                    rowRefs.current.set(rowId, el)
-                  } else {
-                    rowRefs.current.delete(rowId)
-                  }
-                }}
-                className={`data-table-row ${isSelected ? 'data-table-row--selected' : ''} ${isFocused ? 'data-table-row--focused' : ''}`}
-                aria-selected={selectable ? isSelected : undefined}
-                onClick={() => {
-                  if (selectable) {
-                    handleSelectRow(rowId)
-                  }
-                }}
-              >
-                {selectable && (
-                  <td className="data-table-cell data-table-cell--checkbox">
-                    <Checkbox
-                      checked={isSelected}
-                      aria-label={`Select row ${index + 1}`}
-                      onChange={() => handleSelectRow(rowId)}
-                      onClick={(e) => e.stopPropagation()}
-                    />
-                  </td>
-                )}
-                {columns.map((column) => (
-                  <td key={column.key} className="data-table-cell">
-                    {column.render ? column.render(row, index) : row[column.key]}
-                  </td>
-                ))}
-              </tr>
+                row={row}
+                rowId={rowId}
+                index={index}
+                columns={columns}
+                selectable={selectable}
+                isSelected={isSelected}
+                onSelectRow={handleSelectRow}
+              />
             )
           })}
         </tbody>

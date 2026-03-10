@@ -17,6 +17,38 @@
   cursor: pointer;
   accent-color: var(--color-primary-500, #0ea5e9);
   flex-shrink: 0;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border: 2px solid var(--color-border-default, #767676);
+  position: relative;
+}
+
+.form-checkbox:is(:checked, :indeterminate) {
+  background-color: var(--color-primary-500, #0ea5e9);
+  border-color: var(--color-primary-500, #0ea5e9);
+}
+
+.form-checkbox:checked::after {
+	content: '';
+	position: absolute;
+	top: 0px;
+	left: 5px;
+	width: 6px;
+	height: 12px;
+	border: solid white;
+	border-width: 0 2px 2px 0;
+	transform: rotate(45deg);
+}
+
+.form-checkbox:is(:indeterminate):after {
+	content: '';
+	position: absolute;
+	top: 6px;
+	left: 2px;
+	width: 12px;
+	height: 3px;
+  background: white;
 }
 
 .form-checkbox:focus-visible {

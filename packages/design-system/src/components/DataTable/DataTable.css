@@ -68,6 +68,7 @@
 .data-table-row {
   border-bottom: 1px solid var(--color-border-default, #bbbbbb);
   transition: background-color var(--motion-duration-normal, 200ms) var(--motion-easing-ease-out, cubic-bezier(0, 0, 0.2, 1));
+  cursor: pointer;
 }
 
 /* Respect reduced motion */
@@ -86,15 +87,6 @@
 }
 
 .data-table-row--focused {
-  outline: 2px solid var(--color-border-focus, #0ea5e9);
-  outline-offset: -2px;
-}
-
-.data-table-row:focus {
-  outline: none;
-}
-
-.data-table-row:focus-visible {
   outline: 2px solid var(--color-border-focus, #0ea5e9);
   outline-offset: -2px;
 }
