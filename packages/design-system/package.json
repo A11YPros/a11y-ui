@@ -1,6 +1,6 @@
 {
   "name": "@a11ypros/a11y-ui-components",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "An accessibility-first React UI component library built with WCAG 2.1/2.2 compliance",
   "keywords": [
     "react",
@@ -37,9 +37,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/ryan0122/a11ypros-components.git",
+    "url": "https://github.com/A11YPros/a11y-ui.git",
     "directory": "packages/design-system"
   },
+  "bugs": {
+    "url": "https://github.com/A11YPros/a11y-ui/issues"
+  },
+  "homepage": "https://github.com/A11YPros/a11y-ui/tree/main/packages/design-system#readme",
   "scripts": {
     "build": "tsc && node scripts/copy-css.js",
     "prepublishOnly": "npm run build",

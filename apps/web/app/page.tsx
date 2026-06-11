@@ -8,9 +8,6 @@ export default function Home() {
           <li>
             <Link href="/components">Components</Link>
           </li>
-          <li>
-            <Link href="/audit">AI Audit Assistant</Link>
-          </li>
         </ul>
       </nav>
       <h1>Accessible Design System</h1>
