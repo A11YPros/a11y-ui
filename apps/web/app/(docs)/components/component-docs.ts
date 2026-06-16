@@ -20,8 +20,50 @@ export const componentDocs: ComponentDocMeta[] = [
   },
   {
     slug: 'form',
-    title: 'Form',
-    summary: 'Input, select, checkbox, radio, and fieldset controls.',
+    title: 'Form Overview',
+    summary: 'Overview of all form building blocks.',
+    storybookPath: '/storybook-static/index.html?path=/story/components-form-input--default',
+  },
+  {
+    slug: 'input',
+    title: 'Input',
+    summary: 'Single-line text and email fields.',
+    storybookPath: '/storybook-static/index.html?path=/story/components-form-input--default',
+  },
+  {
+    slug: 'textarea',
+    title: 'Textarea',
+    summary: 'Multi-line text input with count and helper text.',
+    storybookPath: '/storybook-static/index.html?path=/story/components-form-textarea--default',
+  },
+  {
+    slug: 'select',
+    title: 'Select',
+    summary: 'Single-select lists with placeholders and option states.',
+    storybookPath: '/storybook-static/index.html?path=/story/components-form-select--default',
+  },
+  {
+    slug: 'checkbox',
+    title: 'Checkbox',
+    summary: 'Boolean choices and consent controls.',
+    storybookPath: '/storybook-static/index.html?path=/story/components-form-checkbox--default',
+  },
+  {
+    slug: 'radio',
+    title: 'Radio',
+    summary: 'Mutually exclusive option groups.',
+    storybookPath: '/storybook-static/index.html?path=/story/components-form-radio--default',
+  },
+  {
+    slug: 'fieldset',
+    title: 'Fieldset',
+    summary: 'Grouped controls with legend context.',
+    storybookPath: '/storybook-static/index.html?path=/story/components-form-fieldset--default',
+  },
+  {
+    slug: 'label',
+    title: 'Label',
+    summary: 'Visible labels and htmlFor association patterns.',
     storybookPath: '/storybook-static/index.html?path=/story/components-form-input--default',
   },
   {
