@@ -1,4 +1,24 @@
+'use client';
+
 import Link from 'next/link';
+import { useState } from 'react';
+import { Button, Modal } from '@a11ypros/a11y-ui-components';
+import { DocExample } from '../_components/DocExample';
+
+function GettingStartedExample() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+      <Button variant="primary" onClick={() => setIsModalOpen(true)}>
+        Notifications
+      </Button>
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Notifications">
+        <p>You have new notifications.</p>
+      </Modal>
+    </div>
+  );
+}
 
 export default function GettingStartedPage() {
   return (
@@ -36,24 +56,29 @@ export default function GettingStartedPage() {
         </pre>
       </section>
 
-      <section aria-labelledby="example-title" className="doc-section">
-        <h2 id="example-title">3. Render your first components</h2>
-        <pre className="code-block">
-          <code>{`import { Button, Input, Modal } from '@a11ypros/a11y-ui-components';
+      <DocExample
+        id="example-title"
+        title="3. Render your first components"
+        code={`import { useState } from 'react';
+import { Button, Modal } from '@a11ypros/a11y-ui-components';
 
 export function Example() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   return (
     <>
-      <Button variant="primary">Continue</Button>
-      <Input label="Email" type="email" required />
-      <Modal isOpen={false} onClose={() => {}} title="Example modal">
-        <p>Modal content</p>
+      <Button variant="primary" onClick={() => setIsModalOpen(true)}>
+        Notifications
+      </Button>
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Notifications">
+        <p>You have new notifications.</p>
       </Modal>
     </>
   );
-}`}</code>
-        </pre>
-      </section>
+}`}
+      >
+        <GettingStartedExample />
+      </DocExample>
 
       <section aria-labelledby="next-title" className="doc-section">
         <h2 id="next-title">Next steps</h2>
