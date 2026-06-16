@@ -10,6 +10,9 @@ import {
   Radio,
   Fieldset,
 } from '@a11ypros/a11y-ui-components';
+import { DocExample } from '../../_components/DocExample';
+import { ApiReference } from '../../_components/ApiReference';
+import { formOverviewApi } from '../api-reference-data';
 
 export default function FormPage() {
   const [email, setEmail] = useState('');
@@ -39,8 +42,19 @@ export default function FormPage() {
         <p>Compose labeled, keyboard-friendly form controls with consistent field semantics.</p>
       </header>
 
-      <section aria-labelledby="form-input-title" className="doc-section">
-        <h2 id="form-input-title">Input</h2>
+      <DocExample
+        id="form-input-title"
+        title="Input"
+        githubUrl="https://github.com/A11YPros/a11y-ui/blob/main/packages/design-system/src/components/Form/Input.tsx"
+        code={`<Input
+  label="Email address"
+  type="email"
+  value={email}
+  onChange={(e) => setEmail(e.target.value)}
+  placeholder="you@example.com"
+  required
+/>`}
+      >
         <Input
           label="Email address"
           type="email"
@@ -49,10 +63,20 @@ export default function FormPage() {
           placeholder="you@example.com"
           required
         />
-      </section>
+      </DocExample>
 
-      <section aria-labelledby="form-textarea-title" className="doc-section">
-        <h2 id="form-textarea-title">Textarea</h2>
+      <DocExample
+        id="form-textarea-title"
+        title="Textarea"
+        githubUrl="https://github.com/A11YPros/a11y-ui/blob/main/packages/design-system/src/components/Form/Textarea.tsx"
+        code={`<Textarea
+  label="Message"
+  value={message}
+  onChange={(e) => setMessage(e.target.value)}
+  maxLength={500}
+  showCount
+/>`}
+      >
         <Textarea
           label="Message"
           value={message}
@@ -60,10 +84,23 @@ export default function FormPage() {
           maxLength={500}
           showCount
         />
-      </section>
+      </DocExample>
 
-      <section aria-labelledby="form-select-title" className="doc-section">
-        <h2 id="form-select-title">Select</h2>
+      <DocExample
+        id="form-select-title"
+        title="Select"
+        githubUrl="https://github.com/A11YPros/a11y-ui/blob/main/packages/design-system/src/components/Form/Select.tsx"
+        code={`<Select
+  label="Country"
+  options={[
+    { value: 'us', label: 'United States' },
+    { value: 'ca', label: 'Canada' },
+    { value: 'uk', label: 'United Kingdom' },
+  ]}
+  value={country}
+  onChange={(e) => setCountry(e.target.value)}
+/>`}
+      >
         <Select
           label="Country"
           options={[
@@ -74,20 +111,43 @@ export default function FormPage() {
           value={country}
           onChange={(e) => setCountry(e.target.value)}
         />
-      </section>
+      </DocExample>
 
-      <section aria-labelledby="form-checkbox-title" className="doc-section">
-        <h2 id="form-checkbox-title">Checkbox</h2>
+      <DocExample
+        id="form-checkbox-title"
+        title="Checkbox"
+        githubUrl="https://github.com/A11YPros/a11y-ui/blob/main/packages/design-system/src/components/Form/Checkbox.tsx"
+        code={`<Checkbox
+  id="agree"
+  label="I agree to the terms and conditions"
+  checked={agree}
+  onChange={(e) => setAgree(e.target.checked)}
+/>`}
+      >
         <Checkbox
           id="agree"
           label="I agree to the terms and conditions"
           checked={agree}
           onChange={(e) => setAgree(e.target.checked)}
         />
-      </section>
+      </DocExample>
 
-      <section aria-labelledby="form-radio-title" className="doc-section">
-        <h2 id="form-radio-title">Radio</h2>
+      <DocExample
+        id="form-radio-title"
+        title="Radio"
+        githubUrl="https://github.com/A11YPros/a11y-ui/blob/main/packages/design-system/src/components/Form/Radio.tsx"
+        code={`<Radio
+  name="size"
+  label="Size"
+  options={[
+    { value: 's', label: 'Small' },
+    { value: 'm', label: 'Medium' },
+    { value: 'l', label: 'Large' },
+  ]}
+  value={size}
+  onChange={(e) => setSize(e.target.value)}
+/>`}
+      >
         <Radio
           name="size"
           label="Size"
@@ -99,10 +159,25 @@ export default function FormPage() {
           value={size}
           onChange={(e) => setSize(e.target.value)}
         />
-      </section>
+      </DocExample>
 
-      <section aria-labelledby="form-fieldset-title" className="doc-section">
-        <h2 id="form-fieldset-title">Fieldset and label</h2>
+      <DocExample
+        id="form-fieldset-title"
+        title="Fieldset and label"
+        githubUrl="https://github.com/A11YPros/a11y-ui/blob/main/packages/design-system/src/components/Form/Fieldset.tsx"
+        code={`<Fieldset legend="Newsletter preferences">
+  <Select
+    id="news-email"
+    label="Email frequency"
+    options={[
+      { value: 'weekly', label: 'Weekly' },
+      { value: 'monthly', label: 'Monthly' },
+    ]}
+    value={country}
+    onChange={(e) => setCountry(e.target.value)}
+  />
+</Fieldset>`}
+      >
         <Fieldset legend="Newsletter preferences">
           <Select
             id="news-email"
@@ -115,7 +190,9 @@ export default function FormPage() {
             onChange={(e) => setCountry(e.target.value)}
           />
         </Fieldset>
-      </section>
+      </DocExample>
+
+      <ApiReference title="Form component APIs" sections={formOverviewApi} />
 
       <section aria-labelledby="form-a11y-title" className="doc-section">
         <h2 id="form-a11y-title">Accessibility</h2>

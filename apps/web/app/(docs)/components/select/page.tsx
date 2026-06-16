@@ -3,6 +3,9 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { Select } from '@a11ypros/a11y-ui-components';
+import { DocExample } from '../../_components/DocExample';
+import { ApiReference } from '../../_components/ApiReference';
+import { selectApi } from '../api-reference-data';
 
 export default function SelectPage() {
   const [value, setValue] = useState('');
@@ -13,7 +16,6 @@ export default function SelectPage() {
         <ol>
           <li><Link href="/">Home</Link></li>
           <li><Link href="/components">Components</Link></li>
-          <li><Link href="/components/form">Form</Link></li>
           <li><span aria-current="page">Select</span></li>
         </ol>
       </nav>
@@ -23,8 +25,24 @@ export default function SelectPage() {
         <p>Use Select for predefined option lists where users choose a single value.</p>
       </header>
 
-      <section aria-labelledby="select-example-title" className="doc-section">
-        <h2 id="select-example-title">Example</h2>
+      <DocExample
+        id="select-example-title"
+        title="Example"
+        githubUrl="https://github.com/A11YPros/a11y-ui/blob/main/packages/design-system/src/components/Form/Select.tsx"
+        code={`const [value, setValue] = useState('');
+
+<Select
+  label="Country"
+  placeholder="Choose a country"
+  options={[
+    { value: 'us', label: 'United States' },
+    { value: 'ca', label: 'Canada' },
+    { value: 'uk', label: 'United Kingdom' },
+  ]}
+  value={value}
+  onChange={(event) => setValue(event.target.value)}
+/>`}
+      >
         <Select
           label="Country"
           placeholder="Choose a country"
@@ -36,7 +54,9 @@ export default function SelectPage() {
           value={value}
           onChange={(event) => setValue(event.target.value)}
         />
-      </section>
+      </DocExample>
+
+      <ApiReference sections={selectApi} />
 
       <section aria-labelledby="select-a11y-title" className="doc-section">
         <h2 id="select-a11y-title">Accessibility</h2>

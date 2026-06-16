@@ -3,6 +3,9 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { Radio } from '@a11ypros/a11y-ui-components';
+import { DocExample } from '../../_components/DocExample';
+import { ApiReference } from '../../_components/ApiReference';
+import { radioApi } from '../api-reference-data';
 
 export default function RadioPage() {
   const [value, setValue] = useState('');
@@ -13,7 +16,6 @@ export default function RadioPage() {
         <ol>
           <li><Link href="/">Home</Link></li>
           <li><Link href="/components">Components</Link></li>
-          <li><Link href="/components/form">Form</Link></li>
           <li><span aria-current="page">Radio</span></li>
         </ol>
       </nav>
@@ -23,8 +25,24 @@ export default function RadioPage() {
         <p>Use Radio for mutually exclusive options where exactly one value is selected.</p>
       </header>
 
-      <section aria-labelledby="radio-example-title" className="doc-section">
-        <h2 id="radio-example-title">Example</h2>
+      <DocExample
+        id="radio-example-title"
+        title="Example"
+        githubUrl="https://github.com/A11YPros/a11y-ui/blob/main/packages/design-system/src/components/Form/Radio.tsx"
+        code={`const [value, setValue] = useState('');
+
+<Radio
+  name="contact-method"
+  label="Preferred contact method"
+  options={[
+    { value: 'email', label: 'Email' },
+    { value: 'phone', label: 'Phone' },
+    { value: 'sms', label: 'SMS' },
+  ]}
+  value={value}
+  onChange={(event) => setValue(event.target.value)}
+/>`}
+      >
         <Radio
           name="contact-method"
           label="Preferred contact method"
@@ -36,7 +54,9 @@ export default function RadioPage() {
           value={value}
           onChange={(event) => setValue(event.target.value)}
         />
-      </section>
+      </DocExample>
+
+      <ApiReference sections={radioApi} />
 
       <section aria-labelledby="radio-a11y-title" className="doc-section">
         <h2 id="radio-a11y-title">Accessibility</h2>

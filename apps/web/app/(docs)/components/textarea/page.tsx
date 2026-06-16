@@ -3,6 +3,9 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { Textarea } from '@a11ypros/a11y-ui-components';
+import { DocExample } from '../../_components/DocExample';
+import { ApiReference } from '../../_components/ApiReference';
+import { textareaApi } from '../api-reference-data';
 
 export default function TextareaPage() {
   const [value, setValue] = useState('');
@@ -13,7 +16,6 @@ export default function TextareaPage() {
         <ol>
           <li><Link href="/">Home</Link></li>
           <li><Link href="/components">Components</Link></li>
-          <li><Link href="/components/form">Form</Link></li>
           <li><span aria-current="page">Textarea</span></li>
         </ol>
       </nav>
@@ -23,8 +25,21 @@ export default function TextareaPage() {
         <p>Use Textarea for longer content input, comments, and multi-line responses.</p>
       </header>
 
-      <section aria-labelledby="textarea-example-title" className="doc-section">
-        <h2 id="textarea-example-title">Example</h2>
+      <DocExample
+        id="textarea-example-title"
+        title="Example"
+        githubUrl="https://github.com/A11YPros/a11y-ui/blob/main/packages/design-system/src/components/Form/Textarea.tsx"
+        code={`const [value, setValue] = useState('');
+
+<Textarea
+  label="Project notes"
+  value={value}
+  onChange={(event) => setValue(event.target.value)}
+  maxLength={280}
+  showCount
+  helperText="Share as much context as you need."
+/>`}
+      >
         <Textarea
           label="Project notes"
           value={value}
@@ -33,7 +48,9 @@ export default function TextareaPage() {
           showCount
           helperText="Share as much context as you need."
         />
-      </section>
+      </DocExample>
+
+      <ApiReference sections={textareaApi} />
 
       <section aria-labelledby="textarea-a11y-title" className="doc-section">
         <h2 id="textarea-a11y-title">Accessibility</h2>

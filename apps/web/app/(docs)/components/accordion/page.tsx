@@ -2,6 +2,9 @@
 
 import Link from 'next/link';
 import { Accordion, AccordionItem } from '@a11ypros/a11y-ui-components';
+import { DocExample } from '../../_components/DocExample';
+import { ApiReference } from '../../_components/ApiReference';
+import { accordionApi } from '../api-reference-data';
 
 export default function AccordionPage() {
   return (
@@ -33,8 +36,19 @@ export default function AccordionPage() {
         </p>
       </section>
 
-      <section aria-labelledby="accordion-example-title" className="doc-section">
-        <h2 id="accordion-example-title">Example</h2>
+      <DocExample
+        id="accordion-example-title"
+        title="Example"
+        githubUrl="https://github.com/A11YPros/a11y-ui/blob/main/packages/design-system/src/components/Accordion/Accordion.tsx"
+        code={`<Accordion>
+  <AccordionItem id="acc-shipping" title="Shipping policy">
+    <p>Orders are processed within two business days and include tracking information.</p>
+  </AccordionItem>
+  <AccordionItem id="acc-returns" title="Returns policy">
+    <p>Returns are accepted within 30 days of delivery for unused products.</p>
+  </AccordionItem>
+</Accordion>`}
+      >
         <Accordion>
           <AccordionItem id="acc-shipping" title="Shipping policy">
             <p>Orders are processed within two business days and include tracking information.</p>
@@ -46,7 +60,9 @@ export default function AccordionPage() {
             <p>Live support is available Monday to Friday, 9am to 5pm Eastern Time.</p>
           </AccordionItem>
         </Accordion>
-      </section>
+      </DocExample>
+
+      <ApiReference sections={accordionApi} />
 
       <section aria-labelledby="accordion-a11y-title" className="doc-section">
         <h2 id="accordion-a11y-title">Accessibility</h2>

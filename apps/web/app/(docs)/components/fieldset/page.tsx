@@ -1,5 +1,8 @@
 import Link from 'next/link';
 import { Fieldset, Input } from '@a11ypros/a11y-ui-components';
+import { DocExample } from '../../_components/DocExample';
+import { ApiReference } from '../../_components/ApiReference';
+import { fieldsetApi } from '../api-reference-data';
 
 export default function FieldsetPage() {
   return (
@@ -8,7 +11,6 @@ export default function FieldsetPage() {
         <ol>
           <li><Link href="/">Home</Link></li>
           <li><Link href="/components">Components</Link></li>
-          <li><Link href="/components/form">Form</Link></li>
           <li><span aria-current="page">Fieldset</span></li>
         </ol>
       </nav>
@@ -18,13 +20,22 @@ export default function FieldsetPage() {
         <p>Use Fieldset and legend to group related controls under a shared context.</p>
       </header>
 
-      <section aria-labelledby="fieldset-example-title" className="doc-section">
-        <h2 id="fieldset-example-title">Example</h2>
+      <DocExample
+        id="fieldset-example-title"
+        title="Example"
+        githubUrl="https://github.com/A11YPros/a11y-ui/blob/main/packages/design-system/src/components/Form/Fieldset.tsx"
+        code={`<Fieldset legend="Shipping address" required>
+  <Input label="Street" name="street" placeholder="123 Main St" required />
+  <Input label="City" name="city" placeholder="San Diego" required />
+</Fieldset>`}
+      >
         <Fieldset legend="Shipping address" required>
           <Input label="Street" name="street" placeholder="123 Main St" required />
           <Input label="City" name="city" placeholder="San Diego" required />
         </Fieldset>
-      </section>
+      </DocExample>
+
+      <ApiReference sections={fieldsetApi} />
 
       <section aria-labelledby="fieldset-a11y-title" className="doc-section">
         <h2 id="fieldset-a11y-title">Accessibility</h2>
