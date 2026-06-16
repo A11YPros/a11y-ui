@@ -262,6 +262,13 @@ summary:focus-visible {
 	color: var(--app-muted);
 }
 
+.docs-header__nav a.HeaderLink {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.35rem;
+	white-space: nowrap;
+}
+
 .docs-header__nav a[aria-current='page'] {
 	color: var(--app-ink);
 	font-weight: 700;
