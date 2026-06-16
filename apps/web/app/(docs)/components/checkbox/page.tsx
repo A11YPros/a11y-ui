@@ -3,6 +3,9 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { Checkbox } from '@a11ypros/a11y-ui-components';
+import { DocExample } from '../../_components/DocExample';
+import { ApiReference } from '../../_components/ApiReference';
+import { checkboxApi } from '../api-reference-data';
 
 export default function CheckboxPage() {
   const [checked, setChecked] = useState(false);
@@ -13,7 +16,6 @@ export default function CheckboxPage() {
         <ol>
           <li><Link href="/">Home</Link></li>
           <li><Link href="/components">Components</Link></li>
-          <li><Link href="/components/form">Form</Link></li>
           <li><span aria-current="page">Checkbox</span></li>
         </ol>
       </nav>
@@ -23,15 +25,28 @@ export default function CheckboxPage() {
         <p>Use Checkbox for independent yes or no choices and consent actions.</p>
       </header>
 
-      <section aria-labelledby="checkbox-example-title" className="doc-section">
-        <h2 id="checkbox-example-title">Example</h2>
+      <DocExample
+        id="checkbox-example-title"
+        title="Example"
+        githubUrl="https://github.com/A11YPros/a11y-ui/blob/main/packages/design-system/src/components/Form/Checkbox.tsx"
+        code={`const [checked, setChecked] = useState(false);
+
+<Checkbox
+  id="terms"
+  label="I agree to the terms and conditions"
+  checked={checked}
+  onChange={(event) => setChecked(event.target.checked)}
+/>`}
+      >
         <Checkbox
           id="terms"
           label="I agree to the terms and conditions"
           checked={checked}
           onChange={(event) => setChecked(event.target.checked)}
         />
-      </section>
+      </DocExample>
+
+      <ApiReference sections={checkboxApi} />
 
       <section aria-labelledby="checkbox-a11y-title" className="doc-section">
         <h2 id="checkbox-a11y-title">Accessibility</h2>

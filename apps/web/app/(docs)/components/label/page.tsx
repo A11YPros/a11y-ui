@@ -1,5 +1,8 @@
 import Link from 'next/link';
 import { Label, Input } from '@a11ypros/a11y-ui-components';
+import { DocExample } from '../../_components/DocExample';
+import { ApiReference } from '../../_components/ApiReference';
+import { labelApi } from '../api-reference-data';
 
 export default function LabelPage() {
   return (
@@ -8,7 +11,6 @@ export default function LabelPage() {
         <ol>
           <li><Link href="/">Home</Link></li>
           <li><Link href="/components">Components</Link></li>
-          <li><Link href="/components/form">Form</Link></li>
           <li><span aria-current="page">Label</span></li>
         </ol>
       </nav>
@@ -18,15 +20,26 @@ export default function LabelPage() {
         <p>Use Label to provide a visible and programmatic name for form controls.</p>
       </header>
 
-      <section aria-labelledby="label-example-title" className="doc-section">
-        <h2 id="label-example-title">Example</h2>
+      <DocExample
+        id="label-example-title"
+        title="Example"
+        githubUrl="https://github.com/A11YPros/a11y-ui/blob/main/packages/design-system/src/components/Form/Label.tsx"
+        code={`<div className="example-column">
+  <Label htmlFor="full-name" required>
+    Full name
+  </Label>
+  <Input id="full-name" name="fullName" placeholder="Taylor Morgan" required />
+</div>`}
+      >
         <div className="example-column">
           <Label htmlFor="full-name" required>
             Full name
           </Label>
           <Input id="full-name" name="fullName" placeholder="Taylor Morgan" required />
         </div>
-      </section>
+      </DocExample>
+
+      <ApiReference sections={labelApi} />
 
       <section aria-labelledby="label-a11y-title" className="doc-section">
         <h2 id="label-a11y-title">Accessibility</h2>

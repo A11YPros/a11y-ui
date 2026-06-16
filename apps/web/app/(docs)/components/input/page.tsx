@@ -3,6 +3,9 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { Input } from '@a11ypros/a11y-ui-components';
+import { DocExample } from '../../_components/DocExample';
+import { ApiReference } from '../../_components/ApiReference';
+import { inputApi } from '../api-reference-data';
 
 export default function InputPage() {
   const [value, setValue] = useState('');
@@ -13,7 +16,6 @@ export default function InputPage() {
         <ol>
           <li><Link href="/">Home</Link></li>
           <li><Link href="/components">Components</Link></li>
-          <li><Link href="/components/form">Form</Link></li>
           <li><span aria-current="page">Input</span></li>
         </ol>
       </nav>
@@ -23,8 +25,22 @@ export default function InputPage() {
         <p>Use Input for single-line text entry with built-in labeling and validation states.</p>
       </header>
 
-      <section aria-labelledby="input-example-title" className="doc-section">
-        <h2 id="input-example-title">Example</h2>
+      <DocExample
+        id="input-example-title"
+        title="Example"
+        githubUrl="https://github.com/A11YPros/a11y-ui/blob/main/packages/design-system/src/components/Form/Input.tsx"
+        code={`const [value, setValue] = useState('');
+
+<Input
+  label="Email address"
+  type="email"
+  value={value}
+  onChange={(event) => setValue(event.target.value)}
+  placeholder="you@example.com"
+  helperText="We use this email for account notifications."
+  required
+/>`}
+      >
         <Input
           label="Email address"
           type="email"
@@ -34,7 +50,9 @@ export default function InputPage() {
           helperText="We use this email for account notifications."
           required
         />
-      </section>
+      </DocExample>
+
+      <ApiReference sections={inputApi} />
 
       <section aria-labelledby="input-a11y-title" className="doc-section">
         <h2 id="input-a11y-title">Accessibility</h2>

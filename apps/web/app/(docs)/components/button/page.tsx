@@ -2,6 +2,9 @@
 
 import Link from 'next/link';
 import { Button } from '@a11ypros/a11y-ui-components';
+import { DocExample } from '../../_components/DocExample';
+import { ApiReference } from '../../_components/ApiReference';
+import { buttonApi } from '../api-reference-data';
 
 export default function ButtonPage() {
   return (
@@ -25,18 +28,39 @@ export default function ButtonPage() {
         <p>Use button variants for primary actions, secondary actions, and lower-emphasis actions.</p>
       </header>
 
-      <section aria-labelledby="button-usage-title" className="doc-section">
-        <h2 id="button-usage-title">Usage</h2>
+      <DocExample
+        id="button-usage-title"
+        title="Usage"
+        githubUrl="https://github.com/A11YPros/a11y-ui/blob/main/packages/design-system/src/components/Button/Button.tsx"
+        code={`import { Button } from '@a11ypros/a11y-ui-components';
+
+<div className="example-row">
+  <Button variant="primary">Primary</Button>
+  <Button variant="secondary">Secondary</Button>
+  <Button variant="ghost">Ghost</Button>
+  <Button variant="danger">Danger</Button>
+</div>`}
+      >
         <div className="example-row">
           <Button variant="primary">Primary</Button>
           <Button variant="secondary">Secondary</Button>
           <Button variant="ghost">Ghost</Button>
           <Button variant="danger">Danger</Button>
         </div>
-      </section>
+      </DocExample>
 
-      <section aria-labelledby="button-size-title" className="doc-section">
-        <h2 id="button-size-title">Sizes and states</h2>
+      <DocExample
+        id="button-size-title"
+        title="Sizes and states"
+        githubUrl="https://github.com/A11YPros/a11y-ui/blob/main/packages/design-system/src/components/Button/Button.tsx"
+        code={`<div className="example-row">
+  <Button size="sm">Small</Button>
+  <Button size="md">Medium</Button>
+  <Button size="lg">Large</Button>
+  <Button loading>Loading</Button>
+  <Button disabled>Disabled</Button>
+</div>`}
+      >
         <div className="example-row">
           <Button size="sm">Small</Button>
           <Button size="md">Medium</Button>
@@ -44,7 +68,9 @@ export default function ButtonPage() {
           <Button loading>Loading</Button>
           <Button disabled>Disabled</Button>
         </div>
-      </section>
+      </DocExample>
+
+      <ApiReference sections={buttonApi} />
 
       <section aria-labelledby="button-a11y-title" className="doc-section">
         <h2 id="button-a11y-title">Accessibility</h2>

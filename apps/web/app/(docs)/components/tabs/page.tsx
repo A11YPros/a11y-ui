@@ -2,6 +2,9 @@
 
 import Link from 'next/link';
 import { Tabs } from '@a11ypros/a11y-ui-components';
+import { DocExample } from '../../_components/DocExample';
+import { ApiReference } from '../../_components/ApiReference';
+import { tabsApi } from '../api-reference-data';
 
 export default function TabsPage() {
   return (
@@ -25,8 +28,19 @@ export default function TabsPage() {
         <p>Organize related views with directional keyboard support and clear panel ownership.</p>
       </header>
 
-      <section aria-labelledby="tabs-example-title" className="doc-section">
-        <h2 id="tabs-example-title">Example</h2>
+      <DocExample
+        id="tabs-example-title"
+        title="Example"
+        githubUrl="https://github.com/A11YPros/a11y-ui/blob/main/packages/design-system/src/components/Tabs/Tabs.tsx"
+        code={`<Tabs
+  aria-label="Settings tabs"
+  items={[
+    { id: 'general', label: 'General', content: <p>Configure general settings.</p> },
+    { id: 'account', label: 'Account', content: <p>Manage account preferences.</p> },
+    { id: 'privacy', label: 'Privacy', content: <p>Control privacy settings.</p> },
+  ]}
+/>`}
+      >
         <Tabs
           aria-label="Settings tabs"
           items={[
@@ -62,7 +76,9 @@ export default function TabsPage() {
             },
           ]}
         />
-      </section>
+      </DocExample>
+
+      <ApiReference sections={tabsApi} />
 
       <section aria-labelledby="tabs-a11y-title" className="doc-section">
         <h2 id="tabs-a11y-title">Accessibility</h2>

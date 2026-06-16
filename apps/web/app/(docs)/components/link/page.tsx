@@ -2,6 +2,9 @@
 
 import NextLink from 'next/link';
 import { Link } from '@a11ypros/a11y-ui-components';
+import { DocExample } from '../../_components/DocExample';
+import { ApiReference } from '../../_components/ApiReference';
+import { linkApi } from '../api-reference-data';
 
 export default function LinkPage() {
   return (
@@ -25,8 +28,22 @@ export default function LinkPage() {
         <p>Use semantic links for navigation actions and add utility styles where needed.</p>
       </header>
 
-      <section aria-labelledby="link-usage-title" className="doc-section">
-        <h2 id="link-usage-title">Usage</h2>
+      <DocExample
+        id="link-usage-title"
+        title="Usage"
+        githubUrl="https://github.com/A11YPros/a11y-ui/blob/main/packages/design-system/src/components/Link/Link.tsx"
+        code={`import { Link } from '@a11ypros/a11y-ui-components';
+
+<div className="example-column">
+  <Link href="/components">Internal Link</Link>
+  <Link href="https://example.com" external>
+    External Link
+  </Link>
+  <Link href="#main-content" skip>
+    Skip Link
+  </Link>
+</div>`}
+      >
         <div className="example-column">
           <Link href="/components">Internal Link</Link>
           <Link href="https://example.com" external>
@@ -36,7 +53,9 @@ export default function LinkPage() {
             Skip Link
           </Link>
         </div>
-      </section>
+      </DocExample>
+
+      <ApiReference sections={linkApi} />
 
       <section aria-labelledby="link-a11y-title" className="doc-section">
         <h2 id="link-a11y-title">Accessibility</h2>
