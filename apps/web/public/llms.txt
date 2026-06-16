@@ -1,0 +1,35 @@
+# A11y UI
+
+This is the documentation for the `@a11ypros/a11y-ui-components` package.
+It contains accessible React components and implementation guidance for production teams.
+Current package version: 2.1.1.
+
+## Overview
+
+- [Home](https://ui.a11ypros.com/): Accessibility-first React component library homepage.
+- [Getting Started](https://ui.a11ypros.com/getting-started): Installation and first usage guide.
+- [Components](https://ui.a11ypros.com/components): Component index with summaries and examples.
+- [Accessibility Guide](https://ui.a11ypros.com/accessibility): Accessibility principles and testing guidance.
+
+## Components
+
+- [Accordion](https://ui.a11ypros.com/components/accordion): Collapsible panel patterns.
+- [Button](https://ui.a11ypros.com/components/button): Action buttons with variants and states.
+- [Checkbox](https://ui.a11ypros.com/components/checkbox): Boolean and consent controls.
+- [Data Table](https://ui.a11ypros.com/components/table): Sortable tabular data and selection patterns.
+- [Fieldset](https://ui.a11ypros.com/components/fieldset): Grouped form controls with legends.
+- [Input](https://ui.a11ypros.com/components/input): Single-line text and email fields.
+- [Label](https://ui.a11ypros.com/components/label): Labeling and form association patterns.
+- [Link](https://ui.a11ypros.com/components/link): Navigation and utility link variants.
+- [Modal](https://ui.a11ypros.com/components/modal): Focus-managed dialog and overlay patterns.
+- [Radio](https://ui.a11ypros.com/components/radio): Mutually exclusive option groups.
+- [Select](https://ui.a11ypros.com/components/select): Single-select dropdown patterns.
+- [Tabs](https://ui.a11ypros.com/components/tabs): Keyboard-friendly tablist and panel patterns.
+- [Textarea](https://ui.a11ypros.com/components/textarea): Multi-line text input patterns.
+
+## Resources
+
+- [Storybook](https://ui.a11ypros.com/storybook): Interactive playground and component states.
+- [NPM Package](https://www.npmjs.com/package/@a11ypros/a11y-ui-components): Package distribution and versions.
+- [GitHub Repository](https://github.com/A11YPros/a11y-ui): Source code, issues, and contribution history.
+- [Audit Tool](https://ui.a11ypros.com/audit): Accessibility audit interface.
