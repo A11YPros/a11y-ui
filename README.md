@@ -1,4 +1,4 @@
-# Accessible Design System + AI Audit Assistant
+# Accessible Design System
 
 An opinionated, accessibility-first design system built with React, TypeScript, and Next.js, featuring an AI-powered accessibility audit assistant powered by Anthropic's Claude API.
 

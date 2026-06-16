@@ -54,7 +54,22 @@
 }
 
 .data-table-sort-button:hover {
-  background-color: var(--color-neutral-100, #f5f5f5);
+  background-color: var(--color-background-hover, #f5f5f5);
+  color: var(--color-text-primary, #171717);
+}
+
+/* Ensure sortable header hover contrast in explicit dark theme */
+[data-theme='dark'] .data-table-sort-button:hover {
+  background-color: var(--color-background-tertiary, #404040);
+  color: var(--color-text-primary, #fafafa);
+}
+
+/* Ensure sortable header hover contrast in auto dark mode */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .data-table-sort-button:hover {
+    background-color: var(--color-background-tertiary, #404040);
+    color: var(--color-text-primary, #fafafa);
+  }
 }
 
 .data-table-sort-button:focus-visible {

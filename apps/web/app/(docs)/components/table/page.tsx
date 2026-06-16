@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useState } from 'react';
 import { DataTable } from '@a11ypros/a11y-ui-components';
 
@@ -22,12 +23,28 @@ export default function TablePage() {
   >();
 
   return (
-    <main style={{ padding: '2rem' }}>
-      <h1>DataTable Component</h1>
-      <p>Accessible data table with keyboard navigation and sorting.</p>
+    <article className="doc-page">
+      <nav aria-label="Breadcrumb" className="docs-breadcrumb">
+        <ol>
+          <li>
+            <Link href="/">Home</Link>
+          </li>
+          <li>
+            <Link href="/components">Components</Link>
+          </li>
+          <li>
+            <span aria-current="page">Data Table</span>
+          </li>
+        </ol>
+      </nav>
 
-      <section style={{ marginTop: '2rem' }}>
-        <h2>Example</h2>
+      <header className="doc-page__header">
+        <h1>Data Table</h1>
+        <p>Present sortable, selectable tabular data with semantic table markup.</p>
+      </header>
+
+      <section aria-labelledby="table-example-title" className="doc-section">
+        <h2 id="table-example-title">Example</h2>
         <DataTable
           data={sampleData}
           columns={columns}
@@ -41,8 +58,8 @@ export default function TablePage() {
         />
       </section>
 
-      <section style={{ marginTop: '2rem' }}>
-        <h2>Accessibility</h2>
+      <section aria-labelledby="table-a11y-title" className="doc-section">
+        <h2 id="table-a11y-title">Accessibility</h2>
         <ul>
           <li>WCAG 1.3.1 Info and Relationships: Semantic table structure</li>
           <li>WCAG 2.1.1 Keyboard: Arrow keys, Home/End navigation</li>
@@ -50,6 +67,16 @@ export default function TablePage() {
           <li>WCAG 4.1.3 Status Messages: Sort announcements</li>
         </ul>
       </section>
-    </main>
+
+      <section aria-labelledby="table-playground-title" className="doc-section">
+        <h2 id="table-playground-title">Playground</h2>
+        <a
+          className="playground-link"
+          href="/storybook-static/index.html?path=/story/components-datatable--default"
+        >
+          Open Data Table stories
+        </a>
+      </section>
+    </article>
   );
 }

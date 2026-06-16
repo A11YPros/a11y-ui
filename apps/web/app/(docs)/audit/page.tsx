@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import { Button } from '@a11ypros/a11y-ui-components';
-import './audit.css';
 
 // Dynamically import SyntaxHighlighter to avoid SSR/build issues
 const SyntaxHighlighter = dynamic(

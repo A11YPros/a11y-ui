@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useState } from 'react';
 import {
   Input,
@@ -8,7 +9,6 @@ import {
   Checkbox,
   Radio,
   Fieldset,
-  Label,
 } from '@a11ypros/a11y-ui-components';
 
 export default function FormPage() {
@@ -19,12 +19,28 @@ export default function FormPage() {
   const [size, setSize] = useState('');
 
   return (
-    <main style={{ padding: '2rem' }}>
-      <h1>Form Components</h1>
-      <p>Accessible form components with proper labels and ARIA attributes.</p>
+    <article className="doc-page">
+      <nav aria-label="Breadcrumb" className="docs-breadcrumb">
+        <ol>
+          <li>
+            <Link href="/">Home</Link>
+          </li>
+          <li>
+            <Link href="/components">Components</Link>
+          </li>
+          <li>
+            <span aria-current="page">Form</span>
+          </li>
+        </ol>
+      </nav>
 
-      <section style={{ marginTop: '2rem' }}>
-        <h2>Input</h2>
+      <header className="doc-page__header">
+        <h1>Form components</h1>
+        <p>Compose labeled, keyboard-friendly form controls with consistent field semantics.</p>
+      </header>
+
+      <section aria-labelledby="form-input-title" className="doc-section">
+        <h2 id="form-input-title">Input</h2>
         <Input
           label="Email address"
           type="email"
@@ -35,8 +51,8 @@ export default function FormPage() {
         />
       </section>
 
-      <section style={{ marginTop: '2rem' }}>
-        <h2>Textarea</h2>
+      <section aria-labelledby="form-textarea-title" className="doc-section">
+        <h2 id="form-textarea-title">Textarea</h2>
         <Textarea
           label="Message"
           value={message}
@@ -46,8 +62,8 @@ export default function FormPage() {
         />
       </section>
 
-      <section style={{ marginTop: '2rem' }}>
-        <h2>Select</h2>
+      <section aria-labelledby="form-select-title" className="doc-section">
+        <h2 id="form-select-title">Select</h2>
         <Select
           label="Country"
           options={[
@@ -60,8 +76,8 @@ export default function FormPage() {
         />
       </section>
 
-      <section style={{ marginTop: '2rem' }}>
-        <h2>Checkbox</h2>
+      <section aria-labelledby="form-checkbox-title" className="doc-section">
+        <h2 id="form-checkbox-title">Checkbox</h2>
         <Checkbox
           id="agree"
           label="I agree to the terms and conditions"
@@ -70,8 +86,8 @@ export default function FormPage() {
         />
       </section>
 
-      <section style={{ marginTop: '2rem' }}>
-        <h2>Radio</h2>
+      <section aria-labelledby="form-radio-title" className="doc-section">
+        <h2 id="form-radio-title">Radio</h2>
         <Radio
           name="size"
           label="Size"
@@ -85,8 +101,24 @@ export default function FormPage() {
         />
       </section>
 
-      <section style={{ marginTop: '2rem' }}>
-        <h2>Accessibility</h2>
+      <section aria-labelledby="form-fieldset-title" className="doc-section">
+        <h2 id="form-fieldset-title">Fieldset and label</h2>
+        <Fieldset legend="Newsletter preferences">
+          <Select
+            id="news-email"
+            label="Email frequency"
+            options={[
+              { value: 'weekly', label: 'Weekly' },
+              { value: 'monthly', label: 'Monthly' },
+            ]}
+            value={country}
+            onChange={(e) => setCountry(e.target.value)}
+          />
+        </Fieldset>
+      </section>
+
+      <section aria-labelledby="form-a11y-title" className="doc-section">
+        <h2 id="form-a11y-title">Accessibility</h2>
         <ul>
           <li>WCAG 1.3.1 Info and Relationships: Proper label-input association</li>
           <li>WCAG 2.5.3 Label in Name: Label text matches accessible name</li>
@@ -94,6 +126,16 @@ export default function FormPage() {
           <li>WCAG 4.1.3 Status Messages: Error messages announced</li>
         </ul>
       </section>
-    </main>
+
+      <section aria-labelledby="form-playground-title" className="doc-section">
+        <h2 id="form-playground-title">Playground</h2>
+        <a
+          className="playground-link"
+          href="/storybook-static/index.html?path=/story/components-form-input--default"
+        >
+          Open Form stories
+        </a>
+      </section>
+    </article>
   );
 }

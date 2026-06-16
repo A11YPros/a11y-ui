@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useState } from 'react';
 import { Modal, Button } from '@a11ypros/a11y-ui-components';
 
@@ -7,23 +8,39 @@ export default function ModalPage() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <main style={{ padding: '2rem' }}>
-      <h1>Modal Component</h1>
-      <p>Accessible modal dialog with focus trap and keyboard support.</p>
+    <article className="doc-page">
+      <nav aria-label="Breadcrumb" className="docs-breadcrumb">
+        <ol>
+          <li>
+            <Link href="/">Home</Link>
+          </li>
+          <li>
+            <Link href="/components">Components</Link>
+          </li>
+          <li>
+            <span aria-current="page">Modal</span>
+          </li>
+        </ol>
+      </nav>
 
-      <section style={{ marginTop: '2rem' }}>
-        <h2>Example</h2>
+      <header className="doc-page__header">
+        <h1>Modal</h1>
+        <p>Display focused dialogs for flows that require immediate attention.</p>
+      </header>
+
+      <section aria-labelledby="modal-example-title" className="doc-section">
+        <h2 id="modal-example-title">Example</h2>
         <Button onClick={() => setIsOpen(true)}>Open Modal</Button>
         <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} title="Example Modal">
           <p>This is a modal dialog. Press ESC to close or click outside.</p>
-          <div style={{ marginTop: '1rem' }}>
+          <div className="example-row example-row--spaced">
             <Button onClick={() => setIsOpen(false)}>Close</Button>
           </div>
         </Modal>
       </section>
 
-      <section style={{ marginTop: '2rem' }}>
-        <h2>Accessibility</h2>
+      <section aria-labelledby="modal-a11y-title" className="doc-section">
+        <h2 id="modal-a11y-title">Accessibility</h2>
         <ul>
           <li>WCAG 2.1.1 Keyboard: ESC key support, focus trap</li>
           <li>WCAG 2.1.2 No Keyboard Trap: Focus returns to trigger</li>
@@ -31,6 +48,16 @@ export default function ModalPage() {
           <li>WCAG 4.1.2 Name, Role, Value: ARIA modal pattern</li>
         </ul>
       </section>
-    </main>
+
+      <section aria-labelledby="modal-playground-title" className="doc-section">
+        <h2 id="modal-playground-title">Playground</h2>
+        <a
+          className="playground-link"
+          href="/storybook-static/index.html?path=/story/components-modal--default"
+        >
+          Open Modal stories
+        </a>
+      </section>
+    </article>
   );
 }

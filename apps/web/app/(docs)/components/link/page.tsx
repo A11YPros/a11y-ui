@@ -1,16 +1,33 @@
 'use client';
 
+import NextLink from 'next/link';
 import { Link } from '@a11ypros/a11y-ui-components';
 
 export default function LinkPage() {
   return (
-    <main style={{ padding: '2rem' }}>
-      <h1>Link Component</h1>
-      <p>Accessible link component with external link detection.</p>
+    <article className="doc-page">
+      <nav aria-label="Breadcrumb" className="docs-breadcrumb">
+        <ol>
+          <li>
+            <NextLink href="/">Home</NextLink>
+          </li>
+          <li>
+            <NextLink href="/components">Components</NextLink>
+          </li>
+          <li>
+            <span aria-current="page">Link</span>
+          </li>
+        </ol>
+      </nav>
 
-      <section style={{ marginTop: '2rem' }}>
-        <h2>Examples</h2>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+      <header className="doc-page__header">
+        <h1>Link</h1>
+        <p>Use semantic links for navigation actions and add utility styles where needed.</p>
+      </header>
+
+      <section aria-labelledby="link-usage-title" className="doc-section">
+        <h2 id="link-usage-title">Usage</h2>
+        <div className="example-column">
           <Link href="/components">Internal Link</Link>
           <Link href="https://example.com" external>
             External Link
@@ -21,14 +38,24 @@ export default function LinkPage() {
         </div>
       </section>
 
-      <section style={{ marginTop: '2rem' }}>
-        <h2>Accessibility</h2>
+      <section aria-labelledby="link-a11y-title" className="doc-section">
+        <h2 id="link-a11y-title">Accessibility</h2>
         <ul>
           <li>WCAG 2.4.4 Link Purpose: Clear link text or aria-label</li>
           <li>WCAG 2.4.7 Focus Visible: Clear focus indicators</li>
           <li>WCAG 4.1.2 Name, Role, Value: Proper semantic HTML</li>
         </ul>
       </section>
-    </main>
+
+      <section aria-labelledby="link-playground-title" className="doc-section">
+        <h2 id="link-playground-title">Playground</h2>
+        <a
+          className="playground-link"
+          href="/storybook-static/index.html?path=/story/components-link--default"
+        >
+          Open Link stories
+        </a>
+      </section>
+    </article>
   );
 }
