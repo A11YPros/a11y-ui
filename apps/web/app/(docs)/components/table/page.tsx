@@ -50,17 +50,39 @@ export default function TablePage() {
         id="table-example-title"
         title="Example"
         githubUrl="https://github.com/A11YPros/a11y-ui/blob/main/packages/design-system/src/components/DataTable/DataTable.tsx"
-        code={`<DataTable
-  data={sampleData}
-  columns={columns}
-  getRowId={(row) => row.id}
-  selectable
-  selectedRows={selectedRows}
-  onSelectionChange={setSelectedRows}
-  sortConfig={sortConfig}
-  onSortChange={(column, direction) => setSortConfig({ column, direction })}
-  caption="User list"
-/>`}
+        code={`import { useState } from 'react';
+import { DataTable } from '@a11ypros/a11y-ui-components';
+
+const sampleData = [
+  { id: '1', name: 'John Doe', email: 'john@example.com', role: 'Admin' },
+  { id: '2', name: 'Jane Smith', email: 'jane@example.com', role: 'User' },
+  { id: '3', name: 'Bob Johnson', email: 'bob@example.com', role: 'User' },
+];
+
+const columns = [
+  { key: 'name', header: 'Name', sortable: true },
+  { key: 'email', header: 'Email', sortable: true },
+  { key: 'role', header: 'Role', sortable: true },
+];
+
+export function Example() {
+  const [selectedRows, setSelectedRows] = useState<string[]>([]);
+  const [sortConfig, setSortConfig] = useState<{ column: string; direction: 'asc' | 'desc' }>();
+
+  return (
+    <DataTable
+      data={sampleData}
+      columns={columns}
+      getRowId={(row) => row.id}
+      selectable
+      selectedRows={selectedRows}
+      onSelectionChange={setSelectedRows}
+      sortConfig={sortConfig}
+      onSortChange={(column, direction) => setSortConfig({ column, direction })}
+      caption="User list"
+    />
+  );
+}`}
       >
         <DataTable
           data={sampleData}
