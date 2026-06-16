@@ -1,9 +1,13 @@
 'use client';
 
 import { ReactNode, useEffect, useMemo, useState } from 'react';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import dynamic from 'next/dynamic';
 import { oneDark, oneLight } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
+const SyntaxHighlighter = dynamic(
+  () => import('react-syntax-highlighter').then((mod) => mod.Prism as any),
+  { ssr: false }
+);
 interface DocExampleProps {
   id: string;
   title: string;
