@@ -62,6 +62,7 @@ export function DocsHeaderNav() {
 
 export function DocsSidebarNav() {
   const pathname = usePathname();
+  const sortedComponentDocs = [...componentDocs].sort((a, b) => a.title.localeCompare(b.title));
 
   return (
     <nav aria-label="Documentation" className="docs-sidebar__nav">
@@ -81,7 +82,7 @@ export function DocsSidebarNav() {
 
       <p className="docs-sidebar__heading">Components</p>
       <ul>
-        {componentDocs.map((item) => {
+        {sortedComponentDocs.map((item) => {
           const href = `/components/${item.slug}`;
           const active = isActive(pathname, href);
           return (
