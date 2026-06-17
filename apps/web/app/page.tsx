@@ -1,18 +1,22 @@
 import Link from 'next/link';
 import { ThemeToggle } from './_components/ThemeToggle';
+import { UiLogo } from './_components/UiLogo';
+import {DocsHeaderNav} from './(docs)/_components/DocsNav';
 
 export default function Home() {
   return (
     <main id="main-content" className="home-main">
       <header className="home-hero">
         <div className="home-hero__top">
-          <p className="eyebrow">A11y UI</p>
-          <ThemeToggle className="home-theme-toggle" />
+         <Link href="/" className="docs-brand">
+		        <UiLogo className="docs-brand__logo" />
+            <span className="visually-hidden">A11y UI</span>
+          </Link>
+          <DocsHeaderNav />
         </div>
         <h1>Accessibility-first React components built for production teams.</h1>
         <p className="home-hero__lead">
-          Ship inclusive interfaces faster with practical examples, WCAG-aware component patterns,
-          and clear implementation guidance.
+          Build inclusive interfaces faster with WCAG compliant components, robust keyboard and screen reader support, and clear implementation guidance.
         </p>
         <nav aria-label="Primary" className="home-hero__actions">
           <Link href="/getting-started" className="button-like button-like--primary">

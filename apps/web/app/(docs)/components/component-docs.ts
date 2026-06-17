@@ -18,12 +18,12 @@ export const componentDocs: ComponentDocMeta[] = [
     summary: 'Action buttons with variants, sizes, and states.',
     storybookPath: '/storybook-static/index.html?path=/story/components-button--primary',
   },
-  {
-    slug: 'form',
-    title: 'Form Overview',
-    summary: 'Overview of all form building blocks.',
-    storybookPath: '/storybook-static/index.html?path=/story/components-form-input--default',
-  },
+  // {
+  //   slug: 'form',
+  //   title: 'Form Overview',
+  //   summary: 'Overview of all form building blocks.',
+  //   storybookPath: '/storybook-static/index.html?path=/story/components-form-input--default',
+  // },
   {
     slug: 'input',
     title: 'Input',
