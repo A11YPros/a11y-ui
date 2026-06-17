@@ -8,7 +8,7 @@ export default function DocsLayout({ children }: { children: React.ReactNode }) 
       <header className="docs-header">
         <div className="docs-header__inner">
           <Link href="/" className="docs-brand">
-		  <UiLogo className="docs-brand__logo" />
+		        <UiLogo className="docs-brand__logo" />
             <span className="visually-hidden">A11y UI</span>
           </Link>
           <DocsHeaderNav />

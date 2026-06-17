@@ -3,7 +3,7 @@ import Script from 'next/script';
 import './styles/globals.css';
 
 export const metadata: Metadata = {
-  title: 'A11y UI',
+  title: 'A11Y UI',
   description: 'Accessibility-first React components, patterns, and documentation.',
 };
 
