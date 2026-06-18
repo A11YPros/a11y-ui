@@ -12,7 +12,7 @@
     "changeset": "changeset",
     "changeset:validate": "node scripts/validate-changesets.mjs",
     "version-packages": "changeset version",
-    "release": "changeset publish",
+    "release": "node scripts/release-publish.mjs",
     "build:netlify": "netlify build --offline",
     "build:netlify:debug": "netlify build --debug --offline",
     "build:local": "mv apps/web/app/api apps/web/app/api.disabled 2>/dev/null || true && yarn install && yarn build-storybook && yarn workspace @apps/web build && mv apps/web/app/api.disabled apps/web/app/api 2>/dev/null || true",
