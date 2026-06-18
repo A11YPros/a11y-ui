@@ -32,7 +32,8 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Create release PR or publish
+      - name: Create release PR or publish (PAT)
+        if: ${{ secrets.CHANGESETS_TOKEN != '' }}
         uses: changesets/action@v1
         with:
           version: npm run version-packages
@@ -40,5 +41,20 @@ jobs:
           title: Version Packages
           commit: Version Packages
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.CHANGESETS_TOKEN }}
+          NPM_CONFIG_PROVENANCE: true
+
+      - name: Publish without release PR
+        if: ${{ secrets.CHANGESETS_TOKEN == '' }}
+        run: |
+          pending_changesets=$(find .changeset -maxdepth 1 -type f -name '*.md' ! -name 'README.md' | wc -l | tr -d ' ')
+
+          if [ "$pending_changesets" -gt 0 ]; then
+            echo "::error::Pending changesets found, but release PR creation is disabled for GITHUB_TOKEN and CHANGESETS_TOKEN is not set."
+            echo "::error::Set repository secret CHANGESETS_TOKEN (PAT with repo write access), or run versioning locally and commit versioned files before push."
+            exit 1
+          fi
+
+          npm run release
+        env:
           NPM_CONFIG_PROVENANCE: true
