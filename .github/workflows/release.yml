@@ -34,6 +34,9 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Validate changesets target design-system only
+        run: npm run changeset:validate
+
       - name: Create release PR or publish (PAT)
         if: ${{ env.CHANGESETS_TOKEN != '' }}
         uses: changesets/action@v1
@@ -44,6 +47,8 @@ jobs:
           commit: Version Packages
         env:
           GITHUB_TOKEN: ${{ env.CHANGESETS_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_CONFIG_PROVENANCE: true
 
       - name: Publish without release PR
@@ -59,4 +64,6 @@ jobs:
 
           npm run release
         env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_CONFIG_PROVENANCE: true

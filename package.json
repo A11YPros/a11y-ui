@@ -1,5 +1,5 @@
 {
-  "name": "@a11ypros/a11y-ui-components",
+  "name": "@a11ypros/a11y-ui-workspace",
   "version": "2.1.1",
   "private": true,
   "workspaces": [
@@ -10,6 +10,7 @@
     "dev": "yarn workspace @apps/web dev",
     "build": "yarn workspace @apps/web build",
     "changeset": "changeset",
+    "changeset:validate": "node scripts/validate-changesets.mjs",
     "version-packages": "changeset version",
     "release": "changeset publish",
     "build:netlify": "netlify build --offline",
