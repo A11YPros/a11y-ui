@@ -11,6 +11,8 @@ jobs:
   release:
     name: Release
     runs-on: ubuntu-latest
+    env:
+      CHANGESETS_TOKEN: ${{ secrets.CHANGESETS_TOKEN }}
     permissions:
       contents: write
       pull-requests: write
@@ -33,7 +35,7 @@ jobs:
         run: npm run build
 
       - name: Create release PR or publish (PAT)
-        if: ${{ secrets.CHANGESETS_TOKEN != '' }}
+        if: ${{ env.CHANGESETS_TOKEN != '' }}
         uses: changesets/action@v1
         with:
           version: npm run version-packages
@@ -41,11 +43,11 @@ jobs:
           title: Version Packages
           commit: Version Packages
         env:
-          GITHUB_TOKEN: ${{ secrets.CHANGESETS_TOKEN }}
+          GITHUB_TOKEN: ${{ env.CHANGESETS_TOKEN }}
           NPM_CONFIG_PROVENANCE: true
 
       - name: Publish without release PR
-        if: ${{ secrets.CHANGESETS_TOKEN == '' }}
+        if: ${{ env.CHANGESETS_TOKEN == '' }}
         run: |
           pending_changesets=$(find .changeset -maxdepth 1 -type f -name '*.md' ! -name 'README.md' | wc -l | tr -d ' ')
 
