@@ -105,6 +105,20 @@ const meta: Meta<typeof Input> = {
         type: { summary: 'string' },
       },
     },
+    helperText: {
+      control: 'text',
+      description: 'Helper text displayed below the input',
+      table: {
+        type: { summary: 'string' },
+      },
+    },
+    error: {
+      control: 'text',
+      description: 'Error message to display and announce',
+      table: {
+        type: { summary: 'string' },
+      },
+    },
   },
 };
 

@@ -9,6 +9,9 @@
   "scripts": {
     "dev": "yarn workspace @apps/web dev",
     "build": "yarn workspace @apps/web build",
+    "changeset": "changeset",
+    "version-packages": "changeset version",
+    "release": "changeset publish",
     "build:netlify": "netlify build --offline",
     "build:netlify:debug": "netlify build --debug --offline",
     "build:local": "mv apps/web/app/api apps/web/app/api.disabled 2>/dev/null || true && yarn install && yarn build-storybook && yarn workspace @apps/web build && mv apps/web/app/api.disabled apps/web/app/api 2>/dev/null || true",
@@ -19,8 +22,8 @@
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,css,md}\"",
     "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,css,md}\""
   },
-  "dependencies": {},
   "devDependencies": {
+    "@changesets/cli": "^2.31.0",
     "@storybook/addon-a11y": "9.1.17",
     "@storybook/addon-docs": "9.1.17",
     "@storybook/addon-links": "9.1.17",
