@@ -58,16 +58,19 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
     },
     ref
   ) => {
+    const inputRef = React.useRef<HTMLInputElement>(null);
     const checkboxId = React.useId();
     const finalId = id || `checkbox-${checkboxId}`;
     const errorId = error ? `${finalId}-error` : undefined;
     const helperId = helperText ? `${finalId}-helper` : undefined;
 
-    React.useEffect(() => {
-      if (ref && 'current' in ref && ref.current) {
-        ref.current.indeterminate = indeterminate ?? false;
+    React.useImperativeHandle(ref, () => inputRef.current as HTMLInputElement, []);
+
+    React.useLayoutEffect(() => {
+      if (inputRef.current) {
+        inputRef.current.indeterminate = indeterminate ?? false;
       }
-    }, [indeterminate, ref]);
+    }, [indeterminate]);
 
     const describedBy = combineAriaDescribedBy(ariaDescribedBy, errorId, helperId);
 
@@ -79,7 +82,7 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
       <div className="form-checkbox-wrapper">
         <div className="form-checkbox-input-wrapper">
           <input
-            ref={ref}
+            ref={inputRef}
             id={finalId}
             type="checkbox"
             className={classes}

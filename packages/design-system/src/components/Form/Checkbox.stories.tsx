@@ -97,10 +97,41 @@ const meta: Meta<typeof Checkbox> = {
   title: 'Components/Form/Checkbox',
   component: Checkbox,
   tags: ['autodocs'],
+  args: {
+    label: 'I agree to the terms and conditions',
+  },
   argTypes: {
+    label: {
+      control: 'text',
+      description: 'Label text for the checkbox',
+      table: {
+        type: { summary: 'string' },
+      },
+    },
+    indeterminate: {
+      control: 'boolean',
+      description: 'Indeterminate state for the checkbox',
+      table: {
+        type: { summary: 'boolean' },
+      },
+    },
     className: {
       control: 'text',
       description: 'Custom class name for the checkbox',
+      table: {
+        type: { summary: 'string' },
+      },
+    },
+    helperText: {
+      control: 'text',
+      description: 'Helper text providing additional context for the checkbox',
+      table: {
+        type: { summary: 'string' },
+      },
+    },
+    error: {
+      control: 'text',
+      description: 'Error message to display when the checkbox is in an error state',
       table: {
         type: { summary: 'string' },
       },
@@ -116,14 +147,15 @@ type Story = StoryObj<typeof Checkbox>;
  * with the checkbox for screen readers and clicking the label toggles the checkbox.
  */
 export const Default: Story = {
-  render: () => {
+  render: (args) => {
     const [checked, setChecked] = useState(false);
     return (
       <Checkbox
         id="checkbox-default"
-        label="I agree to the terms and conditions"
+        label={args.label}
         checked={checked}
         onChange={(e) => setChecked(e.target.checked)}
+        {...args}
       />
     );
   },
