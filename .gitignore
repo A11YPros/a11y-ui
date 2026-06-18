@@ -41,4 +41,6 @@ Thumbs.db
 
 # Agents
 .claude
-.github
+.github/*
+!.github/workflows/
+!.github/workflows/*.yml
