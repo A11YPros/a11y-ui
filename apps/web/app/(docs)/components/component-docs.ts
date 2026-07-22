@@ -13,6 +13,12 @@ export const componentDocs: ComponentDocMeta[] = [
     storybookPath: '/storybook-static/index.html?path=/story/components-accordion--single-open',
   },
   {
+    slug: 'banner',
+    title: 'Banner',
+    summary: 'Inline status and alert messaging with dismiss support.',
+    storybookPath: '/storybook-static/index.html?path=/story/components-banner--info',
+  },
+  {
     slug: 'button',
     title: 'Button',
     summary: 'Action buttons with variants, sizes, and states.',

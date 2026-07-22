@@ -6,6 +6,9 @@
 /* Button */
 @import '../components/Button/Button.css';
 
+/* Banner */
+@import '../components/Banner/Banner.css';
+
 /* Link */
 @import '../components/Link/Link.css';
 
