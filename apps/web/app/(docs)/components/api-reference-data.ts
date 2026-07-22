@@ -31,6 +31,57 @@ export const buttonApi: ApiSectionDoc[] = [
   },
 ];
 
+export const bannerApi: ApiSectionDoc[] = [
+  {
+    name: 'BannerProps',
+    props: [
+      {
+        name: 'title',
+        type: 'string',
+        description: 'Visible banner heading text announced to assistive technology.',
+      },
+      {
+        name: 'variant',
+        type: "'info' | 'success' | 'warning' | 'error' | 'critical'",
+        defaultValue: "'info'",
+        description: 'Visual style and default live region behavior for the banner.',
+      },
+      {
+        name: 'children',
+        type: 'ReactNode',
+        description: 'Optional supporting message content displayed under the title.',
+      },
+      {
+        name: 'isExposed',
+        type: 'boolean',
+        defaultValue: 'true',
+        description: 'Controls visibility of the banner in controlled usage.',
+      },
+      {
+        name: 'onClose',
+        type: '() => void',
+        description: 'Enables dismiss control and fires when user closes the banner.',
+      },
+      {
+        name: 'ariaLive',
+        type: "'polite' | 'assertive' | 'off'",
+        description: 'Optional override for live region politeness.',
+      },
+      {
+        name: 'ariaAtomic',
+        type: "'true' | 'false'",
+        description: 'Optional override to announce full banner region updates.',
+      },
+      {
+        name: 'className',
+        type: 'string',
+        defaultValue: "''",
+        description: 'Additional class names for custom styling.',
+      },
+    ],
+  },
+];
+
 export const accordionApi: ApiSectionDoc[] = [
   {
     name: 'AccordionProps',
