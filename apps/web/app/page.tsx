@@ -32,7 +32,7 @@ export default function Home() {
       </header>
 
       <section aria-labelledby="home-what-title" className="home-section">
-        <h2 id="home-what-title">What you get in the free package</h2>
+        <h2 id="home-what-title">What’s Included</h2>
         <ul className="feature-grid">
           <li>
             <h3>Production-ready components</h3>

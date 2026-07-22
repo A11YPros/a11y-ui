@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import packageMeta from '../../../../../package.json';
+import packageMeta from '../../../../../packages/design-system/package.json';
 import { componentDocs } from '../components/component-docs';
 import { ThemeToggle } from '../../_components/ThemeToggle';
 
