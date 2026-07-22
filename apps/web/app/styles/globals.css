@@ -352,10 +352,34 @@ summary:focus-visible {
 	padding: 0.7rem 1.25rem;
 	color: var(--app-muted);
 	background: var(--app-footer-bg);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 0.45rem;
+	text-align: center;
 }
 
-.docs-footer p {
+.docs-footer__tagline {
 	margin: 0;
+	font-size: 0.92rem;
+	color: var(--app-muted);
+}
+
+.docs-footer__brand-link {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 24px;
+	min-height: 24px;
+	text-decoration: none;
+	color: inherit;
+}
+
+.docs-footer__brand-image {
+	display: block;
+	width: 8.5rem;
+	height: auto;
 }
 
 .doc-page {
