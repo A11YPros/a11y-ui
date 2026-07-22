@@ -39,7 +39,7 @@ describe('Banner', () => {
     const onClose = vi.fn();
 
     render(
-      <Banner title="Dismiss me" onClose={onClose}>
+      <Banner title="Dismiss me" isDismissible onClose={onClose}>
         Message
       </Banner>
     );

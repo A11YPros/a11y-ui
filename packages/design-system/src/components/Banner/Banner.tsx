@@ -1,6 +1,14 @@
 'use client';
 
 import React, { forwardRef, useEffect, useState } from 'react';
+import {
+	BannerCloseIcon,
+	BannerCriticalIcon,
+	BannerErrorIcon,
+	BannerInfoIcon,
+	BannerSuccessIcon,
+	BannerWarningIcon,
+} from './BannerIcons';
 import './Banner.css';
 
 export type BannerVariant = 'info' | 'success' | 'warning' | 'error' | 'critical';
@@ -19,6 +27,7 @@ export type BannerProps = {
 	ariaLive?: AriaAttributes['ariaLive'];
 	children?: React.ReactNode;
 	className?: string;
+	isDismissible?: boolean;
 	isExposed?: boolean;
 	onClose?: () => void;
 	title: string;
@@ -31,12 +40,21 @@ export const Banner = forwardRef<HTMLDivElement, BannerProps>((props, ref) => {
 		ariaLive,
 		children,
 		className = '',
+		isDismissible = false,
 		isExposed = true,
 		onClose,
 		title,
 		variant = 'info',
 		...rest
 	} = props;
+
+	const ICON_MAP: Record<BannerVariant, React.ReactElement> = {
+		info: <BannerInfoIcon className="banner__variant-icon" />,
+		success: <BannerSuccessIcon className="banner__variant-icon" />,
+		warning: <BannerWarningIcon className="banner__variant-icon" />,
+		error: <BannerErrorIcon className="banner__variant-icon" />,
+		critical: <BannerCriticalIcon className="banner__variant-icon" />,
+	};
 
 	const [isExposedState, setIsExposedState] = useState(isExposed);
 	const defaultAria = AriaAttributesMap[variant];
@@ -66,28 +84,16 @@ export const Banner = forwardRef<HTMLDivElement, BannerProps>((props, ref) => {
 			aria-atomic={resolvedAriaAtomic}
 			{...rest}
 		>
-			<div className="banner__content">
-				<strong className="banner__title">{title}</strong>
-				{children ? <div className="banner__body">{children}</div> : null}
+			<div className="banner__content-wrap">
+				<span className="banner__icon-wrap">{ICON_MAP[variant]}</span>
+				<div className="banner__content">
+					<strong className="banner__title">{title}</strong>
+					{children ? <div className="banner__body">{children}</div> : null}
+				</div>
 			</div>
-			{onClose ? (
+			{isDismissible ? (
 				<button type="button" className="banner__close" onClick={onCloseHandler}>
-					<svg
-						className="banner__close-icon"
-						viewBox="0 0 20 20"
-						width="16"
-						height="16"
-						aria-hidden="true"
-						focusable="false"
-					>
-						<path
-							d="M5 5L15 15M15 5L5 15"
-							fill="none"
-							stroke="currentColor"
-							strokeWidth="2"
-							strokeLinecap="round"
-						/>
-					</svg>
+					<BannerCloseIcon className="banner__close-icon" />
 					<span className="sr-only">Close</span>
 				</button>
 			) : null}
