@@ -34,11 +34,11 @@ export default function BannerPage() {
         githubUrl="https://github.com/A11YPros/a11y-ui/blob/main/packages/design-system/src/components/Banner/Banner.tsx"
         code={`import { Banner } from '@a11ypros/a11y-ui-components';
 
-<Banner title="Scheduled maintenance" variant="warning" onClose={() => {}}>
+<Banner title="Scheduled maintenance" variant="warning" isDismissible onClose={() => {}}>
   Service may be unavailable between 2:00 and 2:30 AM UTC.
 </Banner>`}
       >
-        <Banner title="Scheduled maintenance" variant="warning" onClose={() => {}}>
+        <Banner title="Scheduled maintenance" variant="warning" isDismissible onClose={() => {}}>
           Service may be unavailable between 2:00 and 2:30 AM UTC.
         </Banner>
       </DocExample>

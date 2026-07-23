@@ -13,6 +13,9 @@ const meta: Meta<typeof Banner> = {
     isExposed: {
       control: 'boolean',
     },
+    isDismissible: {
+      control: 'boolean',
+    },
     className: {
       control: 'text',
     },
@@ -59,6 +62,7 @@ export const Dismissible: Story = {
     title: 'Session timeout warning',
     variant: 'critical',
     children: 'Your session expires in 2 minutes.',
+    isDismissible: true,
     onClose: () => {},
   },
 };
