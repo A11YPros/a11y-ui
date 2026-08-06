@@ -38,6 +38,7 @@ const NPM_VERSION = packageMeta.version;
 
 const resourceLinks: NavLink[] = [
   { href: '/accessibility', label: 'Accessibility Guide' },
+  { href: '/custom-components', label: 'Custom Components' },
 ];
 
 function isActive(pathname: string, href: string, startsWith?: string): boolean {

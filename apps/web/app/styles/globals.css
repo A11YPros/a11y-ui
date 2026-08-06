@@ -980,3 +980,197 @@ summary:focus-visible {
 	justify-content: space-between;
 }
 
+/* Custom Component CTA & Request Form */
+.custom-cta-section {
+	margin: 3rem 0;
+	padding: 2.25rem 1.75rem;
+	border: 1px solid var(--app-line);
+	border-radius: var(--app-radius);
+	background: var(--app-hero-bg);
+	box-shadow: var(--app-shadow);
+}
+
+.custom-cta-section--compact {
+	margin: 2rem 0 1rem;
+	padding: 1.5rem;
+}
+
+.custom-cta-container {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 2rem;
+	align-items: start;
+}
+
+@media (max-width: 840px) {
+	.custom-cta-container {
+		grid-template-columns: 1fr;
+	}
+}
+
+.custom-badge-pill {
+	display: inline-block;
+	padding: 0.2rem 0.6rem;
+	border-radius: 999px;
+	background: color-mix(in srgb, var(--app-primary) 15%, transparent);
+	color: var(--app-primary);
+	font-weight: 700;
+	font-size: 0.75rem;
+	letter-spacing: 0.05em;
+	margin-bottom: 0.75rem;
+}
+
+.custom-cta-title {
+	margin: 0;
+	font-size: clamp(1.4rem, 2.2vw, 2rem);
+	font-weight: 700;
+	line-height: 1.2;
+}
+
+.custom-cta-desc {
+	margin-top: 0.75rem;
+	color: var(--app-muted);
+	font-size: 1rem;
+	line-height: 1.5;
+}
+
+.custom-cta-highlights {
+	margin-top: 1.25rem;
+	display: flex;
+	flex-direction: column;
+	gap: 0.6rem;
+}
+
+.custom-highlight-item {
+	display: flex;
+	align-items: center;
+	gap: 0.6rem;
+	font-size: 0.92rem;
+	font-weight: 500;
+}
+
+.custom-highlight-icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 1.25rem;
+	height: 1.25rem;
+	border-radius: 50%;
+	background: var(--app-primary);
+	color: var(--app-primary-ink);
+	font-size: 0.75rem;
+	font-weight: 700;
+	flex-shrink: 0;
+}
+
+.custom-cta-form-box {
+	padding: 1.5rem;
+	border-radius: 0.75rem;
+	border: 1px solid var(--app-line);
+	background: var(--app-panel);
+}
+
+.custom-form-box__title {
+	margin: 0 0 0.4rem;
+	font-size: 1.2rem;
+	font-weight: 700;
+}
+
+.custom-form-box__sub {
+	margin: 0 0 1rem;
+	font-size: 0.88rem;
+	color: var(--app-muted);
+}
+
+.custom-form {
+	display: flex;
+	flex-direction: column;
+	gap: 0.85rem;
+}
+
+.custom-form__row {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 0.85rem;
+}
+
+@media (max-width: 520px) {
+	.custom-form__row {
+		grid-template-columns: 1fr;
+	}
+}
+
+.custom-form__field {
+	display: flex;
+	flex-direction: column;
+	gap: 0.3rem;
+}
+
+.custom-form__label {
+	font-size: 0.82rem;
+	font-weight: 600;
+}
+
+.custom-required {
+	color: #d93838;
+}
+
+.custom-form__input,
+.custom-form__select,
+.custom-form__textarea {
+	padding: 0.6rem 0.8rem;
+	border: 1px solid var(--app-line);
+	border-radius: 0.45rem;
+	background: var(--app-card-bg);
+	color: var(--app-ink);
+	font-size: 0.9rem;
+	font-family: inherit;
+	width: 100%;
+}
+
+.custom-form__textarea {
+	resize: vertical;
+	min-height: 70px;
+}
+
+.custom-form__input:focus-visible,
+.custom-form__select:focus-visible,
+.custom-form__textarea:focus-visible {
+	outline: 2px solid var(--app-focus);
+	outline-offset: 1px;
+}
+
+.custom-form__button {
+	margin-top: 0.4rem;
+	width: 100%;
+	justify-content: center;
+}
+
+.custom-success-box {
+	display: flex;
+	align-items: flex-start;
+	gap: 0.85rem;
+	padding: 1rem;
+	border-radius: 0.5rem;
+	background: color-mix(in srgb, var(--app-primary) 15%, var(--app-panel));
+	border: 1px solid var(--app-primary);
+}
+
+.custom-success-icon {
+	color: var(--app-primary);
+	flex-shrink: 0;
+	margin-top: 0.15rem;
+}
+
+.custom-success-box strong {
+	display: block;
+	font-size: 0.98rem;
+}
+
+.custom-success-box p {
+	margin: 0.25rem 0 0;
+	font-size: 0.88rem;
+	color: var(--app-muted);
+}
+
+

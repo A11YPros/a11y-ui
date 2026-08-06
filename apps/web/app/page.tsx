@@ -4,6 +4,7 @@ import { UiLogo } from './_components/UiLogo';
 import { DocsHeaderNav } from './(docs)/_components/DocsNav';
 import { JsonLd, createHomeJsonLd } from './_components/JsonLd';
 import { ProWaitlistSection } from './_components/ProWaitlistSection';
+import { CustomComponentCTA } from './_components/CustomComponentCTA';
 
 export default function Home() {
   const jsonLdData = createHomeJsonLd();
@@ -60,6 +61,8 @@ export default function Home() {
         </section>
 
         <ProWaitlistSection />
+
+        <CustomComponentCTA />
 
         <section aria-labelledby="home-next-title" className="home-section">
           <h2 id="home-next-title">Start here</h2>
