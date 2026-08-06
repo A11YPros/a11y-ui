@@ -1,6 +1,6 @@
 {
   "name": "@a11ypros/a11y-ui-components",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "Accessibility-first React component library built for WCAG 2.1/2.2 AA & AAA compliance, screen reader support, keyboard navigation, and production design systems.",
   "keywords": [
     "react",
