@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Netlify Forms Detection Template</title>
+</head>
+<body>
+  <!-- Static HTML form templates for Netlify deploy bot crawling in Next.js static builds -->
+  
+  <!-- 1. Pro Tier Waitlist Form -->
+  <form name="pro-waitlist" netlify netlify-honeypot="bot-field" hidden>
+    <input type="hidden" name="form-name" value="pro-waitlist" />
+    <input type="text" name="bot-field" />
+    <input type="email" name="email" />
+    <select name="role">
+      <option value="developer">Developer</option>
+      <option value="lead">Lead</option>
+      <option value="a11y-specialist">A11y Specialist</option>
+      <option value="designer">Designer</option>
+      <option value="other">Other</option>
+    </select>
+  </form>
+
+  <!-- 2. Custom Component Request Form -->
+  <form name="custom-component-request" netlify netlify-honeypot="bot-field" hidden>
+    <input type="hidden" name="form-name" value="custom-component-request" />
+    <input type="text" name="bot-field" />
+    <input type="text" name="name" />
+    <input type="email" name="email" />
+    <input type="text" name="company" />
+    <select name="timeline">
+      <option value="asap">ASAP</option>
+      <option value="1month">1 Month</option>
+      <option value="planning">Planning</option>
+    </select>
+    <textarea name="description"></textarea>
+  </form>
+</body>
+</html>
