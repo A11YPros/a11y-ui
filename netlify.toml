@@ -11,7 +11,6 @@
 # Environment variables (set these in Netlify dashboard)
 # [build.environment]
 #   NODE_VERSION = "18"
-#   ANTHROPIC_API_KEY = "your_key_here"
 
 # Redirect rules are now in apps/web/public/_redirects
 # The _redirects file takes precedence and is included in the build output

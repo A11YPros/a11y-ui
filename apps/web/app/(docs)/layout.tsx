@@ -40,7 +40,14 @@ export default function DocsLayout({ children }: { children: React.ReactNode }) 
             alt=""
             width={180}
             height={40}
-            className="docs-footer__brand-image"
+            className="docs-footer__brand-image docs-footer__brand-image--light"
+          />
+          <Image
+            src="/logo-dark.png"
+            alt=""
+            width={180}
+            height={40}
+            className="docs-footer__brand-image docs-footer__brand-image--dark"
           />
           <span className="visually-hidden">A11YPros</span>
         </a>
