@@ -3,8 +3,29 @@ import Script from 'next/script';
 import './styles/globals.css';
 
 export const metadata: Metadata = {
-  title: 'A11Y UI',
-  description: 'Accessibility-first React components, patterns, and documentation.',
+  metadataBase: new URL('https://ui.a11ypros.com'),
+  title: {
+    default: 'A11Y UI - Accessibility-first React Components',
+    template: '%s',
+  },
+  description: 'Accessibility-first React components, patterns, and documentation built for production teams.',
+  openGraph: {
+    title: 'A11Y UI - Accessibility-first React Components',
+    description: 'Build inclusive interfaces faster with WCAG compliant components, keyboard navigation, and screen reader support.',
+    url: 'https://ui.a11ypros.com',
+    siteName: 'A11Y UI',
+    locale: 'en_US',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'A11Y UI - Accessibility-first React Components',
+    description: 'Build inclusive interfaces faster with WCAG compliant components, keyboard navigation, and screen reader support.',
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

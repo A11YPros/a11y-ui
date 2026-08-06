@@ -1,3 +1,68 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## Repository Overview
+
+npm-workspaces monorepo for `@a11ypros/a11y-ui-components`, an accessibility-first React component library, plus the Next.js docs site deployed to `ui.a11ypros.com`.
+
+- `packages/design-system` — the published library (`@a11ypros/a11y-ui-components`). The only package that gets released.
+- `apps/web` — Next.js 15 docs site (`@apps/web`, private, excluded from changesets).
+- `.storybook` — root Storybook config; stories are globbed from `packages/design-system/src`.
+- `netlify/functions/audit.ts` — serverless twin of the Next.js audit API route.
+
+## Commands
+
+Root scripts delegate with `yarn workspace ...`, so `yarn` must be installed even though the committed lockfile is `package-lock.json` and CI installs with `npm ci`.
+
+```bash
+npm run dev              # Next.js docs site on :3000
+npm run storybook        # Storybook on :6006
+npm run build            # Next.js static export -> apps/web/out
+npm run build-storybook  # -> apps/web/public/storybook-static, then fixes asset paths
+npm run build:local      # full Netlify-shaped build (moves app/api aside, see below)
+npm run format           # Prettier write across the repo
+```
+
+Library build and tests run inside the package:
+
+```bash
+cd packages/design-system
+npm run build            # tsc -> dist, then scripts/copy-css.js copies CSS
+npm test                 # vitest run
+npm run test:watch
+npm run test:coverage    # thresholds enforced: 95% statements/functions/lines, 90% branches
+npx vitest run src/components/Button/Button.test.tsx   # single file
+npx vitest run -t "renders loading state"              # single test by name
+```
+
+There is no repo-wide lint or test script. `apps/web` has `next lint`; type checking happens via the library's `tsc` build (root `tsconfig.json` is `noEmit`).
+
+## Architecture Notes
+
+**The web app consumes `dist`, Storybook consumes `src`.** The package's `main`/`exports` point at `packages/design-system/dist`, so after changing library source you must rebuild the package before the Next.js app picks it up (`next.config.js` lists it in `transpilePackages`). Storybook reads `packages/design-system/src/**/*.stories.tsx` directly and hot-reloads without a build — it's the faster loop for component work.
+
+**CSS is hand-wired, not bundled.** Each component does `import './Button.css'` inside its `.tsx`. `tsc` does not emit CSS, so `scripts/copy-css.js` mirrors every component `.css` plus `src/styles/{global,components}.css` into `dist`. A new component's stylesheet must also be added as an `@import` in `src/styles/components.css`, which is the aggregate consumers load via `@a11ypros/a11y-ui-components/styles/components`.
+
+**Theming is CSS custom properties with inline fallbacks.** Every `var()` carries a fallback (`var(--spacing-2, 0.5rem)`) so components still render when the consumer hasn't imported `global.css`. `src/tokens/*.ts` are TS mirrors of those properties. Light/dark switches on `data-theme` on `<html>`; the Storybook toolbar and `src/test-utils.tsx` both set it.
+
+**Static export forces the duplicated audit API.** `apps/web` uses `output: 'export'`, which cannot host route handlers, so `apps/web/app/api/audit/route.ts` and `netlify/functions/audit.ts` contain the same WCAG prompt and Anthropic call and must be kept in sync. Build commands (`netlify.toml`, `build:local`) rename `app/api` to `app/api.disabled` during the build and restore it after. Both need `ANTHROPIC_API_KEY`.
+
+**Storybook ships inside the Next.js export.** It builds into `apps/web/public/storybook-static`, then `scripts/fix-storybook-paths.js` rewrites relative asset paths to `/storybook-static/...` and strips CSP meta tags (CSP for Storybook is set as headers in `netlify.toml`, which needs `unsafe-eval`). Routing lives in `apps/web/public/_redirects`, which takes precedence over `netlify.toml` redirects; order matters there.
+
+**Releases go through changesets.** `.github/workflows/release.yml` runs on push to `main`, and `scripts/validate-changesets.mjs` hard-fails any changeset referencing a package other than `@a11ypros/a11y-ui-components`. `scripts/release-publish.mjs` uses `NPM_TOKEN` when present and npm trusted publishing otherwise. Version bumps to the library need a changeset (`npm run changeset`).
+
+## Component Conventions
+
+Components live in `src/components/<Name>/` with `<Name>.tsx`, `<Name>.css`, `<Name>.stories.tsx`, `<Name>.test.tsx`. Form primitives are flat files under `src/components/Form/`.
+
+- `React.forwardRef` with an exported `<Name>Props` interface extending the matching intrinsic element props, JSDoc on each prop, and a component-level JSDoc block listing the WCAG success criteria it satisfies plus a usage example.
+- Shared behavior comes from `src/utils/{aria,keyboard,focus}.ts` and `src/hooks/{useFocusTrap,useFocusReturn,useAriaLive}.ts` — prefer these over re-implementing key handling or focus logic.
+- Story `title` follows `Components/<Name>` (`Components/Form/<Name>` for form parts); `@storybook/addon-a11y` runs on every story.
+- Tests import from `src/test-utils.tsx`, which registers `jest-axe` matchers, exposes `runAxeTest(container)`, accepts a `theme` render option, and stubs `matchMedia`/`IntersectionObserver`/`ResizeObserver`.
+
+Adding a component touches five places: the component folder, `src/index.ts` exports, the `@import` in `src/styles/components.css`, a docs page at `apps/web/app/(docs)/components/<slug>/`, and entries in `apps/web/app/(docs)/components/component-docs.ts` and `api-reference-data.ts` (the docs nav and API tables are data-driven, including the `storybookPath` deep link).
+
 <!-- a11y-agent-team: start -->
 
 # Accessibility-First Development

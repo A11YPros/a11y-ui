@@ -1,12 +1,29 @@
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
+import { createDocMetadata } from '../../../_components/docMetadata';
+import { JsonLd, createComponentJsonLd } from '../../../_components/JsonLd';
 
-export const metadata: Metadata = {
+const description =
+  'Use the Banner component for status messaging with semantic structure, live region support, variant styling, and optional dismiss actions.';
+const slug = 'components/banner';
+
+export const metadata: Metadata = createDocMetadata({
   title: 'Banner Component | A11Y UI',
-  description:
-    'Use the Banner component for status messaging with semantic structure, live region support, variant styling, and optional dismiss actions.',
-};
+  description,
+  slug,
+});
 
 export default function Layout({ children }: { children: ReactNode }) {
-  return children;
+  const jsonLdData = createComponentJsonLd({
+    name: 'Banner',
+    description,
+    slug: 'banner',
+  });
+
+  return (
+    <>
+      <JsonLd data={jsonLdData} />
+      {children}
+    </>
+  );
 }
