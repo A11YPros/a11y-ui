@@ -1,15 +1,27 @@
 {
   "name": "@a11ypros/a11y-ui-components",
   "version": "2.1.0",
-  "description": "An accessibility-first React UI component library built with WCAG 2.1/2.2 compliance",
+  "description": "Accessibility-first React component library built for WCAG 2.1/2.2 AA & AAA compliance, screen reader support, keyboard navigation, and production design systems.",
   "keywords": [
     "react",
     "accessibility",
     "a11y",
     "wcag",
+    "wcag21",
+    "wcag22",
+    "screen-reader",
+    "aria",
+    "wai-aria",
     "design-system",
     "components",
-    "typescript"
+    "typescript",
+    "headless-ui",
+    "radix-ui",
+    "ui-library",
+    "accessible-components",
+    "keyboard-navigation",
+    "focus-trap",
+    "react-components"
   ],
   "author": "Ryan Mack <ryan@a11ypros.com>",
   "license": "MIT",
@@ -43,7 +55,7 @@
   "bugs": {
     "url": "https://github.com/A11YPros/a11y-ui/issues"
   },
-  "homepage": "https://github.com/A11YPros/a11y-ui/tree/main/packages/design-system#readme",
+  "homepage": "https://ui.a11ypros.com",
   "scripts": {
     "build": "tsc && node scripts/copy-css.js",
     "prepublishOnly": "npm run build",
