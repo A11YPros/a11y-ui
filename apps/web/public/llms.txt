@@ -32,4 +32,3 @@ Current package version: 2.1.1.
 - [Storybook](https://ui.a11ypros.com/storybook): Interactive playground and component states.
 - [NPM Package](https://www.npmjs.com/package/@a11ypros/a11y-ui-components): Package distribution and versions.
 - [GitHub Repository](https://github.com/A11YPros/a11y-ui): Source code, issues, and contribution history.
-- [Audit Tool](https://ui.a11ypros.com/audit): Accessibility audit interface.

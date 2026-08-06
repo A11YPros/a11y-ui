@@ -15,7 +15,7 @@
     "release": "node scripts/release-publish.mjs",
     "build:netlify": "netlify build --offline",
     "build:netlify:debug": "netlify build --debug --offline",
-    "build:local": "mv apps/web/app/api apps/web/app/api.disabled 2>/dev/null || true && yarn install && yarn build-storybook && yarn workspace @apps/web build && mv apps/web/app/api.disabled apps/web/app/api 2>/dev/null || true",
+    "build:local": "yarn install && yarn build-storybook && yarn workspace @apps/web build",
     "build:local:clean": "rm -rf apps/web/.next apps/web/out apps/web/public/storybook-static node_modules/.cache && yarn build:local",
     "build:simulate": "netlify build --offline",
     "storybook": "storybook dev -p 6006 --config-dir .storybook",

@@ -9,9 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.20.0",
     "@a11ypros/a11y-ui-components": "*",
-    "@netlify/functions": "^2.4.1",
     "next": "^15.1.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

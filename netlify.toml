@@ -4,8 +4,7 @@
   # Base directory for the build
   base = "."
   # Install dependencies, build Storybook, then build Next.js app
-  # Note: Move API route temporarily since static export can't handle it (we use Netlify Functions)
-  command = "mv apps/web/app/api apps/web/app/api.disabled 2>/dev/null || true && yarn install && yarn build-storybook && yarn workspace @apps/web build && test -d apps/web/out && echo 'Build successful' || (echo 'Build failed' && exit 1) && mv apps/web/app/api.disabled apps/web/app/api 2>/dev/null || true"
+  command = "yarn install && yarn build-storybook && yarn workspace @apps/web build && test -d apps/web/out && echo 'Build successful' || (echo 'Build failed' && exit 1)"
   # Publish directory - Next.js static export (includes Storybook in public/)
   publish = "apps/web/out"
 

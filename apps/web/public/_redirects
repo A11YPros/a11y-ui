@@ -18,9 +18,6 @@
 # This catches /storybook/sb-manager/runtime.js → /storybook-static/sb-manager/runtime.js
 /storybook/* /storybook-static/:splat 200
 
-# Netlify Function for audit API
-/api/audit /.netlify/functions/audit 200
-
 # Storybook static files (ensures they're served correctly)
 /storybook-static/* /storybook-static/:splat 200
 

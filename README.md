@@ -1,6 +1,6 @@
 # Accessible Design System
 
-An opinionated, accessibility-first design system built with React, TypeScript, and Next.js, featuring an AI-powered accessibility audit assistant powered by Anthropic's Claude API.
+An opinionated, accessibility-first design system built with React, TypeScript, and Next.js.
 
 ## Features
 
@@ -13,7 +13,6 @@ An opinionated, accessibility-first design system built with React, TypeScript, 
 - **ARIA Support**: Semantic HTML with ARIA enhancements where needed
 - **Reduced Motion**: Respects `prefers-reduced-motion` media query
 - **High Contrast**: Supports `prefers-contrast` for better visibility
-- **AI Audit Assistant**: Paste JSX code and get WCAG compliance reviews with code suggestions
 
 ## Project Structure
 
@@ -30,8 +29,7 @@ An opinionated, accessibility-first design system built with React, TypeScript, 
 ├── apps/
 │   └── web/               # Next.js app
 │       ├── app/
-│       │   ├── (docs)/    # Documentation pages
-│       │   └── api/       # API routes
+│       │   └── (docs)/    # Documentation pages
 │       └── package.json
 ├── .storybook/            # Storybook configuration
 └── package.json           # Root workspace config
@@ -58,12 +56,7 @@ git clone <repository-url>
 npm install
 ```
 
-3. Set up environment variables:
-   Create a `.env.local` file in `apps/web/`:
-
-```bash
-ANTHROPIC_API_KEY=your_api_key_here
-```
+No environment variables are required to run the app or Storybook.
 
 ### Development
 
@@ -124,26 +117,6 @@ Each component documents its WCAG 2.1/2.2 compliance:
 - **2.4.7** Focus Visible
 - **2.5.3** Label in Name
 - **4.1.2** Name, Role, Value (ARIA)
-
-## AI Audit Assistant
-
-The AI Audit Assistant analyzes JSX code snippets for accessibility issues:
-
-1. Navigate to `/audit` in the Next.js app
-2. Paste your JSX code
-3. Click "Run Accessibility Audit"
-4. Review issues grouped by WCAG Success Criteria
-5. See code suggestions for each issue
-
-### API Setup
-
-The audit assistant requires an Anthropic API key:
-
-1. Get your API key from [Anthropic](https://console.anthropic.com/)
-2. Add it to `apps/web/.env.local`:
-   ```
-   ANTHROPIC_API_KEY=your_key_here
-   ```
 
 ## Design Tokens
 

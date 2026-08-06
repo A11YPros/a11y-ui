@@ -1,6 +1,5 @@
 /* Import design system global styles */
 @import '../../../../packages/design-system/src/styles/global.css';
-@import '../(docs)/audit/audit.css';
 
 /* App-specific global styles */
 

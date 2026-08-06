@@ -9,7 +9,6 @@ npm-workspaces monorepo for `@a11ypros/a11y-ui-components`, an accessibility-fir
 - `packages/design-system` — the published library (`@a11ypros/a11y-ui-components`). The only package that gets released.
 - `apps/web` — Next.js 15 docs site (`@apps/web`, private, excluded from changesets).
 - `.storybook` — root Storybook config; stories are globbed from `packages/design-system/src`.
-- `netlify/functions/audit.ts` — serverless twin of the Next.js audit API route.
 
 ## Commands
 
@@ -20,7 +19,7 @@ npm run dev              # Next.js docs site on :3000
 npm run storybook        # Storybook on :6006
 npm run build            # Next.js static export -> apps/web/out
 npm run build-storybook  # -> apps/web/public/storybook-static, then fixes asset paths
-npm run build:local      # full Netlify-shaped build (moves app/api aside, see below)
+npm run build:local      # full Netlify-shaped build (Storybook + Next.js export)
 npm run format           # Prettier write across the repo
 ```
 
@@ -46,7 +45,7 @@ There is no repo-wide lint or test script. `apps/web` has `next lint`; type chec
 
 **Theming is CSS custom properties with inline fallbacks.** Every `var()` carries a fallback (`var(--spacing-2, 0.5rem)`) so components still render when the consumer hasn't imported `global.css`. `src/tokens/*.ts` are TS mirrors of those properties. Light/dark switches on `data-theme` on `<html>`; the Storybook toolbar and `src/test-utils.tsx` both set it.
 
-**Static export forces the duplicated audit API.** `apps/web` uses `output: 'export'`, which cannot host route handlers, so `apps/web/app/api/audit/route.ts` and `netlify/functions/audit.ts` contain the same WCAG prompt and Anthropic call and must be kept in sync. Build commands (`netlify.toml`, `build:local`) rename `app/api` to `app/api.disabled` during the build and restore it after. Both need `ANTHROPIC_API_KEY`.
+**The site is fully static — no route handlers, no serverless functions.** `apps/web` uses `output: 'export'`, which cannot host route handlers. The former AI audit endpoint (`app/api/audit/route.ts` plus its `netlify/functions/audit.ts` twin) has been removed along with the `/audit` page, so nothing in the repo needs `ANTHROPIC_API_KEY` and no environment variables are required to build or run. Don't add a route handler under `app/api` — it will break `next build`.
 
 **Storybook ships inside the Next.js export.** It builds into `apps/web/public/storybook-static`, then `scripts/fix-storybook-paths.js` rewrites relative asset paths to `/storybook-static/...` and strips CSP meta tags (CSP for Storybook is set as headers in `netlify.toml`, which needs `unsafe-eval`). Routing lives in `apps/web/public/_redirects`, which takes precedence over `netlify.toml` redirects; order matters there.
 

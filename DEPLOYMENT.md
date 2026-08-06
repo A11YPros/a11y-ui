@@ -8,7 +8,6 @@ This guide covers deploying the component library and Storybook to Netlify at `u
 
 - Builds Storybook and Next.js app
 - Serves Storybook at `/storybook`
-- Routes API calls to Netlify Functions
 
 ✅ **Next.js Static Export**
 
@@ -19,12 +18,6 @@ This guide covers deploying the component library and Storybook to Netlify at `u
 
 - Builds to `apps/web/public/storybook-static`
 - Accessible at `ui.a11ypros.com/storybook`
-
-✅ **Netlify Function**
-
-- Audit API converted to serverless function
-- Located at `netlify/functions/audit.ts`
-- Accessible via `/api/audit` (auto-redirected)
 
 ## Deployment Steps
 
@@ -42,13 +35,7 @@ Netlify should auto-detect `netlify.toml`, but verify:
 - **Build command:** `npm install && npm run build-storybook && npm run build --workspace=apps/web`
 - **Publish directory:** `apps/web/out`
 
-### 3. Set Environment Variables
-
-Go to **Site settings → Environment variables** and add:
-
-- `ANTHROPIC_API_KEY` - Your Anthropic API key for the audit function
-
-### 4. Configure Custom Domain
+### 3. Configure Custom Domain
 
 1. Go to **Site settings → Domain management**
 2. Click "Add custom domain"
@@ -62,7 +49,7 @@ Go to **Site settings → Environment variables** and add:
      ```
 5. Wait for DNS propagation (5-60 minutes)
 
-### 5. Deploy
+### 4. Deploy
 
 - Netlify will automatically deploy on every push to your main branch
 - Or click "Deploy site" to deploy manually
@@ -71,7 +58,6 @@ Go to **Site settings → Environment variables** and add:
 
 - **Main App:** `https://ui.a11ypros.com`
 - **Storybook:** `https://ui.a11ypros.com/storybook`
-- **Audit API:** `https://ui.a11ypros.com/api/audit` (POST)
 
 ## How It Works
 
@@ -82,13 +68,7 @@ Go to **Site settings → Environment variables** and add:
 
 2. **Routing:**
    - `/storybook/*` → Served from `/storybook-static/*`
-   - `/api/audit` → Redirected to `/.netlify/functions/audit`
    - `/*` → Next.js SPA routes
-
-3. **Netlify Function:**
-   - Serverless function handles the audit API
-   - Uses `ANTHROPIC_API_KEY` environment variable
-   - Supports CORS for cross-origin requests
 
 ## Troubleshooting
 
@@ -103,12 +83,6 @@ Go to **Site settings → Environment variables** and add:
 - Verify Storybook build completed successfully
 - Check that `apps/web/public/storybook-static` exists
 - Verify redirect rules in `netlify.toml`
-
-### API Not Working
-
-- Ensure `ANTHROPIC_API_KEY` is set in Netlify environment variables
-- Check Netlify Function logs in dashboard
-- Verify the function is deployed (check Functions tab)
 
 ### DNS Issues
 
@@ -140,9 +114,6 @@ Visit `http://localhost:3000` for the app and `http://localhost:3000/storybook` 
 
 ```
 ├── netlify.toml              # Netlify configuration
-├── netlify/
-│   └── functions/
-│       └── audit.ts          # Netlify Function for audit API
 ├── apps/
 │   └── web/
 │       ├── public/
@@ -154,6 +125,6 @@ Visit `http://localhost:3000` for the app and `http://localhost:3000/storybook` 
 ## Notes
 
 - The Next.js app uses static export, so no server-side features
-- API routes are converted to Netlify Functions
+- There are no API routes or serverless functions; the site is fully static
 - Storybook is served as static files alongside the app
 - All routes are client-side (SPA mode)
