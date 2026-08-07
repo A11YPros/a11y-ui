@@ -98,7 +98,6 @@ export function ProWaitlistSection() {
     setStatus('submitting');
 
     try {
-      // Form submission payload for static Netlify forms
       const formData = new FormData(e.currentTarget);
       await fetch('/', {
         method: 'POST',
@@ -109,7 +108,6 @@ export function ProWaitlistSection() {
       setEmail('');
     } catch (error) {
       console.error('Waitlist submission error:', error);
-      // Even if fetch fails in local dev environment, show success state for smooth UX
       setStatus('success');
       setEmail('');
     }
@@ -130,146 +128,150 @@ export function ProWaitlistSection() {
         </p>
       </div>
 
-      <div className="pro-grid">
-        {proComponents.map((item) => (
-          <article key={item.id} className="pro-card">
-            <div className="pro-card__header">
-              <span className="pro-card__icon" aria-hidden="true">
-                {item.icon}
-              </span>
-              <span className="pro-card__lock" title="Locked component">
+      <div className="pro-body-layout">
+        <div className="pro-grid">
+          {proComponents.map((item) => (
+            <article key={item.id} className="pro-card">
+              <div className="pro-card__header">
+                <span className="pro-card__icon" aria-hidden="true">
+                  {item.icon}
+                </span>
+                <span className="pro-card__lock" title="Locked component">
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    aria-hidden="true"
+                  >
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                  </svg>
+                  <span>{item.availability}</span>
+                </span>
+              </div>
+
+              <h3 className="pro-card__title">{item.title}</h3>
+              <p className="pro-card__desc">{item.description}</p>
+
+              <ul className="pro-card__tags" aria-label="Features">
+                {item.tags.map((tag) => (
+                  <li key={tag} className="pro-tag">
+                    {tag}
+                  </li>
+                ))}
+              </ul>
+            </article>
+          ))}
+        </div>
+
+        <aside className="pro-sidebar">
+          <div className="pro-waitlist-box">
+            <div className="pro-waitlist-box__content">
+              <h3 id="waitlist-form-heading" className="pro-waitlist-box__title">
+                Get Early Access & Pro Discounts
+              </h3>
+              <p className="pro-waitlist-box__desc">
+                Join the waitlist to get early preview builds, launch discounts, and influence which components we release first.
+              </p>
+            </div>
+
+            {status === 'success' ? (
+              <div role="status" aria-live="polite" className="pro-success-box">
                 <svg
-                  width="16"
-                  height="16"
+                  width="24"
+                  height="24"
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
-                  strokeWidth="2"
+                  strokeWidth="2.5"
                   strokeLinecap="round"
                   strokeLinejoin="round"
+                  className="pro-success-icon"
                   aria-hidden="true"
                 >
-                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-                  <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                  <polyline points="22 4 12 14.01 9 11.01"></polyline>
                 </svg>
-                <span>{item.availability}</span>
-              </span>
-            </div>
-
-            <h3 className="pro-card__title">{item.title}</h3>
-            <p className="pro-card__desc">{item.description}</p>
-
-            <ul className="pro-card__tags" aria-label="Features">
-              {item.tags.map((tag) => (
-                <li key={tag} className="pro-tag">
-                  {tag}
-                </li>
-              ))}
-            </ul>
-          </article>
-        ))}
-      </div>
-
-      <div className="pro-waitlist-box">
-        <div className="pro-waitlist-box__content">
-          <h3 id="waitlist-form-heading" className="pro-waitlist-box__title">
-            Get Early Access & Pro Discounts
-          </h3>
-          <p className="pro-waitlist-box__desc">
-            Join the waitlist to get early preview builds, launch discounts, and influence which components we release first.
-          </p>
-        </div>
-
-        {status === 'success' ? (
-          <div role="status" aria-live="polite" className="pro-success-box">
-            <svg
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="pro-success-icon"
-              aria-hidden="true"
-            >
-              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-              <polyline points="22 4 12 14.01 9 11.01"></polyline>
-            </svg>
-            <div>
-              <strong>You&apos;re on the list!</strong>
-              <p>We will email you as soon as early access opens for the Pro Tier.</p>
-            </div>
-          </div>
-        ) : (
-          <form
-            name="pro-waitlist"
-            method="POST"
-            data-netlify="true"
-            netlify-honeypot="bot-field"
-            onSubmit={handleSubmit}
-            className="pro-form"
-            aria-labelledby="waitlist-form-heading"
-          >
-            <input type="hidden" name="form-name" value="pro-waitlist" />
-            <p className="visually-hidden">
-              <label>
-                Don&apos;t fill this out if you&apos;re human: <input name="bot-field" />
-              </label>
-            </p>
-
-            <div className="pro-form__fields">
-              <div className="pro-form__field">
-                <label htmlFor="pro-email" className="pro-form__label">
-                  Email Address <span className="pro-required">*</span>
-                </label>
-                <input
-                  id="pro-email"
-                  type="email"
-                  name="email"
-                  required
-                  placeholder="you@company.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="pro-form__input"
-                  autoComplete="email"
-                />
+                <div>
+                  <strong>You&apos;re on the list!</strong>
+                  <p>We will email you as soon as early access opens for the Pro Tier.</p>
+                </div>
               </div>
-
-              <div className="pro-form__field">
-                <label htmlFor="pro-role" className="pro-form__label">
-                  Your Role
-                </label>
-                <select
-                  id="pro-role"
-                  name="role"
-                  value={role}
-                  onChange={(e) => setRole(e.target.value)}
-                  className="pro-form__select"
-                >
-                  <option value="developer">Frontend / Full-stack Developer</option>
-                  <option value="lead">Tech Lead / Architect</option>
-                  <option value="a11y-specialist">Accessibility Specialist</option>
-                  <option value="designer">Product Designer / Design System</option>
-                  <option value="other">Other</option>
-                </select>
-              </div>
-
-              <button
-                type="submit"
-                disabled={status === 'submitting'}
-                className="button-like button-like--primary pro-form__button"
+            ) : (
+              <form
+                name="pro-waitlist"
+                method="POST"
+                data-netlify="true"
+                netlify-honeypot="bot-field"
+                onSubmit={handleSubmit}
+                className="pro-form"
+                aria-labelledby="waitlist-form-heading"
               >
-                {status === 'submitting' ? 'Joining...' : 'Join Pro Waitlist'}
-              </button>
-            </div>
+                <input type="hidden" name="form-name" value="pro-waitlist" />
+                <p className="visually-hidden">
+                  <label>
+                    Don&apos;t fill this out if you&apos;re human: <input name="bot-field" />
+                  </label>
+                </p>
 
-            <p className="pro-form__privacy">
-              Zero spam. We will only email you for Pro Tier component updates.
-            </p>
-          </form>
-        )}
+                <div className="pro-form__fields">
+                  <div className="pro-form__field">
+                    <label htmlFor="pro-email" className="pro-form__label">
+                      Email Address <span className="pro-required">*</span>
+                    </label>
+                    <input
+                      id="pro-email"
+                      type="email"
+                      name="email"
+                      required
+                      placeholder="you@company.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="pro-form__input"
+                      autoComplete="email"
+                    />
+                  </div>
+
+                  <div className="pro-form__field">
+                    <label htmlFor="pro-role" className="pro-form__label">
+                      Your Role
+                    </label>
+                    <select
+                      id="pro-role"
+                      name="role"
+                      value={role}
+                      onChange={(e) => setRole(e.target.value)}
+                      className="pro-form__select"
+                    >
+                      <option value="developer">Frontend / Full-stack Developer</option>
+                      <option value="lead">Tech Lead / Architect</option>
+                      <option value="a11y-specialist">Accessibility Specialist</option>
+                      <option value="designer">Product Designer / Design System</option>
+                      <option value="other">Other</option>
+                    </select>
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={status === 'submitting'}
+                    className="button-like button-like--primary pro-form__button"
+                  >
+                    {status === 'submitting' ? 'Joining...' : 'Join Pro Waitlist'}
+                  </button>
+                </div>
+
+                <p className="pro-form__privacy">
+                  Zero spam. We will only email you for Pro Tier component updates.
+                </p>
+              </form>
+            )}
+          </div>
+        </aside>
       </div>
     </section>
   );
