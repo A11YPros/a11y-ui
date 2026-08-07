@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { Button, Link as DesignSystemLink } from '@a11ypros/a11y-ui-components';
 import { componentDocs } from './component-docs';
+import { CustomComponentCTA } from '../../_components/CustomComponentCTA';
 
 export default function ComponentsPage() {
   return (
@@ -61,6 +62,8 @@ export default function ComponentsPage() {
           </a>
         </p>
       </section>
+
+      <CustomComponentCTA compact />
     </article>
   );
 }

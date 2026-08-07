@@ -3,6 +3,8 @@ import { ThemeToggle } from './_components/ThemeToggle';
 import { UiLogo } from './_components/UiLogo';
 import { DocsHeaderNav } from './(docs)/_components/DocsNav';
 import { JsonLd, createHomeJsonLd } from './_components/JsonLd';
+import { ProWaitlistSection } from './_components/ProWaitlistSection';
+import { CustomComponentCTA } from './_components/CustomComponentCTA';
 
 export default function Home() {
   const jsonLdData = createHomeJsonLd();
@@ -30,9 +32,9 @@ export default function Home() {
             <Link href="/components" className="button-like button-like--ghost">
               Browse Components
             </Link>
-            <a href="/storybook-static/index.html" className="button-like button-like--ghost">
-              Open Playground
-            </a>
+            <Link href="/pro" className="button-like button-like--accent">
+              Pro Components <span className="badge-inline">NEW</span>
+            </Link>
           </nav>
         </header>
 
@@ -58,6 +60,10 @@ export default function Home() {
           </ul>
         </section>
 
+        <ProWaitlistSection />
+
+        <CustomComponentCTA />
+
         <section aria-labelledby="home-next-title" className="home-section">
           <h2 id="home-next-title">Start here</h2>
           <ol className="home-steps">
@@ -68,7 +74,7 @@ export default function Home() {
               Explore component docs in <Link href="/components">Components</Link>.
             </li>
             <li>
-              Verify interactive states in <a href="/storybook-static/index.html">Storybook</a>.
+              Preview <Link href="/pro">Pro Tier Components & Waitlist</Link>.
             </li>
           </ol>
         </section>

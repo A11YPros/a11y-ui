@@ -16,6 +16,10 @@ interface NavLink {
 
 const headerLinks: NavLink[] = [
   {
+    href: '/pro',
+    label: 'Pro Tier',
+  },
+  {
     href: 'https://github.com/A11YPros/a11y-ui',
     label: 'GitHub',
     external: true,
@@ -34,6 +38,7 @@ const NPM_VERSION = packageMeta.version;
 
 const resourceLinks: NavLink[] = [
   { href: '/accessibility', label: 'Accessibility Guide' },
+  { href: '/custom-components', label: 'Custom Components' },
 ];
 
 function isActive(pathname: string, href: string, startsWith?: string): boolean {
@@ -75,11 +80,11 @@ export function DocsHeaderNav() {
 
   return (
     <nav aria-label="Main" className="docs-header__nav">
-	  <ul className="docs-header__nav-list">
-	      {headerLinks.map((link) => {
-	        const active = isActive(pathname, link.href, link.startsWith);
-	        return (
-	          <li key={link.href}>
+      <ul className="docs-header__nav-list">
+        {headerLinks.map((link) => {
+          const active = isActive(pathname, link.href, link.startsWith);
+          return (
+            <li key={link.href}>
               {link.external && link.icon === 'npm' ? (
                 <a
                   className="HeaderLink"
@@ -100,17 +105,22 @@ export function DocsHeaderNav() {
                   {link.label}
                 </a>
               ) : (
-                <Link href={link.href} aria-current={active ? 'page' : undefined}>
+                <Link
+                  href={link.href}
+                  className={link.href === '/pro' ? 'HeaderLink--pro' : undefined}
+                  aria-current={active ? 'page' : undefined}
+                >
                   {link.label}
+                  {link.href === '/pro' && <span className="pro-nav-badge">NEW</span>}
                 </Link>
               )}
-	          </li>
-	        );
-	      })}
-	      <li>
-	        <ThemeToggle className="docs-theme-toggle" />
-	      </li>
-	  </ul>
+            </li>
+          );
+        })}
+        <li>
+          <ThemeToggle className="docs-theme-toggle" />
+        </li>
+      </ul>
     </nav>
   );
 }
@@ -148,6 +158,20 @@ export function DocsSidebarNav() {
             </li>
           );
         })}
+      </ul>
+
+      <p className="docs-sidebar__heading">Pro Tier</p>
+      <ul>
+        <li>
+          <Link
+            href="/pro"
+            className="sidebar-pro-link"
+            aria-current={isActive(pathname, '/pro') ? 'page' : undefined}
+          >
+            <span>Pro Waitlist</span>
+            <span className="sidebar-pro-badge">SOON</span>
+          </Link>
+        </li>
       </ul>
 
       <p className="docs-sidebar__heading">Resources</p>
