@@ -775,11 +775,29 @@ summary:focus-visible {
 	font-size: 1.05rem;
 }
 
+.pro-body-layout {
+	display: grid;
+	grid-template-columns: 1fr 340px;
+	gap: 1.75rem;
+	align-items: start;
+}
+
+@media (max-width: 960px) {
+	.pro-body-layout {
+		grid-template-columns: 1fr;
+	}
+}
+
+.pro-sidebar {
+	position: sticky;
+	top: 1.5rem;
+}
+
 .pro-grid {
 	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+	grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
 	gap: 1.25rem;
-	margin-bottom: 2.5rem;
+	margin-bottom: 0;
 }
 
 .pro-card {
@@ -854,36 +872,37 @@ summary:focus-visible {
 }
 
 .pro-waitlist-box {
-	padding: 1.75rem;
+	padding: 1.5rem;
 	border-radius: 0.75rem;
 	border: 1px solid var(--app-line);
-	background: color-mix(in srgb, var(--app-primary) 6%, var(--app-panel));
+	background: color-mix(in srgb, var(--app-primary) 8%, var(--app-panel));
+	box-shadow: var(--app-shadow);
 }
 
 .pro-waitlist-box__title {
 	margin: 0 0 0.5rem;
-	font-size: 1.3rem;
+	font-size: 1.25rem;
 	font-weight: 700;
 }
 
 .pro-waitlist-box__desc {
 	margin: 0 0 1.25rem;
 	color: var(--app-muted);
-	font-size: 0.95rem;
+	font-size: 0.9rem;
+	line-height: 1.45;
 }
 
 .pro-form__fields {
 	display: flex;
-	flex-wrap: wrap;
-	align-items: flex-end;
-	gap: 1rem;
+	flex-direction: column;
+	gap: 0.85rem;
 }
 
 .pro-form__field {
 	display: flex;
 	flex-direction: column;
 	gap: 0.35rem;
-	flex: 1 1 200px;
+	width: 100%;
 }
 
 .pro-form__label {
@@ -916,6 +935,8 @@ summary:focus-visible {
 	height: 42px;
 	padding: 0 1.25rem;
 	white-space: nowrap;
+	width: 100%;
+	justify-content: center;
 }
 
 .pro-form__privacy {
