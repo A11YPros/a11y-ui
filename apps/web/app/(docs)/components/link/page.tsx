@@ -70,7 +70,7 @@ export default function LinkPage() {
         <h2 id="link-playground-title">Playground</h2>
         <a
           className="playground-link"
-          href="/storybook-static/index.html?path=/story/components-link--default"
+          href="/storybook-static/index.html?path=/docs/components-link--docs"
         >
           Open Link stories
         </a>

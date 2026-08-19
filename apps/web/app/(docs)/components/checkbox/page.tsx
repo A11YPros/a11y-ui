@@ -59,7 +59,7 @@ export default function CheckboxPage() {
 
       <section aria-labelledby="checkbox-playground-title" className="doc-section">
         <h2 id="checkbox-playground-title">Playground</h2>
-        <a className="playground-link" href="/storybook-static/index.html?path=/story/components-form-checkbox--default">
+        <a className="playground-link" href="/storybook-static/index.html?path=/docs/components-form-checkbox--docs">
           Open Checkbox stories
         </a>
       </section>

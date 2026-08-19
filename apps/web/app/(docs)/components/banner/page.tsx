@@ -86,7 +86,7 @@ export default function BannerPage() {
         <h2 id="banner-playground-title">Playground</h2>
         <a
           className="playground-link"
-          href="/storybook-static/index.html?path=/story/components-banner--info"
+          href="/storybook-static/index.html?path=/docs/components-banner--docs"
         >
           Open Banner stories
         </a>

@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { DocsHeaderNav, DocsSidebarNav } from './_components/DocsNav';
+import { MobileNavDrawer } from './_components/MobileNavDrawer';
 import { UiLogo } from '../_components/UiLogo';
 
 export default function DocsLayout({ children }: { children: React.ReactNode }) {
@@ -8,10 +9,13 @@ export default function DocsLayout({ children }: { children: React.ReactNode }) 
     <div className="docs-shell">
       <header className="docs-header">
         <div className="docs-header__inner">
-          <Link href="/" className="docs-brand">
-		        <UiLogo className="docs-brand__logo" />
-            <span className="visually-hidden">A11y UI</span>
-          </Link>
+          <div className="docs-header__brand-group">
+            <MobileNavDrawer />
+            <Link href="/" className="docs-brand">
+              <UiLogo className="docs-brand__logo" />
+              <span className="visually-hidden">A11y UI</span>
+            </Link>
+          </div>
           <DocsHeaderNav />
         </div>
       </header>

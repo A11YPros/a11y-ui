@@ -6,7 +6,7 @@ import packageMeta from '../../../../../packages/design-system/package.json';
 import { componentDocs } from '../components/component-docs';
 import { ThemeToggle } from '../../_components/ThemeToggle';
 
-interface NavLink {
+export interface NavLink {
   href: string;
   label: string;
   startsWith?: string;
@@ -14,7 +14,7 @@ interface NavLink {
   icon?: 'github' | 'npm';
 }
 
-const headerLinks: NavLink[] = [
+export const headerLinks: NavLink[] = [
   {
     href: '/pro',
     label: 'Pro Tier',
@@ -33,10 +33,10 @@ const headerLinks: NavLink[] = [
   },
 ];
 
-const guideLinks: NavLink[] = [{ href: '/getting-started', label: 'Getting Started' }];
-const NPM_VERSION = packageMeta.version;
+export const guideLinks: NavLink[] = [{ href: '/getting-started', label: 'Getting Started' }];
+export const NPM_VERSION = packageMeta.version;
 
-const resourceLinks: NavLink[] = [
+export const resourceLinks: NavLink[] = [
   { href: '/accessibility', label: 'Accessibility Guide' },
   { href: '/custom-components', label: 'Custom Components' },
 ];
@@ -49,7 +49,7 @@ function isActive(pathname: string, href: string, startsWith?: string): boolean 
   return pathname === href;
 }
 
-function HeaderLinkIcon({ icon }: { icon?: 'github' | 'npm' }) {
+export function HeaderLinkIcon({ icon }: { icon?: 'github' | 'npm' }) {
   if (icon === 'github') {
     return (
       <svg aria-hidden="true" viewBox="0 0 24 24" width="16" height="16" focusable="false">
@@ -75,7 +75,7 @@ function HeaderLinkIcon({ icon }: { icon?: 'github' | 'npm' }) {
   return null;
 }
 
-export function DocsHeaderNav() {
+export function DocsHeaderNav({ onItemClick }: { onItemClick?: () => void } = {}) {
   const pathname = usePathname();
 
   return (
@@ -84,13 +84,17 @@ export function DocsHeaderNav() {
         {headerLinks.map((link) => {
           const active = isActive(pathname, link.href, link.startsWith);
           return (
-            <li key={link.href}>
+            <li
+              key={link.href}
+              className={link.external ? 'docs-header__nav-item--external' : undefined}
+            >
               {link.external && link.icon === 'npm' ? (
                 <a
                   className="HeaderLink"
                   href={link.href}
                   rel="noopener"
                   aria-label={`npm version ${NPM_VERSION}`}
+                  onClick={onItemClick}
                 >
                   <svg fill="currentColor" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
                     <rect width="16" height="16" fill="black"></rect>
@@ -100,7 +104,13 @@ export function DocsHeaderNav() {
                   {NPM_VERSION}
                 </a>
               ) : link.external ? (
-                <a className="HeaderLink" href={link.href} target="_blank" rel="noopener noreferrer">
+                <a
+                  className="HeaderLink"
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={onItemClick}
+                >
                   <HeaderLinkIcon icon={link.icon} />{' '}
                   {link.label}
                 </a>
@@ -109,6 +119,7 @@ export function DocsHeaderNav() {
                   href={link.href}
                   className={link.href === '/pro' ? 'HeaderLink--pro' : undefined}
                   aria-current={active ? 'page' : undefined}
+                  onClick={onItemClick}
                 >
                   {link.label}
                   {link.href === '/pro' && <span className="pro-nav-badge">NEW</span>}
@@ -125,7 +136,7 @@ export function DocsHeaderNav() {
   );
 }
 
-export function DocsSidebarNav() {
+export function DocsSidebarNav({ onItemClick }: { onItemClick?: () => void } = {}) {
   const pathname = usePathname();
   const sortedComponentDocs = [...componentDocs].sort((a, b) => a.title.localeCompare(b.title));
 
@@ -137,7 +148,11 @@ export function DocsSidebarNav() {
           const active = isActive(pathname, link.href, link.startsWith);
           return (
             <li key={link.href}>
-              <Link href={link.href} aria-current={active ? 'page' : undefined}>
+              <Link
+                href={link.href}
+                aria-current={active ? 'page' : undefined}
+                onClick={onItemClick}
+              >
                 {link.label}
               </Link>
             </li>
@@ -152,7 +167,11 @@ export function DocsSidebarNav() {
           const active = isActive(pathname, href);
           return (
             <li key={item.slug}>
-              <Link href={href} aria-current={active ? 'page' : undefined}>
+              <Link
+                href={href}
+                aria-current={active ? 'page' : undefined}
+                onClick={onItemClick}
+              >
                 {item.title}
               </Link>
             </li>
@@ -167,6 +186,7 @@ export function DocsSidebarNav() {
             href="/pro"
             className="sidebar-pro-link"
             aria-current={isActive(pathname, '/pro') ? 'page' : undefined}
+            onClick={onItemClick}
           >
             <span>Pro Waitlist</span>
             <span className="sidebar-pro-badge">SOON</span>
@@ -180,14 +200,20 @@ export function DocsSidebarNav() {
           const active = isActive(pathname, link.href, link.startsWith);
           return (
             <li key={link.href}>
-              <Link href={link.href} aria-current={active ? 'page' : undefined}>
+              <Link
+                href={link.href}
+                aria-current={active ? 'page' : undefined}
+                onClick={onItemClick}
+              >
                 {link.label}
               </Link>
             </li>
           );
         })}
         <li>
-          <a href="/storybook-static/index.html">Storybook Playground</a>
+          <a href="/storybook-static/index.html" onClick={onItemClick}>
+            Storybook Playground
+          </a>
         </li>
       </ul>
     </nav>

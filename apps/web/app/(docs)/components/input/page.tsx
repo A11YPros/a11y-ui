@@ -65,7 +65,7 @@ export default function InputPage() {
 
       <section aria-labelledby="input-playground-title" className="doc-section">
         <h2 id="input-playground-title">Playground</h2>
-        <a className="playground-link" href="/storybook-static/index.html?path=/story/components-form-input--default">
+        <a className="playground-link" href="/storybook-static/index.html?path=/docs/components-form-input--docs">
           Open Input stories
         </a>
       </section>

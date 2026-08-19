@@ -113,7 +113,7 @@ export function Example() {
         <h2 id="table-playground-title">Playground</h2>
         <a
           className="playground-link"
-          href="/storybook-static/index.html?path=/story/components-datatable--default"
+          href="/storybook-static/index.html?path=/docs/components-datatable--docs"
         >
           Open Data Table stories
         </a>

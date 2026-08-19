@@ -91,7 +91,7 @@ export default function TabsPage() {
 
       <section aria-labelledby="tabs-playground-title" className="doc-section">
         <h2 id="tabs-playground-title">Playground</h2>
-        <a className="playground-link" href="/storybook-static/index.html?path=/story/components-tabs--default">
+        <a className="playground-link" href="/storybook-static/index.html?path=/docs/components-tabs--docs">
           Open Tabs stories
         </a>
       </section>
