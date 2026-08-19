@@ -109,7 +109,7 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
           required={props.required ? true : undefined}
           {...props}
         />
-        {(showCount || helperText) && (
+        {(showCount || helperText || error) && (
           <div className="form-textarea-footer">
             {helperText && !error && (
               <span id={helperId} className="form-helper-text">
