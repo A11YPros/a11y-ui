@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { createPortal } from 'react-dom';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { DocsSidebarNav, headerLinks, HeaderLinkIcon, NPM_VERSION, NavLink } from './DocsNav';
@@ -9,10 +10,15 @@ import { ThemeToggle } from '../../_components/ThemeToggle';
 
 export function MobileNavDrawer() {
   const [isOpen, setIsOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
   const triggerRef = useRef<HTMLButtonElement | null>(null);
   const drawerRef = useRef<HTMLDivElement | null>(null);
   const closeBtnRef = useRef<HTMLButtonElement | null>(null);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const closeDrawer = useCallback(() => {
     setIsOpen(false);
@@ -96,37 +102,8 @@ export function MobileNavDrawer() {
     };
   }, [isOpen, closeDrawer]);
 
-  return (
+  const drawerPortal = (
     <>
-      <button
-        ref={triggerRef}
-        type="button"
-        className="docs-mobile-menu-btn"
-        aria-label={isOpen ? 'Close navigation menu' : 'Open navigation menu'}
-        aria-expanded={isOpen}
-        aria-controls="docs-mobile-drawer"
-        onClick={toggleDrawer}
-      >
-        <span className="docs-mobile-menu-btn__icon" aria-hidden="true">
-          {isOpen ? (
-            <svg viewBox="0 0 24 24" width="22" height="22" focusable="false">
-              <path
-                fill="currentColor"
-                d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"
-              />
-            </svg>
-          ) : (
-            <svg viewBox="0 0 24 24" width="22" height="22" focusable="false">
-              <path
-                fill="currentColor"
-                d="M3 6h18v2H3V6Zm0 5h18v2H3v-2Zm0 5h18v2H3v-2Z"
-              />
-            </svg>
-          )}
-        </span>
-        <span className="docs-mobile-menu-btn__text">Menu</span>
-      </button>
-
       {/* Backdrop */}
       <div
         className={`docs-drawer-backdrop ${isOpen ? 'is-open' : ''}`}
@@ -210,6 +187,41 @@ export function MobileNavDrawer() {
           </div>
         </div>
       </div>
+    </>
+  );
+
+  return (
+    <>
+      <button
+        ref={triggerRef}
+        type="button"
+        className="docs-mobile-menu-btn"
+        aria-label={isOpen ? 'Close navigation menu' : 'Open navigation menu'}
+        aria-expanded={isOpen}
+        aria-controls="docs-mobile-drawer"
+        onClick={toggleDrawer}
+      >
+        <span className="docs-mobile-menu-btn__icon" aria-hidden="true">
+          {isOpen ? (
+            <svg viewBox="0 0 24 24" width="22" height="22" focusable="false">
+              <path
+                fill="currentColor"
+                d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"
+              />
+            </svg>
+          ) : (
+            <svg viewBox="0 0 24 24" width="22" height="22" focusable="false">
+              <path
+                fill="currentColor"
+                d="M3 6h18v2H3V6Zm0 5h18v2H3v-2Zm0 5h18v2H3v-2Z"
+              />
+            </svg>
+          )}
+        </span>
+        <span className="docs-mobile-menu-btn__text">Menu</span>
+      </button>
+
+      {mounted && typeof document !== 'undefined' ? createPortal(drawerPortal, document.body) : null}
     </>
   );
 }

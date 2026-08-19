@@ -286,7 +286,7 @@ summary:focus-visible {
 .docs-drawer-backdrop {
 	position: fixed;
 	inset: 0;
-	z-index: 1000;
+	z-index: 9998;
 	background: rgb(0 0 0 / 55%);
 	backdrop-filter: blur(4px);
 	opacity: 0;
@@ -304,8 +304,11 @@ summary:focus-visible {
 	top: 0;
 	left: 0;
 	bottom: 0;
+	height: 100vh;
+	height: 100dvh;
+	max-height: 100dvh;
 	width: min(88vw, 21rem);
-	z-index: 1001;
+	z-index: 9999;
 	background: var(--app-panel);
 	border-right: 1px solid var(--app-line);
 	box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
