@@ -17,24 +17,24 @@
 }
 
 .form-radio {
-  width: 1.25rem;
-  height: 1.25rem;
+  width: var(--radio-size, 1.25rem);
+  height: var(--radio-size, 1.25rem);
   margin-top: 0.125rem;
   cursor: pointer;
-  accent-color: var(--color-primary-500, #0ea5e9);
+  accent-color: var(--radio-checked-color, var(--a11y-color-primary, var(--color-primary-500, #0ea5e9)));
   flex-shrink: 0;
   appearance: none;
   -webkit-appearance: none;
-  border: 2px solid var(--color-border-default, #d4d4d4);
+  border: var(--radio-border-width, 2px) solid var(--radio-border-color, var(--a11y-color-border, var(--color-border-default, #d4d4d4)));
   border-radius: 50%;
-  background-color: var(--color-background, #ffffff);
+  background-color: var(--radio-bg, var(--a11y-color-bg, #ffffff));
   position: relative;
   transition: border-color 0.2s ease;
 }
 
 .form-radio:checked {
-  border-color: var(--color-primary-500, #0ea5e9);
-  background-color: var(--color-background, #ffffff);
+  border-color: var(--radio-checked-border, var(--a11y-color-primary, var(--color-primary-500, #0ea5e9)));
+  background-color: var(--radio-bg, var(--a11y-color-bg, #ffffff));
 }
 
 .form-radio:checked::after {
@@ -46,7 +46,12 @@
   width: 0.5rem;
   height: 0.5rem;
   border-radius: 50%;
-  background-color: var(--color-primary-500, #0ea5e9);
+  background-color: var(--radio-dot-color, var(--a11y-color-primary, var(--color-primary-500, #0ea5e9)));
+}
+
+.form-radio:focus-visible {
+  outline: var(--a11y-focus-width, 2px) solid var(--radio-focus-color, var(--a11y-color-focus, var(--color-border-focus, #0ea5e9)));
+  outline-offset: var(--a11y-focus-offset, 2px);
 }
 
 .form-radio:hover:not(:disabled) {

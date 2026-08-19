@@ -1,7 +1,7 @@
 /* Link component styles */
 .link {
-  color: var(--color-link, #0369a1);
-  text-decoration: underline;
+  color: var(--link-color, var(--a11y-color-primary, var(--color-link, #0369a1)));
+  text-decoration: var(--link-text-decoration, underline);
   text-underline-offset: 0.125em;
   transition: color var(--motion-duration-normal, 200ms)
     var(--motion-easing-ease-out, cubic-bezier(0, 0, 0.2, 1));
@@ -16,9 +16,9 @@
 
 /* Focus styles - WCAG 2.4.7 Focus Visible */
 .link:focus-visible {
-  outline: 2px solid var(--color-border-focus, #0ea5e9);
-  outline-offset: 2px;
-  border-radius: 2px;
+  outline: var(--a11y-focus-width, 2px) solid var(--link-focus-color, var(--a11y-color-focus, var(--color-border-focus, #0ea5e9)));
+  outline-offset: var(--a11y-focus-offset, 2px);
+  border-radius: var(--a11y-radius-none, 2px);
 }
 
 .link:focus:not(:focus-visible) {
@@ -27,7 +27,7 @@
 
 /* Hover state */
 .link:hover:not(:disabled) {
-  color: var(--color-link-hover, #075985);
+  color: var(--link-hover-color, var(--a11y-color-primary-hover, var(--color-link-hover, #075985)));
   text-decoration-thickness: 2px;
 }
 

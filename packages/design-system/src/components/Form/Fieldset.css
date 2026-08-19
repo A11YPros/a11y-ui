@@ -1,8 +1,9 @@
 .form-fieldset {
-  border: 1px solid var(--color-border-default, #bbbbbb);
-  border-radius: 0.375rem;
-  padding: var(--spacing-4, 1rem);
+  border: var(--fieldset-border-width, 1px) solid var(--fieldset-border-color, var(--a11y-color-border, var(--color-border-default, #bbbbbb)));
+  border-radius: var(--fieldset-radius, var(--a11y-radius, 0.375rem));
+  padding: var(--fieldset-padding, var(--spacing-4, 1rem));
   margin: 0;
+  background-color: var(--fieldset-bg, transparent);
 }
 
 .fieldset__required {

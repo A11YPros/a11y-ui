@@ -8,14 +8,14 @@
 
 /* Accordion item (details element) */
 .accordion-item {
-  background-color: var(--color-background-default, #ffffff);
-  border-radius: 0.5rem;
+  background-color: var(--accordion-bg, var(--a11y-color-bg, var(--color-background-default, #ffffff)));
+  border-radius: var(--accordion-radius, var(--a11y-radius-lg, var(--a11y-radius, 0.5rem)));
   transition: border-color var(--motion-duration-normal, 200ms)
     var(--motion-easing-ease-out, cubic-bezier(0, 0, 0.2, 1));
 }
 
 .accordion-item:hover {
-  border-color: var(--color-border-hover, #d4d4d4);
+  border-color: var(--accordion-border-hover, var(--a11y-color-border, var(--color-border-hover, #d4d4d4)));
 }
 
 /* Respect reduced motion */
@@ -31,15 +31,16 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--spacing-3, 0.75rem);
-  padding: var(--spacing-4, 1rem);
+  padding: var(--accordion-padding-y, var(--spacing-4, 1rem)) var(--accordion-padding-x, var(--spacing-4, 1rem));
   cursor: pointer;
   list-style: none;
   user-select: none;
-  font-weight: var(--font-weight-medium, 500);
-  color: var(--color-text-primary, #171717);
+  font-weight: var(--accordion-font-weight, var(--font-weight-medium, 500));
+  font-family: var(--accordion-font-family, var(--a11y-font-sans, inherit));
+  color: var(--accordion-header-color, var(--a11y-color-text, var(--color-text-primary, #171717)));
   transition: background-color var(--motion-duration-normal, 200ms)
     var(--motion-easing-ease-out, cubic-bezier(0, 0, 0.2, 1));
-  border-radius: 0.5rem;
+  border-radius: var(--accordion-radius, var(--a11y-radius-lg, var(--a11y-radius, 0.5rem)));
 }
 
 /* Remove default marker */
@@ -52,14 +53,14 @@
 }
 
 .accordion-item__summary:hover {
-  background-color: var(--color-background-secondary, #fafafa);
+  background-color: var(--accordion-header-hover-bg, var(--a11y-color-surface, var(--color-background-secondary, #fafafa)));
 }
 
 /* Focus styles - WCAG 2.4.7 Focus Visible */
 .accordion-item__summary:focus-visible {
-  outline: 2px solid var(--color-border-focus, #0ea5e9);
-  outline-offset: 3px;
-  border-radius: 0.5rem;
+  outline: var(--a11y-focus-width, 2px) solid var(--accordion-focus-color, var(--a11y-color-focus, var(--color-border-focus, #0ea5e9)));
+  outline-offset: var(--a11y-focus-offset, 2px);
+  border-radius: var(--accordion-radius, var(--a11y-radius-lg, var(--a11y-radius, 0.5rem)));
 }
 
 .accordion-item__summary:focus:not(:focus-visible) {

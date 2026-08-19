@@ -33,7 +33,10 @@ export const headerLinks: NavLink[] = [
   },
 ];
 
-export const guideLinks: NavLink[] = [{ href: '/getting-started', label: 'Getting Started' }];
+export const guideLinks: NavLink[] = [
+  { href: '/getting-started', label: 'Getting Started' },
+  { href: '/theming', label: 'Theming Guide' },
+];
 export const NPM_VERSION = packageMeta.version;
 
 export const resourceLinks: NavLink[] = [
