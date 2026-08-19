@@ -366,6 +366,10 @@ summary:focus-visible {
 	padding: 1rem 1.25rem 2.5rem;
 }
 
+.docs-drawer-body .docs-sidebar__nav {
+	position: static;
+}
+
 .docs-drawer-links {
 	margin-top: 1.5rem;
 	padding-top: 1rem;
@@ -455,7 +459,7 @@ summary:focus-visible {
 	padding: 1.25rem 1rem;
 }
 
-.docs-sidebar__nav {
+.docs-sidebar .docs-sidebar__nav {
 	position: sticky;
 	top: 1rem;
 }
