@@ -68,7 +68,7 @@ export default function ModalPage() {
         <h2 id="modal-playground-title">Playground</h2>
         <a
           className="playground-link"
-          href="/storybook-static/index.html?path=/story/components-modal--default"
+          href="/storybook-static/index.html?path=/docs/components-modal--docs"
         >
           Open Modal stories
         </a>

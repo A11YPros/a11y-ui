@@ -85,7 +85,7 @@ export default function ButtonPage() {
         <h2 id="button-playground-title">Playground</h2>
         <a
           className="playground-link"
-          href="/storybook-static/index.html?path=/story/components-button--primary"
+          href="/storybook-static/index.html?path=/docs/components-button--docs"
         >
           Open Button stories
         </a>

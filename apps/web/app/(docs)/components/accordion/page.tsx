@@ -75,12 +75,14 @@ export default function AccordionPage() {
 
       <section aria-labelledby="accordion-playground-title" className="doc-section">
         <h2 id="accordion-playground-title">Playground</h2>
-        <a
-          className="playground-link"
-          href="/storybook-static/index.html?path=/story/components-accordion--single-open"
-        >
-          Open Accordion stories
-        </a>
+        <p>
+          <a
+            className="playground-link"
+            href="/storybook-static/index.html?path=/docs/components-accordion--docs"
+          >
+            Open Accordion in Storybook
+          </a>
+        </p>
       </section>
     </article>
   );

@@ -48,7 +48,7 @@ export default function FieldsetPage() {
 
       <section aria-labelledby="fieldset-playground-title" className="doc-section">
         <h2 id="fieldset-playground-title">Playground</h2>
-        <a className="playground-link" href="/storybook-static/index.html?path=/story/components-form-fieldset--default">
+        <a className="playground-link" href="/storybook-static/index.html?path=/docs/components-form-fieldset--docs">
           Open Fieldset stories
         </a>
       </section>

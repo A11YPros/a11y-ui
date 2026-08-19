@@ -208,7 +208,7 @@ export default function FormPage() {
         <h2 id="form-playground-title">Playground</h2>
         <a
           className="playground-link"
-          href="/storybook-static/index.html?path=/story/components-form-input--default"
+          href="/storybook-static/index.html?path=/docs/components-form-input--docs"
         >
           Open Form stories
         </a>

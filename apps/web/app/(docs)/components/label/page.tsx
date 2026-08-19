@@ -52,7 +52,7 @@ export default function LabelPage() {
 
       <section aria-labelledby="label-playground-title" className="doc-section">
         <h2 id="label-playground-title">Playground</h2>
-        <a className="playground-link" href="/storybook-static/index.html?path=/story/components-form-input--default">
+        <a className="playground-link" href="/storybook-static/index.html?path=/docs/components-form-input--docs">
           Open Form stories
         </a>
       </section>

@@ -63,7 +63,7 @@ export default function TextareaPage() {
 
       <section aria-labelledby="textarea-playground-title" className="doc-section">
         <h2 id="textarea-playground-title">Playground</h2>
-        <a className="playground-link" href="/storybook-static/index.html?path=/story/components-form-textarea--default">
+        <a className="playground-link" href="/storybook-static/index.html?path=/docs/components-form-textarea--docs">
           Open Textarea stories
         </a>
       </section>

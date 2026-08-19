@@ -69,7 +69,7 @@ export default function RadioPage() {
 
       <section aria-labelledby="radio-playground-title" className="doc-section">
         <h2 id="radio-playground-title">Playground</h2>
-        <a className="playground-link" href="/storybook-static/index.html?path=/story/components-form-radio--default">
+        <a className="playground-link" href="/storybook-static/index.html?path=/docs/components-form-radio--docs">
           Open Radio stories
         </a>
       </section>

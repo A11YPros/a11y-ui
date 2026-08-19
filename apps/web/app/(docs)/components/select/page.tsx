@@ -69,7 +69,7 @@ export default function SelectPage() {
 
       <section aria-labelledby="select-playground-title" className="doc-section">
         <h2 id="select-playground-title">Playground</h2>
-        <a className="playground-link" href="/storybook-static/index.html?path=/story/components-form-select--default">
+        <a className="playground-link" href="/storybook-static/index.html?path=/docs/components-form-select--docs">
           Open Select stories
         </a>
       </section>
