@@ -143,9 +143,12 @@ export const Accordion = React.forwardRef<HTMLDivElement, AccordionProps>(
         return React.cloneElement(child as React.ReactElement<any>, {
           ref: (el: HTMLDetailsElement) => {
             detailsRefs.current[index] = el;
-            // Forward ref if child has one
-            if (typeof (child as any).ref === 'function') {
-              (child as any).ref(el);
+            // Forward ref if child has one (supports callback refs, object refs, and React 19 props.ref)
+            const childRef = (child.props as any)?.ref ?? (child as any).ref;
+            if (typeof childRef === 'function') {
+              childRef(el);
+            } else if (childRef && typeof childRef === 'object' && 'current' in childRef) {
+              (childRef as any).current = el;
             }
           },
           onToggle: handleToggle,
