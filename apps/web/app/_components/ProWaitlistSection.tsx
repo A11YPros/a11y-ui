@@ -169,7 +169,7 @@ export function ProWaitlistSection() {
           ))}
         </div>
 
-        <aside className="pro-sidebar">
+        <div className="pro-sidebar">
           <div className="pro-waitlist-box">
             <div className="pro-waitlist-box__content">
               <h3 id="waitlist-form-heading" className="pro-waitlist-box__title">
@@ -271,7 +271,7 @@ export function ProWaitlistSection() {
               </form>
             )}
           </div>
-        </aside>
+        </div>
       </div>
     </section>
   );

@@ -87,7 +87,7 @@ export function DocExample({
       <h2 id={id}>{title}</h2>
       {description ? <p className="doc-example__description">{description}</p> : null}
 
-      <div className="doc-example__preview" aria-label={`${title} preview`}>
+      <div className="doc-example__preview">
         {children}
       </div>
 

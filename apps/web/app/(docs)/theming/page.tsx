@@ -226,6 +226,7 @@ export default function ThemingGuidePage() {
                 type="text"
                 value={primaryColor}
                 onChange={(e) => setPrimaryColor(e.target.value)}
+                aria-label="Primary color hex value"
                 style={{
                   padding: '0.375rem 0.5rem',
                   fontSize: '0.875rem',
@@ -259,6 +260,7 @@ export default function ThemingGuidePage() {
                 type="text"
                 value={primaryHoverColor}
                 onChange={(e) => setPrimaryHoverColor(e.target.value)}
+                aria-label="Primary hover color hex value"
                 style={{
                   padding: '0.375rem 0.5rem',
                   fontSize: '0.875rem',
