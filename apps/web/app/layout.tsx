@@ -38,6 +38,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               "(function(){try{var t=localStorage.getItem('a11y-ui-theme');document.documentElement.setAttribute('data-theme',t==='dark'?'dark':'light');}catch(e){document.documentElement.setAttribute('data-theme','light');}})();",
           }}
         />
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-W8QRH1S6R6"
+          strategy="afterInteractive"
+        />
         <Script id="ga4-config" strategy="afterInteractive">
           {`window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
