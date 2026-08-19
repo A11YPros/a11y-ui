@@ -1,13 +1,15 @@
 .banner {
-  --banner-info-border: var(--color-info-600, #0284c7);
-  --banner-info-bg: var(--color-info-50, #f0f9ff);
-  --banner-success-border: var(--color-success-600, #16a34a);
-  --banner-success-bg: var(--color-success-50, #f0fdf4);
-  --banner-warning-border: var(--color-warning-600, #d97706);
-  --banner-warning-bg: var(--color-warning-50, #fffbeb);
-  --banner-error-border: var(--color-error-600, #dc2626);
-  --banner-error-bg: var(--color-error-50, #fef2f2);
-  --banner-close-hover-bg: var(--color-neutral-100, #f5f5f5);
+  --banner-radius: var(--a11y-radius-lg, var(--a11y-radius, 0.5rem));
+  --banner-border-width: 4px;
+  --banner-info-border: var(--a11y-color-info, var(--a11y-color-primary, var(--color-info-600, #0284c7)));
+  --banner-info-bg: var(--a11y-color-info-bg, color-mix(in srgb, var(--banner-info-border) 10%, var(--a11y-color-bg, var(--color-background-default, #ffffff))));
+  --banner-success-border: var(--a11y-color-success, var(--color-success-600, #16a34a));
+  --banner-success-bg: var(--a11y-color-success-bg, color-mix(in srgb, var(--banner-success-border) 10%, var(--a11y-color-bg, var(--color-background-default, #ffffff))));
+  --banner-warning-border: var(--a11y-color-warning, var(--color-warning-600, #d97706));
+  --banner-warning-bg: var(--a11y-color-warning-bg, color-mix(in srgb, var(--banner-warning-border) 10%, var(--a11y-color-bg, var(--color-background-default, #ffffff))));
+  --banner-error-border: var(--a11y-color-error, var(--color-error-600, #dc2626));
+  --banner-error-bg: var(--a11y-color-error-bg, color-mix(in srgb, var(--banner-error-border) 10%, var(--a11y-color-bg, var(--color-background-default, #ffffff))));
+  --banner-close-hover-bg: var(--a11y-color-surface-hover, var(--color-neutral-100, #f5f5f5));
 }
 
 .banner {
@@ -17,11 +19,11 @@
   gap: var(--spacing-3, 0.75rem);
   width: 100%;
   padding: var(--spacing-3, 0.75rem) var(--spacing-4, 1rem);
-  border: 1px solid var(--color-border-default, #d4d4d4);
-  border-left-width: 4px;
-  border-radius: 0.5rem;
-  background-color: var(--color-surface-default, #ffffff);
-  color: var(--color-text-primary, #171717);
+  border: 1px solid var(--banner-border-color, var(--a11y-color-border, var(--color-border-default, #d4d4d4)));
+  border-left-width: var(--banner-border-width, 4px);
+  border-radius: var(--banner-radius, var(--a11y-radius-lg, var(--a11y-radius, 0.5rem)));
+  background-color: var(--banner-bg, var(--a11y-color-surface, var(--color-surface-default, #ffffff)));
+  color: var(--banner-color, var(--a11y-color-text, var(--color-text-primary, #171717)));
 }
 
 .banner__content-wrap {
@@ -116,27 +118,27 @@
 }
 
 [data-theme='dark'] .banner {
-  --banner-info-border: #38bdf8;
-  --banner-info-bg: #0c2233;
-  --banner-success-border: #4ade80;
-  --banner-success-bg: #102a1c;
-  --banner-warning-border: #f59e0b;
-  --banner-warning-bg: #34260f;
-  --banner-error-border: #f87171;
-  --banner-error-bg: #35151a;
+  --banner-info-border: var(--a11y-color-info, var(--a11y-color-primary, #38bdf8));
+  --banner-info-bg: var(--a11y-color-info-bg, color-mix(in srgb, var(--banner-info-border) 18%, var(--a11y-color-bg, #171717)));
+  --banner-success-border: var(--a11y-color-success, #4ade80);
+  --banner-success-bg: var(--a11y-color-success-bg, color-mix(in srgb, var(--banner-success-border) 18%, var(--a11y-color-bg, #171717)));
+  --banner-warning-border: var(--a11y-color-warning, #f59e0b);
+  --banner-warning-bg: var(--a11y-color-warning-bg, color-mix(in srgb, var(--banner-warning-border) 18%, var(--a11y-color-bg, #171717)));
+  --banner-error-border: var(--a11y-color-error, #dc2626);
+  --banner-error-bg: var(--a11y-color-error-bg, color-mix(in srgb, var(--banner-error-border) 18%, var(--a11y-color-bg, #171717)));
   --banner-close-hover-bg: rgb(255 255 255 / 10%);
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) .banner {
-    --banner-info-border: #38bdf8;
-    --banner-info-bg: #0c2233;
-    --banner-success-border: #4ade80;
-    --banner-success-bg: #102a1c;
-    --banner-warning-border: #f59e0b;
-    --banner-warning-bg: #34260f;
-    --banner-error-border: #f87171;
-    --banner-error-bg: #35151a;
+    --banner-info-border: var(--a11y-color-info, var(--a11y-color-primary, #38bdf8));
+    --banner-info-bg: var(--a11y-color-info-bg, color-mix(in srgb, var(--banner-info-border) 18%, var(--a11y-color-bg, #171717)));
+    --banner-success-border: var(--a11y-color-success, #4ade80);
+    --banner-success-bg: var(--a11y-color-success-bg, color-mix(in srgb, var(--banner-success-border) 18%, var(--a11y-color-bg, #171717)));
+    --banner-warning-border: var(--a11y-color-warning, #f59e0b);
+    --banner-warning-bg: var(--a11y-color-warning-bg, color-mix(in srgb, var(--banner-warning-border) 18%, var(--a11y-color-bg, #171717)));
+    --banner-error-border: var(--a11y-color-error, #dc2626);
+    --banner-error-bg: var(--a11y-color-error-bg, color-mix(in srgb, var(--banner-error-border) 18%, var(--a11y-color-bg, #171717)));
     --banner-close-hover-bg: rgb(255 255 255 / 10%);
   }
 }

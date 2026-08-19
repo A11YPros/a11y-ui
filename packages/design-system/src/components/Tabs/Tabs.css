@@ -10,7 +10,7 @@
 
 .tabs-list {
   display: flex;
-  border-bottom: 1px solid var(--color-border-default, #bbbbbb);
+  border-bottom: 1px solid var(--tabs-border-color, var(--a11y-color-border, var(--color-border-default, #bbbbbb)));
   gap: var(--spacing-1, 0.25rem);
 }
 
@@ -27,13 +27,14 @@
 .tabs-tab {
   display: flex;
   align-items: center;
-  padding: var(--spacing-3, 0.75rem) var(--spacing-4, 1rem);
-  font-size: var(--font-size-base, 1rem);
+  padding: var(--tabs-padding-y, var(--spacing-3, 0.75rem)) var(--tabs-padding-x, var(--spacing-4, 1rem));
+  font-size: var(--tabs-font-size, var(--font-size-base, 1rem));
+  font-family: var(--tabs-font-family, var(--a11y-font-sans, inherit));
   font-weight: var(--font-weight-medium, 500);
-  color: var(--color-text-secondary, #525252);
+  color: var(--tabs-color, var(--a11y-color-text-muted, var(--color-text-secondary, #525252)));
   background: none;
   border: none;
-  border-bottom: 2px solid transparent;
+  border-bottom: var(--tabs-active-border-width, 2px) solid transparent;
   cursor: pointer;
   transition:
     color var(--motion-duration-normal, 200ms)
@@ -64,19 +65,19 @@
 }
 
 .tabs-tab:hover:not(:disabled) {
-  color: var(--color-text-primary, #171717);
+  color: var(--tabs-hover-color, var(--a11y-color-text, var(--color-text-primary, #171717)));
 }
 
 .tabs-tab--selected {
-  color: var(--color-link, #0369a1);
-  border-bottom-color: var(--color-link, #0369a1);
+  color: var(--tabs-active-color, var(--a11y-color-primary, var(--color-link, #0369a1)));
+  border-bottom-color: var(--tabs-active-border-color, var(--a11y-color-primary, var(--color-link, #0369a1)));
 }
 
 .tabs--vertical .tabs-tab--selected {
   border-bottom-color: transparent;
-  border-left-color: var(--color-link, #0369a1);
-  background-color: var(--color-background-secondary, #fafafa);
-  color: var(--color-link, #0369a1);
+  border-left-color: var(--tabs-active-border-color, var(--a11y-color-primary, var(--color-link, #0369a1)));
+  background-color: var(--tabs-active-bg, var(--a11y-color-surface, var(--color-background-secondary, #fafafa)));
+  color: var(--tabs-active-color, var(--a11y-color-primary, var(--color-link, #0369a1)));
   font-weight: var(--font-weight-semibold, 600);
 }
 

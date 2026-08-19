@@ -1,17 +1,20 @@
 /* Dialog backdrop (native HTML5 dialog element) */
 .modal::backdrop {
-  background-color: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(2px);
+  background-color: var(--modal-backdrop-bg, rgba(0, 0, 0, 0.5));
+  backdrop-filter: var(--modal-backdrop-blur, blur(2px));
 }
 
 .modal {
-  background-color: var(--color-background-default, #ffffff);
-  color: var(--color-text-primary, #171717);
-  border-radius: 0.5rem;
-  border: none;
-  box-shadow:
+  background-color: var(--modal-bg, var(--a11y-color-bg, var(--color-background-default, #ffffff)));
+  color: var(--modal-color, var(--a11y-color-text, var(--color-text-primary, #171717)));
+  border-radius: var(--modal-radius, var(--a11y-radius-lg, var(--a11y-radius, 0.5rem)));
+  border: var(--modal-border, none);
+  box-shadow: var(
+    --modal-shadow,
+    var(--a11y-shadow-lg,
     0 20px 25px -5px rgba(0, 0, 0, 0.1),
-    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    0 10px 10px -5px rgba(0, 0, 0, 0.04))
+  );
   max-height: 90vh;
   display: flex;
   flex-direction: column;
@@ -49,7 +52,7 @@
   align-items: center;
   justify-content: space-between;
   padding: var(--spacing-4, 1rem) var(--spacing-6, 1.5rem);
-  border-bottom: 1px solid var(--color-border-default, #bbbbbb);
+  border-bottom: 1px solid var(--modal-border-color, var(--a11y-color-border, var(--color-border-default, #bbbbbb)));
 }
 
 .modal-title {

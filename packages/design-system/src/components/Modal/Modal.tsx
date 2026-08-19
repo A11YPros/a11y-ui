@@ -91,6 +91,7 @@ export const Modal: React.FC<ModalProps> = ({
 }) => {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const titleId = React.useId();
+  const contentId = React.useId();
 
   // Return focus on close
   useFocusReturn(isOpen, returnFocusTo);
@@ -140,6 +141,7 @@ export const Modal: React.FC<ModalProps> = ({
       ref={dialogRef}
       className={`modal modal--${size} ${isOpen ? 'modal--open' : ''} ${className}`.trim()}
       aria-labelledby={titleId}
+      aria-describedby={contentId}
       onCancel={handleCancel}
       onClick={handleDialogClick}
     >
@@ -158,7 +160,7 @@ export const Modal: React.FC<ModalProps> = ({
             <span aria-hidden="true">×</span>
           </Button>
         </div>
-        <div className="modal-content">{children}</div>
+        <div id={contentId} className="modal-content">{children}</div>
       </div>
     </dialog>
   );

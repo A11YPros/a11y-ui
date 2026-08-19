@@ -11,22 +11,24 @@
 }
 
 .form-checkbox {
-  width: 1.25rem;
-  height: 1.25rem;
+  width: var(--checkbox-size, 1.25rem);
+  height: var(--checkbox-size, 1.25rem);
   margin-top: 0.125rem;
   cursor: pointer;
-  accent-color: var(--color-primary-500, #0ea5e9);
+  accent-color: var(--checkbox-checked-bg, var(--a11y-color-primary, var(--color-primary-500, #0ea5e9)));
   flex-shrink: 0;
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  border: 2px solid var(--color-border-default, #767676);
+  border: var(--checkbox-border-width, 2px) solid var(--checkbox-border-color, var(--a11y-color-border, var(--color-border-default, #767676)));
+  border-radius: var(--checkbox-radius, var(--a11y-radius-sm, 0.25rem));
   position: relative;
+  background-color: var(--checkbox-bg, var(--a11y-color-bg, #ffffff));
 }
 
 .form-checkbox:is(:checked, :indeterminate) {
-  background-color: var(--color-primary-500, #0ea5e9);
-  border-color: var(--color-primary-500, #0ea5e9);
+  background-color: var(--checkbox-checked-bg, var(--a11y-color-primary, var(--color-primary-500, #0ea5e9)));
+  border-color: var(--checkbox-checked-border, var(--a11y-color-primary, var(--color-primary-500, #0ea5e9)));
 }
 
 .form-checkbox:checked::after {
@@ -52,9 +54,8 @@
 }
 
 .form-checkbox:focus-visible {
-  outline: 2px solid var(--color-border-focus, #0ea5e9);
-  outline-offset: 2px;
-  border-radius: 2px;
+  outline: var(--a11y-focus-width, 2px) solid var(--checkbox-focus-color, var(--a11y-color-focus, var(--color-border-focus, #0ea5e9)));
+  outline-offset: var(--a11y-focus-offset, 2px);
 }
 
 .form-checkbox-label {
