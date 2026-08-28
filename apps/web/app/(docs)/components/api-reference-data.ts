@@ -564,3 +564,150 @@ export const formOverviewApi: ApiSectionDoc[] = [
     ],
   },
 ];
+
+export const switchApi: ApiSectionDoc[] = [
+  {
+    name: 'SwitchProps',
+    props: [
+      {
+        name: 'checked',
+        type: 'boolean',
+        description: 'Controlled checked state.',
+      },
+      {
+        name: 'defaultChecked',
+        type: 'boolean',
+        defaultValue: 'false',
+        description: 'Initial state for uncontrolled usage.',
+      },
+      {
+        name: 'onChange',
+        type: '(checked: boolean, event: MouseEvent | KeyboardEvent) => void',
+        description: 'Callback fired when the switch state changes.',
+      },
+      {
+        name: 'label',
+        type: 'string',
+        description: 'Visible label text associated with the switch.',
+      },
+      {
+        name: 'labelPosition',
+        type: "'start' | 'end'",
+        defaultValue: "'end'",
+        description: 'Position of label relative to the switch toggle.',
+      },
+      {
+        name: 'size',
+        type: "'sm' | 'md' | 'lg'",
+        defaultValue: "'md'",
+        description: 'Size of the switch control.',
+      },
+      {
+        name: 'disabled',
+        type: 'boolean',
+        defaultValue: 'false',
+        description: 'Disables user interaction and dims the control.',
+      },
+      {
+        name: 'error',
+        type: 'string',
+        description: 'Validation error message associated via aria-describedby.',
+      },
+      {
+        name: 'helperText',
+        type: 'string',
+        description: 'Supplementary helper text associated via aria-describedby.',
+      },
+      {
+        name: 'name',
+        type: 'string',
+        description: 'Field name for hidden input during standard HTML form submission.',
+      },
+      {
+        name: 'value',
+        type: 'string',
+        defaultValue: "'on'",
+        description: 'Field value for hidden input during form submission.',
+      },
+    ],
+  },
+];
+
+export const tooltipApi: ApiSectionDoc[] = [
+  {
+    name: 'TooltipProps',
+    props: [
+      {
+        name: 'content',
+        type: 'React.ReactNode',
+        description: 'Tooltip body copy or elements displayed inside the popover.',
+      },
+      {
+        name: 'label',
+        type: 'string',
+        description: 'Accessible name for icon-only triggers (aria-label).',
+      },
+      {
+        name: 'contentHeading',
+        type: 'string',
+        description: 'Optional bold heading rendered above the tooltip body.',
+      },
+      {
+        name: 'placement',
+        type: "'top' | 'bottom' | 'left' | 'right' | 'top-start' | 'top-end' | 'bottom-start' | 'bottom-end'",
+        defaultValue: "'top'",
+        description: 'Preferred placement of tooltip relative to the anchor trigger.',
+      },
+      {
+        name: 'defaultIcon',
+        type: "'help' | 'info'",
+        description: 'Built-in icon anchor when no children are provided.',
+      },
+      {
+        name: 'customIcon',
+        type: 'React.ReactNode',
+        description: 'Custom SVG or icon element for free-standing triggers.',
+      },
+      {
+        name: 'isSmall',
+        type: 'boolean',
+        defaultValue: 'false',
+        description: 'Compact tooltip size with reduced padding.',
+      },
+      {
+        name: 'showDashedUnderline',
+        type: 'boolean',
+        defaultValue: 'true',
+        description: 'Whether to show dashed underline on non-interactive wrapped text.',
+      },
+      {
+        name: 'shouldNotWrap',
+        type: 'boolean',
+        defaultValue: 'false',
+        description:
+          'Prevents wrapping child in a button if child already handles keyboard events.',
+      },
+      {
+        name: 'open',
+        type: 'boolean',
+        description: 'Controlled visibility state.',
+      },
+      {
+        name: 'onOpenChange',
+        type: '(open: boolean) => void',
+        description: 'Callback fired when tooltip visibility changes.',
+      },
+      {
+        name: 'delay',
+        type: 'number',
+        defaultValue: '150',
+        description: 'Delay in milliseconds before opening on hover.',
+      },
+      {
+        name: 'children',
+        type: 'React.ReactNode',
+        description: 'Anchor element to wrap as trigger.',
+      },
+    ],
+  },
+];

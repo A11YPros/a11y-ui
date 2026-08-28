@@ -18,8 +18,17 @@
 /* DataTable */
 @import '../components/DataTable/DataTable.css';
 
+/* Accordion */
+@import '../components/Accordion/Accordion.css';
+
 /* Tabs */
 @import '../components/Tabs/Tabs.css';
+
+/* Switch */
+@import '../components/Switch/Switch.css';
+
+/* Tooltip */
+@import '../components/Tooltip/Tooltip.css';
 
 /* Form components */
 @import '../components/Form/Label.css';

@@ -9,6 +9,8 @@ export * from './components/Link/Link';
 export * from './components/Modal/Modal';
 export * from './components/DataTable/DataTable';
 export * from './components/Tabs/Tabs';
+export * from './components/Switch/Switch';
+export * from './components/Tooltip/Tooltip';
 export * from './components/Form/Input';
 export * from './components/Form/Textarea';
 export * from './components/Form/Select';
