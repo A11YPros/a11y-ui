@@ -16,10 +16,12 @@ An accessibility-first React UI component library built with WCAG 2.1 / 2.2 Leve
 ## Key Features
 
 - ✅ **WCAG 2.1/2.2 AA & AAA Compliant** - Accessibility built in as a core requirement, not an afterthought
+- ✅ **Fully Themeable & Brandable** - Comprehensive `--a11y-*` CSS variable design token contract with out-of-the-box light and dark mode support
 - ✅ **TypeScript Native** - Full type safety and inline JSDoc completion
-- ✅ **Keyboard Navigable** - Complete keyboard support (`Tab`, `Shift+Tab`, `Arrow Keys`, `Escape`) for all interactive elements
-- ✅ **Screen Reader Tested** - Verified with VoiceOver, NVDA, and JAWS with proper ARIA attributes & live regions
+- ✅ **Keyboard Navigable** - Complete keyboard support (`Tab`, `Shift+Tab`, `Arrow Keys`, `Escape`, `Space`) across all interactive components
+- ✅ **Screen Reader Tested** - Verified with VoiceOver, NVDA, and JAWS with proper ARIA attributes, live regions, and semantic markup
 - ✅ **Focus Management** - Built-in focus trap, focus return, and visible 3:1 focus ring tokens
+- ✅ **Assistive Preferences Built In** - Automatic support for `prefers-reduced-motion` and `prefers-contrast`
 - ✅ **Tree-Shakeable & Lightweight** - ESM exports with zero side effects for minimal bundle impact
 - ✅ **Modern React** - React 18+ & 19+ compatible
 
@@ -49,14 +51,18 @@ npm install react react-dom
 
 ### 1. Import CSS Styles
 
-Import global component tokens and styles in your application entry point:
+Choose the stylesheet export that best matches your project setup:
+
+**Option A: Full Stylesheet (Recommended)**  
+Includes design tokens, CSS reset, focus visible rings, light/dark themes, high-contrast, and reduced-motion rules:
 
 ```tsx
 // In your app root (e.g., layout.tsx, index.tsx, or App.tsx)
 import '@a11ypros/a11y-ui-components/styles';
 ```
 
-Or component-specific styles:
+**Option B: Component-Only Styles**  
+Includes only structural component styles without global resets or typography defaults (ideal if you already use Tailwind CSS or your own reset):
 
 ```tsx
 import '@a11ypros/a11y-ui-components/styles/components';
@@ -65,32 +71,32 @@ import '@a11ypros/a11y-ui-components/styles/components';
 ### 2. Import and Render Components
 
 ```tsx
-import { Button, Input, Modal } from '@a11ypros/a11y-ui-components';
+import { Button, Input, Modal, Switch, Tooltip } from '@a11ypros/a11y-ui-components';
 import { useState } from 'react';
 
 export function App() {
   const [isOpen, setIsOpen] = useState(false);
+  const [notifications, setNotifications] = useState(false);
 
   return (
     <main>
       <h1>Accessible React Application</h1>
-      
-      <Input 
-        label="Work Email" 
-        type="email" 
-        required 
-        placeholder="you@company.com" 
+
+      <Input label="Work Email" type="email" required placeholder="you@company.com" />
+
+      <Switch
+        label="Enable email notifications"
+        checked={notifications}
+        onChange={setNotifications}
       />
 
-      <Button variant="primary" onClick={() => setIsOpen(true)}>
-        Open Confirm Modal
-      </Button>
+      <Tooltip content="Opens confirmation dialog" position="top">
+        <Button variant="primary" onClick={() => setIsOpen(true)}>
+          Open Confirm Modal
+        </Button>
+      </Tooltip>
 
-      <Modal 
-        isOpen={isOpen} 
-        onClose={() => setIsOpen(false)} 
-        title="Confirm Operation"
-      >
+      <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} title="Confirm Operation">
         <p>This modal automatically traps keyboard focus and announces to screen readers.</p>
         <Button onClick={() => setIsOpen(false)}>Close Modal</Button>
       </Modal>
@@ -99,40 +105,81 @@ export function App() {
 }
 ```
 
----
-
-## Available Components & Utilities
-
-### Form Controls
-- **Input** — Accessible text input with label association, description, and error live regions
-- **Textarea** — Multi-line text field with dynamic height and ARIA error states
-- **Select** — Custom accessible dropdown select with keyboard navigation
-- **Checkbox** — Keyboard-toggleable checkbox with custom accessible states
-- **Radio / Fieldset** — Radio button group with semantic fieldset and legend wrappers
-- **Label** — Accessible form label component with required indicators
-
-### UI & Navigation
-- **Button** — Accessible button with primary, secondary, ghost, and danger variants
-- **Link** — Accessible link with external indicator support and focus rings
-- **Modal** — Dialog overlay with automatic focus trapping, escape key closing, and focus restoration
-- **Tabs** — WAI-ARIA 1.2 compliant keyboard-navigable tabs (`ArrowLeft` / `ArrowRight`)
-- **DataTable** — Accessible data grid with column sorting indicators
-
-### Accessibility Hooks & Helpers
-- **useFocusTrap** — Traps keyboard focus within a container element
-- **useFocusReturn** — Restores focus to the triggering element when a modal or popover closes
-- **useAriaLive** — Manages ARIA live region announcements dynamically
+> **Note for Next.js App Router (RSC)**: Interactive components (`Modal`, `Tabs`, `Switch`, `Tooltip`, `Select`, `Accordion`, etc.) manage client-side state and should be imported within `'use client'` files or client boundary wrappers.
 
 ---
 
-## Customization with Design Tokens
+## Theming & Customization
 
-Import pre-tested accessibility design tokens for custom styling:
+The library is designed from the ground up to be easily customized to fit your brand identity while guaranteeing WCAG non-text and text contrast standards.
+
+### 1. CSS Custom Properties (`--a11y-*` Contract)
+
+You can override tokens globally on `:root`, per theme, or scoped to specific component containers:
+
+```css
+/* Example: Customizing your brand colors, border radius, and typography */
+:root {
+  /* Brand colors */
+  --a11y-color-primary: #6366f1;
+  --a11y-color-primary-hover: #4f46e5;
+  --a11y-color-primary-active: #4338ca;
+  --a11y-color-primary-fg: #ffffff;
+
+  /* Focus ring (WCAG 2.4.7 / 2.4.11 compliant) */
+  --a11y-color-focus: #6366f1;
+  --a11y-focus-width: 2px;
+  --a11y-focus-offset: 2px;
+
+  /* Border radius (change to 0px for sharp corners, or 9999px for rounded pill styles) */
+  --a11y-radius: 0.5rem;
+
+  /* Typography */
+  --a11y-font-sans: 'Inter', system-ui, sans-serif;
+}
+```
+
+### Key Theming Tokens
+
+| Token                        | Description                                       | Default (Light) |
+| ---------------------------- | ------------------------------------------------- | --------------- |
+| `--a11y-color-primary`       | Primary action color                              | `#0369a1`       |
+| `--a11y-color-primary-hover` | Hover state for primary actions                   | `#075985`       |
+| `--a11y-color-bg`            | Background canvas color                           | `#ffffff`       |
+| `--a11y-color-surface`       | Secondary surface/card background                 | `#fafafa`       |
+| `--a11y-color-text`          | Primary body and heading text                     | `#171717`       |
+| `--a11y-color-text-muted`    | Secondary helper and descriptive text             | `#525252`       |
+| `--a11y-color-border`        | Default border color (WCAG 3:1 non-text contrast) | `#767676`       |
+| `--a11y-color-focus`         | Accessible focus indicator color                  | `#0ea5e9`       |
+| `--a11y-radius`              | Universal corner border radius                    | `0.375rem`      |
+
+### 2. Light & Dark Themes
+
+- **Automatic**: The library automatically matches the user's OS color scheme using `@media (prefers-color-scheme: dark)`.
+- **Explicit Toggling**: Set `data-theme="dark"` or `data-theme="light"` on your `<html>` or `<body>` element to force a theme:
+
+```html
+<!-- Forced Dark Theme -->
+<html data-theme="dark">
+  ...
+</html>
+```
+
+### 3. Reduced Motion & High Contrast
+
+When using `@a11ypros/a11y-ui-components/styles`:
+
+- **Reduced Motion**: Automatically zeroes out transition and animation durations when users enable `prefers-reduced-motion: reduce`.
+- **High Contrast**: Elevates borders to `2px` and uses high-visibility focus rings under `prefers-contrast: high`.
+
+### 4. JavaScript Design Tokens
+
+Tokens are also exported as JavaScript/TypeScript constants for CSS-in-JS, Tailwind presets, or inline styles:
 
 ```tsx
 import { colors, spacing, typography, motion } from '@a11ypros/a11y-ui-components';
 
-const CustomBanner = () => (
+const CustomCard = () => (
   <div
     style={{
       backgroundColor: colors.neutral[50],
@@ -145,6 +192,43 @@ const CustomBanner = () => (
   </div>
 );
 ```
+
+---
+
+## Available Components & Utilities
+
+### Form Controls
+
+- **Input** — Accessible text input with label association, descriptions, and error live regions
+- **Textarea** — Multi-line text field with dynamic height and ARIA error states
+- **Select** — Accessible dropdown select with keyboard navigation (`ArrowUp` / `ArrowDown` / `Enter`)
+- **Checkbox** — Keyboard-toggleable checkbox with custom accessible states
+- **Radio / Fieldset** — Radio button group with semantic fieldset and legend wrappers
+- **Switch** — Accessible toggle switch with `role="switch"` and keyboard toggling
+- **Label** — Accessible form label component with required indicators
+
+### UI & Navigation
+
+- **Accordion** — WAI-ARIA collapsible disclosure component with keyboard arrow navigation
+- **Banner** — Status and alert messaging banner with semantic `role="status"` / `role="alert"`
+- **Button** — Accessible button with primary, secondary, ghost, and danger variants
+- **DataTable** — Accessible data grid with column sorting indicators
+- **Link** — Accessible link with external indicator support and focus rings
+- **Modal** — Dialog overlay with automatic focus trapping, escape key closing, and focus restoration
+- **Tabs** — WAI-ARIA 1.2 compliant keyboard-navigable tabs (`ArrowLeft` / `ArrowRight`)
+- **Tooltip** — Floating information popup with `role="tooltip"`, `aria-describedby`, and Escape key dismissal
+
+### Accessibility Hooks
+
+- **`useFocusTrap`** — Traps keyboard focus within a container element (e.g., drawers, modals)
+- **`useFocusReturn`** — Restores focus to the triggering element when an overlay closes
+- **`useAriaLive`** — Manages dynamic screen reader announcements via live regions
+
+### Accessibility Utilities
+
+- **ARIA**: `announceToScreenReader()`
+- **Focus Management**: `trapFocus()`, `getKeyboardFocusableElements()`
+- **Keyboard Navigation**: `handleArrowNavigation()`, `isNavigationKey()`
 
 ---
 
