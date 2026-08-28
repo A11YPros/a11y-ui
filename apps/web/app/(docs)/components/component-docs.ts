@@ -91,9 +91,21 @@ export const componentDocs: ComponentDocMeta[] = [
     storybookPath: '/storybook-static/index.html?path=/docs/components-datatable--docs',
   },
   {
+    slug: 'switch',
+    title: 'Switch',
+    summary: 'Accessible toggle control for immediate settings.',
+    storybookPath: '/storybook-static/index.html?path=/docs/components-switch--docs',
+  },
+  {
     slug: 'tabs',
     title: 'Tabs',
     summary: 'Keyboard-friendly tab lists and panels.',
     storybookPath: '/storybook-static/index.html?path=/docs/components-tabs--docs',
+  },
+  {
+    slug: 'tooltip',
+    title: 'Tooltip',
+    summary: 'Accessible popup helper with hover, focus, and escape dismissal.',
+    storybookPath: '/storybook-static/index.html?path=/docs/components-tooltip--docs',
   },
 ];

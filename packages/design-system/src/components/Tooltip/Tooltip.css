@@ -1,0 +1,250 @@
+/* ==========================================================================
+   Tooltip Component Styles
+   ========================================================================== */
+
+.a11y-tooltip-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+}
+
+/* Tooltip Content Bubble */
+.a11y-tooltip {
+  position: absolute;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1, 0.25rem);
+  width: max-content;
+  max-width: 320px;
+  padding: var(--spacing-2, 0.5rem) var(--spacing-3, 0.75rem);
+  border-radius: var(--a11y-radius, 0.375rem);
+  background-color: var(--color-surface-inverse, #1f2937);
+  color: var(--color-white, #ffffff);
+  font-family: var(--a11y-font-sans, inherit);
+  font-size: var(--font-size-sm, 0.875rem);
+  line-height: var(--line-height-normal, 1.4);
+  text-align: start;
+  word-wrap: break-word;
+  box-shadow: var(
+    --a11y-shadow-md,
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -2px rgba(0, 0, 0, 0.1)
+  );
+  pointer-events: auto;
+  opacity: 1;
+  transition: opacity 150ms ease;
+}
+
+/* Small Variant */
+.a11y-tooltip--small {
+  padding: var(--spacing-1, 0.25rem) var(--spacing-2, 0.5rem);
+  font-size: var(--font-size-xs, 0.75rem);
+}
+
+/* Heading */
+.a11y-tooltip__heading {
+  font-weight: 600;
+  color: var(--color-white, #ffffff);
+}
+
+.a11y-tooltip__content {
+  color: inherit;
+}
+
+/* Arrow Caret */
+.a11y-tooltip__arrow {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background-color: inherit;
+  transform: rotate(45deg);
+}
+
+/* Placements */
+/* Top */
+.a11y-tooltip--top {
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.a11y-tooltip--top .a11y-tooltip__arrow {
+  bottom: -4px;
+  left: calc(50% - 4px);
+}
+
+/* Top Start */
+.a11y-tooltip--top-start {
+  bottom: calc(100% + 8px);
+  left: 0;
+}
+
+.a11y-tooltip--top-start .a11y-tooltip__arrow {
+  bottom: -4px;
+  left: 12px;
+}
+
+/* Top End */
+.a11y-tooltip--top-end {
+  bottom: calc(100% + 8px);
+  right: 0;
+}
+
+.a11y-tooltip--top-end .a11y-tooltip__arrow {
+  bottom: -4px;
+  right: 12px;
+}
+
+/* Bottom */
+.a11y-tooltip--bottom {
+  top: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.a11y-tooltip--bottom .a11y-tooltip__arrow {
+  top: -4px;
+  left: calc(50% - 4px);
+}
+
+/* Bottom Start */
+.a11y-tooltip--bottom-start {
+  top: calc(100% + 8px);
+  left: 0;
+}
+
+.a11y-tooltip--bottom-start .a11y-tooltip__arrow {
+  top: -4px;
+  left: 12px;
+}
+
+/* Bottom End */
+.a11y-tooltip--bottom-end {
+  top: calc(100% + 8px);
+  right: 0;
+}
+
+.a11y-tooltip--bottom-end .a11y-tooltip__arrow {
+  top: -4px;
+  right: 12px;
+}
+
+/* Left */
+.a11y-tooltip--left {
+  right: calc(100% + 8px);
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.a11y-tooltip--left .a11y-tooltip__arrow {
+  right: -4px;
+  top: calc(50% - 4px);
+}
+
+/* Right */
+.a11y-tooltip--right {
+  left: calc(100% + 8px);
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.a11y-tooltip--right .a11y-tooltip__arrow {
+  left: -4px;
+  top: calc(50% - 4px);
+}
+
+/* Free-standing Icon Button Trigger */
+.a11y-tooltip-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  margin: 0;
+  padding: var(--spacing-1, 0.25rem);
+  border: none;
+  border-radius: var(--a11y-radius-full, 9999px);
+  background: transparent;
+  color: var(--color-text-secondary, #525252);
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    color 150ms ease,
+    background-color 150ms ease;
+}
+
+.a11y-tooltip-icon-btn:hover {
+  color: var(--a11y-color-primary, var(--color-primary-600, #0284c7));
+  background-color: var(--color-neutral-100, #f5f5f5);
+}
+
+.a11y-tooltip-icon-btn:focus-visible {
+  outline: var(--a11y-focus-width, 2px) solid
+    var(--tooltip-focus-color, var(--a11y-color-focus, var(--color-border-focus, #0ea5e9)));
+  outline-offset: var(--a11y-focus-offset, 2px);
+}
+
+.a11y-tooltip-icon-btn:focus:not(:focus-visible) {
+  outline: none;
+}
+
+.a11y-tooltip-icon-svg {
+  width: 1.125rem;
+  height: 1.125rem;
+}
+
+/* Wrapped Non-Interactive Text Trigger */
+.a11y-tooltip-text-trigger {
+  display: inline;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  font: inherit;
+  color: inherit;
+  text-align: start;
+  cursor: help;
+}
+
+.a11y-tooltip-text-trigger--underlined {
+  text-decoration: underline dotted 2px;
+  text-underline-offset: 3px;
+}
+
+.a11y-tooltip-text-trigger:focus-visible {
+  outline: var(--a11y-focus-width, 2px) solid
+    var(--tooltip-focus-color, var(--a11y-color-focus, var(--color-border-focus, #0ea5e9)));
+  outline-offset: 2px;
+  border-radius: var(--a11y-radius-sm, 0.25rem);
+}
+
+.a11y-tooltip-text-trigger:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* High Contrast Mode (WCAG 1.4.1 / 1.4.11) */
+@media (forced-colors: active) {
+  .a11y-tooltip {
+    border: 1px solid CanvasText;
+    background-color: Canvas;
+    color: CanvasText;
+  }
+
+  .a11y-tooltip__arrow {
+    border: 1px solid CanvasText;
+  }
+
+  .a11y-tooltip-icon-btn:focus-visible,
+  .a11y-tooltip-text-trigger:focus-visible {
+    outline: 3px solid Highlight;
+  }
+}
+
+/* Reduced Motion (WCAG 2.3.3) */
+@media (prefers-reduced-motion: reduce) {
+  .a11y-tooltip {
+    transition: none !important;
+  }
+}
