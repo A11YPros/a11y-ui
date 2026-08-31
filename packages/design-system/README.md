@@ -105,7 +105,64 @@ export function App() {
 }
 ```
 
-> **Note for Next.js App Router (RSC)**: Interactive components (`Modal`, `Tabs`, `Switch`, `Tooltip`, `Select`, `Accordion`, etc.) manage client-side state and should be imported within `'use client'` files or client boundary wrappers.
+### 3. Accessible Dropdown Menu & Application Menubar
+
+```tsx
+import {
+  Menu,
+  MenuItem,
+  MenuDivider,
+  MenuGroup,
+  Menubar,
+  Button,
+} from '@a11ypros/a11y-ui-components';
+
+// Dropdown Action Menu
+export function ActionsMenu() {
+  return (
+    <Menu trigger={<Button variant="secondary">Actions ▾</Button>}>
+      <MenuItem onClick={() => alert('Edit')}>Edit</MenuItem>
+      <MenuItem onClick={() => alert('Duplicate')}>Duplicate</MenuItem>
+      <MenuItem disabled>Archive (Disabled)</MenuItem>
+      <MenuDivider />
+      <MenuItem danger onClick={() => alert('Delete')}>
+        Delete
+      </MenuItem>
+    </Menu>
+  );
+}
+
+// Application Menubar (Desktop-Style Navigation)
+export function AppHeader() {
+  return (
+    <Menubar label="Application menu">
+      <Menu trigger={<button type="button">File</button>}>
+        <MenuItem shortcut="⌘N" onClick={() => alert('New File')}>New File</MenuItem>
+        <MenuItem shortcut="⌘O" onClick={() => alert('Open')}>Open...</MenuItem>
+        <MenuItem shortcut="⌘S" onClick={() => alert('Save')}>Save</MenuItem>
+        <MenuDivider />
+        <MenuItem danger shortcut="⌘Q" onClick={() => alert('Quit')}>Quit</MenuItem>
+      </Menu>
+
+      <Menu trigger={<button type="button">Edit</button>}>
+        <MenuItem shortcut="⌘Z" onClick={() => alert('Undo')}>Undo</MenuItem>
+        <MenuItem shortcut="⇧⌘Z" onClick={() => alert('Redo')}>Redo</MenuItem>
+        <MenuDivider />
+        <MenuItem shortcut="⌘X">Cut</MenuItem>
+        <MenuItem shortcut="⌘C">Copy</MenuItem>
+        <MenuItem shortcut="⌘V">Paste</MenuItem>
+      </Menu>
+
+      <Menu trigger={<button type="button">View</button>}>
+        <MenuItem shortcut="⌘+">Zoom In</MenuItem>
+        <MenuItem shortcut="⌘-">Zoom Out</MenuItem>
+      </Menu>
+    </Menubar>
+  );
+}
+```
+
+> **Note for Next.js App Router (RSC)**: Interactive components (`Modal`, `Tabs`, `Switch`, `Tooltip`, `Select`, `Accordion`, `Menu`, `Menubar`, etc.) manage client-side state and should be imported within `'use client'` files or client boundary wrappers.
 
 ---
 
@@ -214,6 +271,8 @@ const CustomCard = () => (
 - **Button** — Accessible button with primary, secondary, ghost, and danger variants
 - **DataTable** — Accessible data grid with column sorting indicators
 - **Link** — Accessible link with external indicator support and focus rings
+- **Menu** — Accessible dropdown action menu with WAI-ARIA menu button pattern, roving tabindex, keyboard shortcuts, and danger states
+- **Menubar** — Desktop-style horizontal application menu bar (`role="menubar"`) with roving tabindex, inter-menu keyboard transitions, and hover switching
 - **Modal** — Dialog overlay with automatic focus trapping, escape key closing, and focus restoration
 - **Tabs** — WAI-ARIA 1.2 compliant keyboard-navigable tabs (`ArrowLeft` / `ArrowRight`)
 - **Tooltip** — Floating information popup with `role="tooltip"`, `aria-describedby`, and Escape key dismissal

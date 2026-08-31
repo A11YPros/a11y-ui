@@ -1,5 +1,11 @@
 # @a11ypros/a11y-ui-components
 
+## 2.3.1
+
+### Patch Changes
+
+- Update README documentation to include Menu and Menubar components and usage examples
+
 ## 2.3.0
 
 ### Minor Changes

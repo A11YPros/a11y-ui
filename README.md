@@ -78,11 +78,17 @@ The Next.js app will be available at `http://localhost:3000` and Storybook at `h
 
 ### Available Components
 
+- **Accordion**: WAI-ARIA collapsible disclosure component with keyboard arrow navigation
+- **Banner**: Semantic status and alert banner with ARIA live region announcements
 - **Button**: Accessible button with variants, sizes, and loading states
+- **DataTable**: Accessible table with column sorting and keyboard interaction
 - **Link**: Semantic link component with external link detection
-- **Modal**: Focus-trapped modal dialog with ARIA support
-- **DataTable**: Accessible table with sorting
+- **Menu**: Accessible dropdown action menu with WAI-ARIA menu button pattern, roving tabindex, and shortcut keys
+- **Menubar**: Desktop-style horizontal application menu bar (`role="menubar"`) with composite roving tabindex
+- **Modal**: Focus-trapped modal dialog with ARIA support and focus restoration
+- **Switch**: Accessible toggle switch with `role="switch"` and keyboard toggling
 - **Tabs**: Tab component with arrow key navigation
+- **Tooltip**: Floating information popup with `role="tooltip"` and Escape dismissal
 - **Form Components**: Input, Textarea, Select, Checkbox, Radio, Fieldset, Label
 
 ### Usage Example
@@ -241,7 +247,7 @@ npm run test:ui
 
 **Test Coverage:**
 
-- ✅ All 15 components with accessibility validation
+- ✅ All 17 components with accessibility validation
 - ✅ Custom hooks (useAriaLive, useFocusReturn, useFocusTrap)
 - ✅ Utility functions (ARIA, focus, keyboard helpers)
 - 🎯 Target: 95%+ code coverage
