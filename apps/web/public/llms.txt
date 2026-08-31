@@ -1,34 +1,45 @@
 # A11y UI
 
-This is the documentation for the `@a11ypros/a11y-ui-components` package.
-It contains accessible React components and implementation guidance for production teams.
-Current package version: 2.1.1.
+> Accessibility-first React UI component library built for WCAG 2.1 / 2.2 Level AA & AAA compliance, screen reader support, keyboard navigation, and production design systems.
 
-## Overview
+- Current package version: 2.3.1
+- Package name: `@a11ypros/a11y-ui-components`
+- For full API references, props, and code examples in a single document: [Full Documentation](https://ui.a11ypros.com/llms-full.txt)
+
+## Overview & Guides
 
 - [Home](https://ui.a11ypros.com/): Accessibility-first React component library homepage.
-- [Getting Started](https://ui.a11ypros.com/getting-started): Installation and first usage guide.
-- [Components](https://ui.a11ypros.com/components): Component index with summaries and examples.
-- [Accessibility Guide](https://ui.a11ypros.com/accessibility): Accessibility principles and testing guidance.
+- [Getting Started](https://ui.a11ypros.com/getting-started): Installation, CSS token imports, and first usage guide.
+- [Components Index](https://ui.a11ypros.com/components): Component catalog with summaries, examples, and Storybook links.
+- [Theming & Tokens](https://ui.a11ypros.com/theming): Comprehensive 3-tier CSS custom property contract, light/dark mode, and live customizer.
+- [Accessibility Guide](https://ui.a11ypros.com/accessibility): Core accessibility principles, WCAG criteria mapping, and assistive technology testing.
+- [Custom Components](https://ui.a11ypros.com/custom-components): Custom WCAG 2.2 AA compliant component development for enterprise design systems.
+- [Pro Tier](https://ui.a11ypros.com/pro): Upcoming enterprise components (DatePicker, DataGrid, Combobox, Rich Text Editor) and early access waitlist.
 
 ## Components
 
-- [Accordion](https://ui.a11ypros.com/components/accordion): Collapsible panel patterns.
-- [Button](https://ui.a11ypros.com/components/button): Action buttons with variants and states.
-- [Checkbox](https://ui.a11ypros.com/components/checkbox): Boolean and consent controls.
-- [Data Table](https://ui.a11ypros.com/components/table): Sortable tabular data and selection patterns.
-- [Fieldset](https://ui.a11ypros.com/components/fieldset): Grouped form controls with legends.
-- [Input](https://ui.a11ypros.com/components/input): Single-line text and email fields.
-- [Label](https://ui.a11ypros.com/components/label): Labeling and form association patterns.
-- [Link](https://ui.a11ypros.com/components/link): Navigation and utility link variants.
-- [Modal](https://ui.a11ypros.com/components/modal): Focus-managed dialog and overlay patterns.
-- [Radio](https://ui.a11ypros.com/components/radio): Mutually exclusive option groups.
-- [Select](https://ui.a11ypros.com/components/select): Single-select dropdown patterns.
-- [Tabs](https://ui.a11ypros.com/components/tabs): Keyboard-friendly tablist and panel patterns.
-- [Textarea](https://ui.a11ypros.com/components/textarea): Multi-line text input patterns.
+- [Accordion](https://ui.a11ypros.com/components/accordion): WAI-ARIA collapsible disclosure pattern with keyboard arrow navigation.
+- [Banner](https://ui.a11ypros.com/components/banner): Status and alert notification banner with ARIA live regions and dismiss behavior.
+- [Button](https://ui.a11ypros.com/components/button): Interactive buttons with primary, secondary, ghost, danger variants and loading states.
+- [Checkbox](https://ui.a11ypros.com/components/checkbox): Accessible boolean choice and consent controls with custom keyboard-focusable indicator.
+- [Data Table](https://ui.a11ypros.com/components/table): Sortable tabular data grid with column header ARIA sorting and row selection.
+- [Fieldset](https://ui.a11ypros.com/components/fieldset): Semantic grouping for related form controls with legend context.
+- [Input](https://ui.a11ypros.com/components/input): Accessible single-line text and email fields with label association and error live regions.
+- [Label](https://ui.a11ypros.com/components/label): Semantic form labeling component with htmlFor association and required indicators.
+- [Link](https://ui.a11ypros.com/components/link): Accessible navigation and utility link variants with external indicator support.
+- [Menu](https://ui.a11ypros.com/components/menu): Dropdown action menus following the WAI-ARIA Menu Button pattern with roving focus, shortcut keys, and focus return.
+- [Menubar](https://ui.a11ypros.com/components/menubar): Desktop-style application menu bar following the WAI-ARIA Menubar pattern with roving tabindex and horizontal arrow navigation.
+- [Modal](https://ui.a11ypros.com/components/modal): Dialog overlay with automatic focus trapping, Escape key closing, and focus return.
+- [Radio](https://ui.a11ypros.com/components/radio): Mutually exclusive option groups wrapped with accessible fieldset semantics.
+- [Select](https://ui.a11ypros.com/components/select): Accessible dropdown select with keyboard navigation and option state management.
+- [Switch](https://ui.a11ypros.com/components/switch): Accessible toggle switch control implementing role="switch" and keyboard Space toggling.
+- [Tabs](https://ui.a11ypros.com/components/tabs): WAI-ARIA 1.2 compliant keyboard-navigable tab list and panels (ArrowLeft / ArrowRight).
+- [Textarea](https://ui.a11ypros.com/components/textarea): Multi-line text field with dynamic count and helper text.
+- [Tooltip](https://ui.a11ypros.com/components/tooltip): Contextual popup descriptions with role="tooltip", aria-describedby, and Escape dismissal.
 
-## Resources
+## Resources & Links
 
-- [Storybook](https://ui.a11ypros.com/storybook): Interactive playground and component states.
-- [NPM Package](https://www.npmjs.com/package/@a11ypros/a11y-ui-components): Package distribution and versions.
+- [Documentation Site](https://ui.a11ypros.com): Official live documentation and interactive demos.
+- [Storybook Playground](https://ui.a11ypros.com/storybook-static/index.html): Interactive component workbench and a11y testing addon.
+- [NPM Package](https://www.npmjs.com/package/@a11ypros/a11y-ui-components): Package distribution, versions, and provenance attestations.
 - [GitHub Repository](https://github.com/A11YPros/a11y-ui): Source code, issues, and contribution history.

@@ -9,6 +9,9 @@ export const metadata: Metadata = {
     template: '%s',
   },
   description: 'Accessibility-first React components, patterns, and documentation built for production teams.',
+  alternates: {
+    canonical: '/',
+  },
   openGraph: {
     title: 'A11Y UI - Accessibility-first React Components',
     description: 'Build inclusive interfaces faster with WCAG compliant components, keyboard navigation, and screen reader support.',
@@ -16,11 +19,20 @@ export const metadata: Metadata = {
     siteName: 'A11Y UI',
     locale: 'en_US',
     type: 'website',
+    images: [
+      {
+        url: '/logo.png',
+        width: 1200,
+        height: 630,
+        alt: 'A11Y UI - Accessibility-first React Components',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'A11Y UI - Accessibility-first React Components',
     description: 'Build inclusive interfaces faster with WCAG compliant components, keyboard navigation, and screen reader support.',
+    images: ['/logo.png'],
   },
   robots: {
     index: true,
