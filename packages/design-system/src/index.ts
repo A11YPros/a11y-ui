@@ -11,6 +11,8 @@ export * from './components/DataTable/DataTable';
 export * from './components/Tabs/Tabs';
 export * from './components/Switch/Switch';
 export * from './components/Tooltip/Tooltip';
+export * from './components/Menu/Menu';
+export * from './components/Menubar';
 export * from './components/Form/Input';
 export * from './components/Form/Textarea';
 export * from './components/Form/Select';
