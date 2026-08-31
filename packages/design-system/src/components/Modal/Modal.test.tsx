@@ -170,4 +170,99 @@ describe('Modal', () => {
       await runAxeTest(container);
     });
   });
+
+  describe('focus trap and keyboard containment', () => {
+    it('wraps focus to first element when Tab is pressed on last element', async () => {
+      render(
+        <Modal isOpen={true} onClose={vi.fn()} title="Focus Trap Modal">
+          <p>Content</p>
+          <button type="button">First Action</button>
+          <button type="button">Last Action</button>
+        </Modal>
+      );
+
+      const closeButton = screen.getByRole('button', { name: 'Close modal' });
+      const lastButton = screen.getByRole('button', { name: 'Last Action' });
+
+      // Focus the last focusable element
+      lastButton.focus();
+      expect(document.activeElement).toBe(lastButton);
+
+      // Press Tab on the last element
+      const tabEvent = new KeyboardEvent('keydown', {
+        key: 'Tab',
+        bubbles: true,
+        cancelable: true,
+      });
+      lastButton.dispatchEvent(tabEvent);
+
+      // Focus should cycle back to the first element (close button)
+      expect(tabEvent.defaultPrevented).toBe(true);
+      expect(document.activeElement).toBe(closeButton);
+    });
+
+    it('wraps focus to last element when Shift+Tab is pressed on first element', async () => {
+      render(
+        <Modal isOpen={true} onClose={vi.fn()} title="Focus Trap Modal">
+          <p>Content</p>
+          <button type="button">First Action</button>
+          <button type="button">Last Action</button>
+        </Modal>
+      );
+
+      const closeButton = screen.getByRole('button', { name: 'Close modal' });
+      const lastButton = screen.getByRole('button', { name: 'Last Action' });
+
+      // Focus the first focusable element (close button)
+      closeButton.focus();
+      expect(document.activeElement).toBe(closeButton);
+
+      // Press Shift+Tab on the first element
+      const shiftTabEvent = new KeyboardEvent('keydown', {
+        key: 'Tab',
+        shiftKey: true,
+        bubbles: true,
+        cancelable: true,
+      });
+      closeButton.dispatchEvent(shiftTabEvent);
+
+      // Focus should cycle backwards to the last element
+      expect(shiftTabEvent.defaultPrevented).toBe(true);
+      expect(document.activeElement).toBe(lastButton);
+    });
+
+    it('keeps focus contained when only one focusable element exists', async () => {
+      render(
+        <Modal isOpen={true} onClose={vi.fn()} title="Single Focusable Modal">
+          <p>Read-only text without any interactive elements</p>
+        </Modal>
+      );
+
+      const closeButton = screen.getByRole('button', { name: 'Close modal' });
+      closeButton.focus();
+      expect(document.activeElement).toBe(closeButton);
+
+      // Tab on only element
+      const tabEvent = new KeyboardEvent('keydown', {
+        key: 'Tab',
+        bubbles: true,
+        cancelable: true,
+      });
+      closeButton.dispatchEvent(tabEvent);
+      expect(tabEvent.defaultPrevented).toBe(true);
+      expect(document.activeElement).toBe(closeButton);
+
+      // Shift+Tab on only element
+      const shiftTabEvent = new KeyboardEvent('keydown', {
+        key: 'Tab',
+        shiftKey: true,
+        bubbles: true,
+        cancelable: true,
+      });
+      closeButton.dispatchEvent(shiftTabEvent);
+      expect(shiftTabEvent.defaultPrevented).toBe(true);
+      expect(document.activeElement).toBe(closeButton);
+    });
+  });
 });
+

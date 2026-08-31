@@ -1,7 +1,33 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { getFirstFocusable, getLastFocusable } from '../utils/focus';
+import { getFirstFocusable, getFocusableElements } from '../utils/focus';
+
+/**
+ * Traps Tab and Shift+Tab key navigation within a node (Mantine scope-tab pattern)
+ */
+export function scopeTab(node: HTMLElement, event: KeyboardEvent): void {
+  const tabbable = getFocusableElements(node);
+  if (!tabbable.length) {
+    event.preventDefault();
+    return;
+  }
+
+  const finalTabbable = tabbable[event.shiftKey ? 0 : tabbable.length - 1];
+  const leavingFinalTabbable =
+    finalTabbable === document.activeElement || node === document.activeElement;
+
+  if (!leavingFinalTabbable) {
+    return;
+  }
+
+  event.preventDefault();
+
+  const target = tabbable[event.shiftKey ? tabbable.length - 1 : 0];
+  if (target) {
+    target.focus();
+  }
+}
 
 /**
  * Hook to trap focus within a container element
@@ -10,7 +36,10 @@ import { getFirstFocusable, getLastFocusable } from '../utils/focus';
  * @param enabled - Whether the focus trap is active
  * @param containerRef - Ref to the container element
  */
-export function useFocusTrap(enabled: boolean, containerRef: React.RefObject<HTMLElement>): void {
+export function useFocusTrap(
+  enabled: boolean,
+  containerRef: React.RefObject<HTMLElement | null>
+): void {
   const previousActiveElement = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
@@ -23,43 +52,17 @@ export function useFocusTrap(enabled: boolean, containerRef: React.RefObject<HTM
       previousActiveElement.current = document.activeElement;
     }
 
-    // Focus the first focusable element in the container
+    // Focus first focusable element or container
     const firstFocusable = getFirstFocusable(container);
     if (firstFocusable) {
       firstFocusable.focus();
     } else {
-      // If no focusable elements, focus the container itself
       container.focus();
     }
 
-    // Handle Tab key to trap focus
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key !== 'Tab') return;
-
-      const focusableElements = [getFirstFocusable(container), getLastFocusable(container)].filter(
-        Boolean
-      ) as HTMLElement[];
-
-      if (focusableElements.length === 0) {
-        event.preventDefault();
-        return;
-      }
-
-      const firstElement = focusableElements[0];
-      const lastElement = focusableElements[focusableElements.length - 1];
-
-      if (event.shiftKey) {
-        // Shift + Tab
-        if (document.activeElement === firstElement) {
-          event.preventDefault();
-          lastElement.focus();
-        }
-      } else {
-        // Tab
-        if (document.activeElement === lastElement) {
-          event.preventDefault();
-          firstElement.focus();
-        }
+      if (event.key === 'Tab') {
+        scopeTab(container, event);
       }
     };
 
@@ -68,10 +71,11 @@ export function useFocusTrap(enabled: boolean, containerRef: React.RefObject<HTM
     return () => {
       container.removeEventListener('keydown', handleKeyDown);
 
-      // Restore focus to the previously focused element
       if (previousActiveElement.current) {
         previousActiveElement.current.focus();
       }
     };
   }, [enabled, containerRef]);
 }
+
+
