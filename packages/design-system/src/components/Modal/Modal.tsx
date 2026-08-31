@@ -95,7 +95,7 @@ export const Modal: React.FC<ModalProps> = ({
   const contentId = React.useId();
 
   // Trap focus within the dialog when open (WCAG 2.1.2 & 2.4.3)
-  useFocusTrap(isOpen, dialogRef, { returnFocus: false });
+  useFocusTrap(isOpen, dialogRef);
 
   // Return focus on close
   useFocusReturn(isOpen, returnFocusTo);
