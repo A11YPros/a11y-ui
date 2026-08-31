@@ -2,7 +2,7 @@
 
 > Accessibility-first React UI component library built for WCAG 2.1 / 2.2 Level AA & AAA compliance, screen reader support, keyboard navigation, and production design systems.
 > Package: `@a11ypros/a11y-ui-components`
-> Current Version: 2.3.1
+> Current Version: 2.3.2
 > Homepage: https://ui.a11ypros.com
 > Storybook: https://ui.a11ypros.com/storybook-static/index.html
 > GitHub: https://github.com/A11YPros/a11y-ui

@@ -1,5 +1,11 @@
 # @a11ypros/a11y-ui-components
 
+## 2.3.2
+
+### Patch Changes
+
+- e048784: Fix modal focus trap to prevent keyboard focus from escaping to browser controls when tabbing past boundaries
+
 ## 2.3.1
 
 ### Patch Changes
