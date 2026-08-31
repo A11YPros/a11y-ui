@@ -21,11 +21,20 @@ export function createDocMetadata({ title, description, slug }: DocMetadataOptio
       url,
       siteName: 'A11Y UI',
       type: 'article',
+      images: [
+        {
+          url: '/logo.png',
+          width: 1200,
+          height: 630,
+          alt: title,
+        },
+      ],
     },
     twitter: {
       card: 'summary_large_image',
       title,
       description,
+      images: ['/logo.png'],
     },
   };
 }

@@ -1,0 +1,371 @@
+# A11Y UI - Complete Documentation & Component API Reference
+
+> Accessibility-first React UI component library built for WCAG 2.1 / 2.2 Level AA & AAA compliance, screen reader support, keyboard navigation, and production design systems.
+> Package: `@a11ypros/a11y-ui-components`
+> Current Version: 2.3.1
+> Homepage: https://ui.a11ypros.com
+> Storybook: https://ui.a11ypros.com/storybook-static/index.html
+> GitHub: https://github.com/A11YPros/a11y-ui
+
+---
+
+## 1. Getting Started
+
+### Installation
+```bash
+npm install @a11ypros/a11y-ui-components
+# Peer dependencies
+npm install react react-dom
+```
+
+### Stylesheet Import
+Import the stylesheet at the root of your application (e.g., `layout.tsx`, `App.tsx`, or `index.tsx`):
+```tsx
+// Complete stylesheet with CSS reset, theming tokens, and accessibility enhancements
+import '@a11ypros/a11y-ui-components/styles';
+
+// Or component-only structural styles (if you provide your own reset)
+import '@a11ypros/a11y-ui-components/styles/components';
+```
+
+### Next.js App Router (RSC) Note
+Interactive components (`Menu`, `Menubar`, `Modal`, `Tabs`, `Switch`, `Tooltip`, `Select`, `Accordion`) maintain client state and use DOM events. Import them inside `'use client'` files or wrap them in client boundaries.
+
+---
+
+## 2. Design Tokens & Theming
+
+The library uses a 3-tier CSS custom property contract with fallback defaults. Override on `:root` or with `data-theme="dark"`:
+
+```css
+:root {
+  /* Brand colors */
+  --a11y-color-primary: #0369a1;
+  --a11y-color-primary-hover: #075985;
+  --a11y-color-primary-active: #0c4a6e;
+  --a11y-color-primary-fg: #ffffff;
+
+  /* Surfaces & backgrounds */
+  --a11y-color-bg: #ffffff;
+  --a11y-color-surface: #fafafa;
+  --a11y-color-surface-hover: #f4f4f5;
+
+  /* Text colors */
+  --a11y-color-text: #171717;
+  --a11y-color-text-muted: #525252;
+
+  /* Borders & focus rings (WCAG 3:1 non-text contrast) */
+  --a11y-color-border: #767676;
+  --a11y-color-focus: #0ea5e9;
+  --a11y-focus-width: 2px;
+  --a11y-focus-offset: 2px;
+
+  /* Universal radius */
+  --a11y-radius: 0.375rem;
+}
+
+[data-theme='dark'] {
+  --a11y-color-bg: #09090b;
+  --a11y-color-surface: #18181b;
+  --a11y-color-surface-hover: #27272a;
+  --a11y-color-text: #f4f4f5;
+  --a11y-color-text-muted: #a1a1aa;
+  --a11y-color-border: #52525b;
+}
+```
+
+---
+
+## 3. Components Reference
+
+### 3.1 Button
+Accessible button supporting primary, secondary, ghost, danger variants, sizes, and accessible loading states.
+- **WCAG SC**: 1.3.1 (Info and Relationships), 2.1.1 (Keyboard), 2.4.7 (Focus Visible), 4.1.2 (Name, Role, Value)
+- **Keyboard**: `Enter` / `Space` activates click. Disabled buttons receive `aria-disabled="true"` or `disabled`.
+
+```tsx
+import { Button } from '@a11ypros/a11y-ui-components';
+
+<Button variant="primary" size="md" onClick={() => console.log('Clicked')}>
+  Submit Form
+</Button>
+<Button variant="danger" size="sm" onClick={() => console.log('Delete')}>
+  Delete Item
+</Button>
+<Button variant="ghost" loading={true}>
+  Saving...
+</Button>
+```
+
+### 3.2 Menu
+Accessible dropdown action menu following the WAI-ARIA Menu Button pattern with roving focus, shortcut keys, and focus restoration.
+- **WCAG SC**: 2.1.1 (Keyboard), 2.4.3 (Focus Order), 4.1.2 (Name, Role, Value)
+- **Keyboard**: `Enter` / `Space` / `ArrowDown` opens menu; `ArrowUp` / `ArrowDown` roves focus; `Home` / `End` jumps to first/last; `Escape` closes menu and returns focus to trigger.
+
+```tsx
+import { Menu, MenuItem, MenuDivider } from '@a11ypros/a11y-ui-components';
+
+<Menu trigger={<Button variant="secondary">Options ▾</Button>}>
+  <MenuItem shortcut="⌘E" onClick={() => alert('Edit')}>Edit</MenuItem>
+  <MenuItem shortcut="⌘D" onClick={() => alert('Duplicate')}>Duplicate</MenuItem>
+  <MenuItem disabled>Archive (Disabled)</MenuItem>
+  <MenuDivider />
+  <MenuItem danger shortcut="⌘⌫" onClick={() => alert('Delete')}>Delete</MenuItem>
+</Menu>
+```
+
+### 3.3 Menubar
+Desktop-style horizontal application menu bar (`role="menubar"`) with composite roving tabindex, inter-menu keyboard roving, and hover switching.
+- **WCAG SC**: 2.1.1 (Keyboard), 2.4.3 (Focus Order), 2.4.7 (Focus Visible), 4.1.2 (Name, Role, Value)
+- **Keyboard**: Single tab stop for the whole menubar. `ArrowLeft` / `ArrowRight` cycles through top-level menus. When a menu is open, `ArrowLeft` / `ArrowRight` opens the adjacent menu immediately and focuses its first item.
+
+```tsx
+import { Menubar, Menu, MenuItem, MenuDivider } from '@a11ypros/a11y-ui-components';
+
+<Menubar label="Application menu">
+  <Menu trigger={<button type="button">File</button>}>
+    <MenuItem shortcut="⌘N" onClick={() => alert('New')}>New File</MenuItem>
+    <MenuItem shortcut="⌘O" onClick={() => alert('Open')}>Open...</MenuItem>
+    <MenuItem shortcut="⌘S" onClick={() => alert('Save')}>Save</MenuItem>
+    <MenuDivider />
+    <MenuItem danger shortcut="⌘Q" onClick={() => alert('Quit')}>Quit</MenuItem>
+  </Menu>
+  <Menu trigger={<button type="button">Edit</button>}>
+    <MenuItem shortcut="⌘Z" onClick={() => alert('Undo')}>Undo</MenuItem>
+    <MenuItem shortcut="⌘C" onClick={() => alert('Copy')}>Copy</MenuItem>
+    <MenuItem shortcut="⌘V" onClick={() => alert('Paste')}>Paste</MenuItem>
+  </Menu>
+  <Menu trigger={<button type="button">View</button>}>
+    <MenuItem shortcut="⌘+" onClick={() => alert('Zoom In')}>Zoom In</MenuItem>
+    <MenuItem shortcut="⌘-" onClick={() => alert('Zoom Out')}>Zoom Out</MenuItem>
+  </Menu>
+</Menubar>
+```
+
+### 3.4 Modal
+Dialog overlay with automatic focus trapping, `Escape` key closing, `aria-modal="true"`, and focus restoration to the trigger.
+- **WCAG SC**: 1.3.1, 2.1.2 (No Keyboard Trap), 2.4.3 (Focus Order), 4.1.2
+- **Keyboard**: `Tab` cycles only within modal; `Escape` closes modal and returns focus.
+
+```tsx
+import { Modal, Button } from '@a11ypros/a11y-ui-components';
+import { useState } from 'react';
+
+export function ConfirmModal() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <>
+      <Button onClick={() => setOpen(true)}>Open Modal</Button>
+      <Modal isOpen={open} onClose={() => setOpen(false)} title="Confirm Action">
+        <p>Are you sure you want to proceed?</p>
+        <Button variant="danger" onClick={() => setOpen(false)}>Confirm</Button>
+        <Button variant="ghost" onClick={() => setOpen(false)}>Cancel</Button>
+      </Modal>
+    </>
+  );
+}
+```
+
+### 3.5 Switch
+Accessible toggle switch with `role="switch"`, `aria-checked`, and keyboard space toggling.
+- **WCAG SC**: 1.3.1, 2.1.1, 2.4.7, 4.1.2
+- **Keyboard**: `Space` or `Enter` toggles state.
+
+```tsx
+import { Switch } from '@a11ypros/a11y-ui-components';
+import { useState } from 'react';
+
+export function Settings() {
+  const [enabled, setEnabled] = useState(false);
+
+  return (
+    <Switch
+      label="Enable dark mode"
+      description="Adjusts contrast and theme automatically"
+      checked={enabled}
+      onChange={setEnabled}
+    />
+  );
+}
+```
+
+### 3.6 Tooltip
+Contextual popup description with `role="tooltip"`, `aria-describedby` association, hover and focus triggers, and `Escape` dismissal.
+- **WCAG SC**: 1.3.1, 1.4.13 (Content on Hover or Focus), 2.1.1, 4.1.2
+- **Keyboard**: Displays on focus; `Escape` dismisses without losing focus.
+
+```tsx
+import { Tooltip, Button } from '@a11ypros/a11y-ui-components';
+
+<Tooltip content="Permanently removes the document" position="top">
+  <Button variant="danger">Delete</Button>
+</Tooltip>
+```
+
+### 3.7 Tabs
+WAI-ARIA 1.2 compliant keyboard-navigable tab list (`role="tablist"`), tabs (`role="tab"`), and panels (`role="tabpanel"`).
+- **WCAG SC**: 1.3.1, 2.1.1, 2.4.3, 4.1.2
+- **Keyboard**: Single tab stop in tab list; `ArrowLeft` / `ArrowRight` (or `ArrowUp` / `ArrowDown` if vertical) switches active tab and moves focus; `Home` / `End` activates first/last.
+
+```tsx
+import { Tabs } from '@a11ypros/a11y-ui-components';
+
+<Tabs
+  items={[
+    { id: 'overview', label: 'Overview', content: <p>Overview details</p> },
+    { id: 'api', label: 'API Reference', content: <p>API specification</p> },
+    { id: 'a11y', label: 'Accessibility', content: <p>WCAG compliance notes</p> },
+  ]}
+  defaultActiveId="overview"
+/>
+```
+
+### 3.8 Accordion
+WAI-ARIA collapsible disclosure pattern with proper `aria-expanded` and `aria-controls`.
+- **WCAG SC**: 1.3.1, 2.1.1, 4.1.2
+- **Keyboard**: `Enter` / `Space` toggles disclosure; `ArrowUp` / `ArrowDown` roves between headers.
+
+```tsx
+import { Accordion } from '@a11ypros/a11y-ui-components';
+
+<Accordion
+  items={[
+    { id: '1', title: 'What is WCAG AA compliance?', content: 'WCAG 2.1/2.2 AA requires 4.5:1 text contrast...' },
+    { id: '2', title: 'How does keyboard navigation work?', content: 'All interactive elements are reachable with Tab...' },
+  ]}
+  allowMultiple={false}
+/>
+```
+
+### 3.9 Banner
+Status and alert messaging banner supporting semantic `role="status"` or `role="alert"` (with live region announcements) and dismiss callback.
+- **WCAG SC**: 1.3.1, 4.1.3 (Status Messages)
+
+```tsx
+import { Banner } from '@a11ypros/a11y-ui-components';
+
+<Banner variant="success" title="Profile saved successfully">
+  Your preferences have been persisted to the server.
+</Banner>
+<Banner variant="danger" title="Connection error" dismissible onDismiss={() => console.log('Dismissed')}>
+  Could not synchronize changes. Please check your network.
+</Banner>
+```
+
+### 3.10 DataTable
+Accessible data grid with sortable column headers (`aria-sort="ascending" | "descending"`) and row selection.
+- **WCAG SC**: 1.3.1 (Info and Relationships - `<th>`, `<caption>`, `scope="col"`), 2.1.1
+
+```tsx
+import { DataTable } from '@a11ypros/a11y-ui-components';
+
+const columns = [
+  { key: 'name', header: 'Component', sortable: true },
+  { key: 'wcag', header: 'WCAG Level', sortable: true },
+  { key: 'status', header: 'Status' },
+];
+
+const data = [
+  { id: '1', name: 'Menu', wcag: 'AA / AAA', status: 'Stable' },
+  { id: '2', name: 'Menubar', wcag: 'AA / AAA', status: 'Stable' },
+];
+
+<DataTable caption="Component Accessibility Conformance" columns={columns} data={data} />
+```
+
+### 3.11 Form Controls: Input, Textarea, Select, Checkbox, Radio, Fieldset, Label
+All form primitives link labels to inputs via `htmlFor`/`id`, associate helper text and error messages via `aria-describedby`, and mark required fields with `aria-required="true"`.
+
+```tsx
+import {
+  Input,
+  Textarea,
+  Select,
+  Checkbox,
+  Radio,
+  Fieldset,
+  Label,
+} from '@a11ypros/a11y-ui-components';
+
+// Input with validation error announced to screen readers
+<Input
+  label="Work Email"
+  type="email"
+  required
+  placeholder="you@company.com"
+  errorMessage="Please enter a valid work email address"
+/>
+
+// Textarea with character count
+<Textarea
+  label="Project Feedback"
+  maxLength={500}
+  showCount
+  placeholder="Share your thoughts..."
+/>
+
+// Select with keyboard navigation
+<Select
+  label="Country"
+  options={[
+    { value: 'us', label: 'United States' },
+    { value: 'ca', label: 'Canada' },
+    { value: 'uk', label: 'United Kingdom' },
+  ]}
+  value="us"
+  onChange={(val) => console.log(val)}
+/>
+
+// Checkbox
+<Checkbox
+  id="terms"
+  label="I accept the accessibility guidelines"
+  checked={true}
+  onChange={(checked) => console.log(checked)}
+/>
+
+// Radio group in semantic Fieldset
+<Fieldset legend="Select Color Theme">
+  <Radio name="theme" label="System Default" value="system" defaultChecked />
+  <Radio name="theme" label="High Contrast" value="high-contrast" />
+</Fieldset>
+```
+
+### 3.12 Link
+Semantic anchor tag with external link detection (`rel="noopener noreferrer"`), external icon indicators, and visible focus rings.
+- **WCAG SC**: 2.4.4 (Link Purpose in Context), 2.4.7
+
+```tsx
+import { Link } from '@a11ypros/a11y-ui-components';
+
+<Link href="/getting-started">Read the guide</Link>
+<Link href="https://w3.org/WAI" external>W3C Accessibility Guidelines</Link>
+```
+
+---
+
+## 4. Accessibility Hooks & Utilities
+
+Exported hooks and utilities for custom component development:
+
+### `useFocusTrap(containerRef, isActive)`
+Traps keyboard `Tab` and `Shift+Tab` cycles strictly within the referenced container element.
+
+### `useFocusReturn(isActive)`
+Captures the currently active element when an overlay opens and restores focus back to it when the overlay closes.
+
+### `useAriaLive()`
+Manages dynamic announcements to screen readers using polite or assertive live regions:
+```tsx
+import { useAriaLive } from '@a11ypros/a11y-ui-components';
+
+const { announce } = useAriaLive();
+announce('3 items added to cart', 'polite');
+```
+
+### Utilities
+- `announceToScreenReader(message: string, priority?: 'polite' | 'assertive')`
+- `trapFocus(element: HTMLElement, event: KeyboardEvent)`
+- `getKeyboardFocusableElements(container: HTMLElement): HTMLElement[]`
+- `handleArrowNavigation(event: KeyboardEvent, elements: HTMLElement[], currentIndex: number, options?: { orientation?: 'horizontal' | 'vertical', loop?: boolean }): number`
