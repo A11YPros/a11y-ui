@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef } from 'react';
 import { useFocusReturn } from '../../hooks/useFocusReturn';
+import { useFocusTrap } from '../../hooks/useFocusTrap';
 import { Button } from '../Button/Button';
 import './Modal.css';
 
@@ -92,6 +93,9 @@ export const Modal: React.FC<ModalProps> = ({
   const dialogRef = useRef<HTMLDialogElement>(null);
   const titleId = React.useId();
   const contentId = React.useId();
+
+  // Trap focus within the dialog when open (WCAG 2.1.2 & 2.4.3)
+  useFocusTrap(isOpen, dialogRef, { returnFocus: false });
 
   // Return focus on close
   useFocusReturn(isOpen, returnFocusTo);
