@@ -198,7 +198,7 @@
   --a11y-color-primary: var(--color-link, #7dd3fc);
   --a11y-color-primary-hover: var(--color-link-hover, #38bdf8);
   --a11y-color-primary-active: #bae6fd;
-  --a11y-color-primary-fg: #ffffff;
+  --a11y-color-primary-fg: #0f172a;
 
   --a11y-color-bg: var(--color-background-default, #171717);
   --a11y-color-surface: var(--color-background-secondary, #262626);
@@ -245,7 +245,7 @@
     --a11y-color-primary: var(--color-link, #7dd3fc);
     --a11y-color-primary-hover: var(--color-link-hover, #38bdf8);
     --a11y-color-primary-active: #bae6fd;
-    --a11y-color-primary-fg: #ffffff;
+    --a11y-color-primary-fg: #0f172a;
 
     --a11y-color-bg: var(--color-background-default, #171717);
     --a11y-color-surface: var(--color-background-secondary, #262626);

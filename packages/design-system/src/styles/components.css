@@ -30,6 +30,12 @@
 /* Tooltip */
 @import '../components/Tooltip/Tooltip.css';
 
+/* Menu */
+@import '../components/Menu/Menu.css';
+
+/* Menubar */
+@import '../components/Menubar/Menubar.css';
+
 /* Form components */
 @import '../components/Form/Label.css';
 @import '../components/Form/Input.css';

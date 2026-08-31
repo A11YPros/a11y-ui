@@ -1,0 +1,137 @@
+/* ==========================================================================
+   Menubar Component Styles
+   ========================================================================== */
+
+.a11y-menubar {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-1, 0.25rem);
+  box-sizing: border-box;
+  padding: 4px;
+  background-color: var(--a11y-color-bg, var(--color-background-default, #ffffff));
+  border: 1px solid var(--a11y-color-border, var(--color-border-default, #e5e5e5));
+  border-radius: var(--a11y-radius-md, 0.375rem);
+  box-shadow: var(--a11y-shadow-sm, 0 1px 2px 0 rgba(0, 0, 0, 0.05));
+  font-family: var(--a11y-font-sans, inherit);
+}
+
+.a11y-menubar--vertical {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+/* Menu wrappers inside Menubar */
+.a11y-menubar .a11y-menu-wrapper {
+  position: relative;
+  display: inline-flex;
+}
+
+/* Trigger items inside Menubar */
+.a11y-menubar button,
+.a11y-menubar [role='menuitem'] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 12px;
+  border: none;
+  border-radius: var(--a11y-radius-sm, 0.25rem);
+  background: transparent;
+  color: var(--a11y-color-text, var(--color-text-primary, #171717));
+  font-family: inherit;
+  font-size: var(--font-size-sm, 0.875rem);
+  font-weight: 500;
+  line-height: var(--line-height-normal, 1.4);
+  cursor: pointer;
+  text-decoration: none;
+  outline: none;
+  transition:
+    background-color 120ms ease,
+    color 120ms ease;
+  user-select: none;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Hover and active/open states */
+.a11y-menubar button:hover,
+.a11y-menubar [role='menuitem']:hover,
+.a11y-menubar button[aria-expanded='true'],
+.a11y-menubar [role='menuitem'][aria-expanded='true'] {
+  background-color: var(--a11y-color-surface-hover, var(--color-background-hover, #f3f4f6));
+  color: var(--a11y-color-text, var(--color-text-primary, #171717));
+}
+
+.a11y-menubar button:focus-visible,
+.a11y-menubar [role='menuitem']:focus-visible {
+  outline: 2px solid var(--a11y-color-focus, var(--color-border-focus, #0284c7));
+  outline-offset: 2px;
+}
+
+/* Offset dropdown slightly below menubar */
+.a11y-menubar .a11y-menu {
+  margin-top: 2px;
+}
+
+/* Dark Theme Support (WCAG 1.4.3 Contrast Ratio >= 4.5:1) */
+[data-theme='dark'] .a11y-menubar {
+  background-color: var(--a11y-color-bg, #171717);
+  border-color: var(--a11y-color-border, #404040);
+}
+
+[data-theme='dark'] .a11y-menubar button,
+[data-theme='dark'] .a11y-menubar [role='menuitem'] {
+  color: var(--a11y-color-text, #fafafa);
+}
+
+[data-theme='dark'] .a11y-menubar button:hover,
+[data-theme='dark'] .a11y-menubar [role='menuitem']:hover,
+[data-theme='dark'] .a11y-menubar button[aria-expanded='true'],
+[data-theme='dark'] .a11y-menubar [role='menuitem'][aria-expanded='true'] {
+  background-color: var(--a11y-color-surface-hover, #404040);
+  color: var(--a11y-color-text, #fafafa);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .a11y-menubar {
+    background-color: var(--a11y-color-bg, #171717);
+    border-color: var(--a11y-color-border, #404040);
+  }
+
+  :root:not([data-theme='light']) .a11y-menubar button,
+  :root:not([data-theme='light']) .a11y-menubar [role='menuitem'] {
+    color: var(--a11y-color-text, #fafafa);
+  }
+
+  :root:not([data-theme='light']) .a11y-menubar button:hover,
+  :root:not([data-theme='light']) .a11y-menubar [role='menuitem']:hover,
+  :root:not([data-theme='light']) .a11y-menubar button[aria-expanded='true'],
+  :root:not([data-theme='light']) .a11y-menubar [role='menuitem'][aria-expanded='true'] {
+    background-color: var(--a11y-color-surface-hover, #404040);
+    color: var(--a11y-color-text, #fafafa);
+  }
+}
+
+/* High Contrast Mode (WCAG 1.4.1 / 1.4.11) */
+@media (forced-colors: active) {
+  .a11y-menubar {
+    border: 1px solid CanvasText;
+  }
+
+  .a11y-menubar button:focus-visible,
+  .a11y-menubar [role='menuitem']:focus-visible {
+    outline: 2px solid Highlight;
+  }
+
+  .a11y-menubar button[aria-expanded='true'],
+  .a11y-menubar [role='menuitem'][aria-expanded='true'] {
+    outline: 1px solid Highlight;
+  }
+}
+
+/* Reduced Motion (WCAG 2.3.3) */
+@media (prefers-reduced-motion: reduce) {
+  .a11y-menubar button,
+  .a11y-menubar [role='menuitem'] {
+    transition: none !important;
+  }
+}

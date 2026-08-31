@@ -711,3 +711,147 @@ export const tooltipApi: ApiSectionDoc[] = [
     ],
   },
 ];
+
+export const menuApi: ApiSectionDoc[] = [
+  {
+    name: 'MenuProps',
+    props: [
+      {
+        name: 'trigger',
+        type: 'React.ReactNode',
+        description:
+          'The trigger element (e.g. <Button>). Automatically wired with accessibility attributes.',
+      },
+      {
+        name: 'children',
+        type: 'React.ReactNode',
+        description: 'Menu content containing MenuItem, MenuDivider, and MenuGroup.',
+      },
+      {
+        name: 'label',
+        type: 'string',
+        description: 'Accessible label for the menu if trigger does not contain visible text.',
+      },
+      {
+        name: 'isOpen',
+        type: 'boolean',
+        description: 'Controlled open state.',
+      },
+      {
+        name: 'defaultOpen',
+        type: 'boolean',
+        defaultValue: 'false',
+        description: 'Initial open state when uncontrolled.',
+      },
+      {
+        name: 'onOpenChange',
+        type: '(isOpen: boolean) => void',
+        description: 'Callback fired when open state changes.',
+      },
+      {
+        name: 'placement',
+        type: "'bottom-start' | 'bottom-end' | 'top-start' | 'top-end'",
+        defaultValue: "'bottom-start'",
+        description: 'Alignment of dropdown menu relative to the trigger.',
+      },
+      {
+        name: 'closeOnSelect',
+        type: 'boolean',
+        defaultValue: 'true',
+        description: 'Whether selecting a menu item automatically closes the menu.',
+      },
+    ],
+  },
+  {
+    name: 'MenuItemProps',
+    props: [
+      {
+        name: 'children',
+        type: 'React.ReactNode',
+        description: 'Item label text or elements.',
+      },
+      {
+        name: 'onClick',
+        type: '(event: React.MouseEvent | React.KeyboardEvent) => void',
+        description: 'Action handler invoked on click, Enter, or Space.',
+      },
+      {
+        name: 'href',
+        type: 'string',
+        description: 'Optional destination URL to render as an accessible navigation link.',
+      },
+      {
+        name: 'icon',
+        type: 'React.ReactNode',
+        description: 'Optional leading icon or SVG element.',
+      },
+      {
+        name: 'shortcut',
+        type: 'string',
+        description: 'Optional keyboard shortcut label (e.g. ⌘S).',
+      },
+      {
+        name: 'disabled',
+        type: 'boolean',
+        defaultValue: 'false',
+        description: 'Disables interaction and skips the item during keyboard navigation.',
+      },
+      {
+        name: 'danger',
+        type: 'boolean',
+        defaultValue: 'false',
+        description: 'Applies destructive danger styling for critical actions (e.g. Delete).',
+      },
+    ],
+  },
+  {
+    name: 'MenuGroupProps',
+    props: [
+      {
+        name: 'label',
+        type: 'string',
+        description: 'Optional section header text associated via aria-labelledby.',
+      },
+      {
+        name: 'children',
+        type: 'React.ReactNode',
+        description: 'Group content items.',
+      },
+    ],
+  },
+];
+
+export const menubarApi: ApiSectionDoc[] = [
+  {
+    name: 'MenubarProps',
+    props: [
+      {
+        name: 'children',
+        type: 'React.ReactNode',
+        description: 'The Menu instances rendered within the menubar.',
+      },
+      {
+        name: 'label',
+        type: 'string',
+        defaultValue: "'Application menu'",
+        description: 'Accessible label for the menubar container (aria-label).',
+      },
+      {
+        name: 'orientation',
+        type: "'horizontal' | 'vertical'",
+        defaultValue: "'horizontal'",
+        description: 'Orientation of the menubar container.',
+      },
+      {
+        name: 'openMenuId',
+        type: 'string | null',
+        description: 'Controlled ID of the currently open menu.',
+      },
+      {
+        name: 'onOpenMenuChange',
+        type: '(menuId: string | null) => void',
+        description: 'Callback fired when the active/open menu changes.',
+      },
+    ],
+  },
+];
