@@ -14,9 +14,15 @@ export default function InputPage() {
     <article className="doc-page">
       <nav aria-label="Breadcrumb" className="docs-breadcrumb">
         <ol>
-          <li><Link href="/">Home</Link></li>
-          <li><Link href="/components">Components</Link></li>
-          <li><span aria-current="page">Input</span></li>
+          <li>
+            <Link href="/">Home</Link>
+          </li>
+          <li>
+            <Link href="/components">Components</Link>
+          </li>
+          <li>
+            <span aria-current="page">Input</span>
+          </li>
         </ol>
       </nav>
 
@@ -29,7 +35,11 @@ export default function InputPage() {
         id="input-example-title"
         title="Example"
         githubUrl="https://github.com/A11YPros/a11y-ui/blob/main/packages/design-system/src/components/Form/Input.tsx"
-        code={`const [value, setValue] = useState('');
+        snippets={[
+          {
+            label: 'React',
+            language: 'tsx',
+            code: `const [value, setValue] = useState('');
 
 <Input
   label="Email address"
@@ -39,7 +49,44 @@ export default function InputPage() {
   placeholder="you@example.com"
   helperText="We use this email for account notifications."
   required
-/>`}
+/>`,
+            preview: (
+              <Input
+                label="Email address"
+                type="email"
+                value={value}
+                onChange={(event) => setValue(event.target.value)}
+                placeholder="you@example.com"
+                helperText="We use this email for account notifications."
+                required
+              />
+            ),
+          },
+          {
+            label: 'Web Component (HTML)',
+            language: 'html',
+            code: `// Import once in your app or component
+import '@a11ypros/a11y-ui-elements/input';
+
+<a11y-input
+  label="Email address"
+  type="email"
+  placeholder="you@example.com"
+  helper-text="We use this email for account notifications."
+  required
+></a11y-input>`,
+            preview: (
+              <a11y-input
+                label="Email address"
+                type="email"
+                value={value}
+                placeholder="you@example.com"
+                helper-text="We use this email for account notifications."
+                required
+              ></a11y-input>
+            ),
+          },
+        ]}
       >
         <Input
           label="Email address"
@@ -65,7 +112,10 @@ export default function InputPage() {
 
       <section aria-labelledby="input-playground-title" className="doc-section">
         <h2 id="input-playground-title">Playground</h2>
-        <a className="playground-link" href="/storybook-static/index.html?path=/docs/components-form-input--docs">
+        <a
+          className="playground-link"
+          href="/storybook-static/index.html?path=/docs/components-form-input--docs"
+        >
           Open Input stories
         </a>
       </section>

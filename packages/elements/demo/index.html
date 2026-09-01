@@ -189,6 +189,77 @@
           </div>
         </a11y-modal>
       </section>
+
+      <!-- Form Components Section -->
+      <section class="section">
+        <h2>Accessible Form Components</h2>
+        <p>
+          Semantic, accessible form inputs, textareas, selects, checkboxes, radios, and fieldsets.
+        </p>
+
+        <a11y-fieldset legend="User Profile Form" required>
+          <div
+            style="
+              display: flex;
+              flex-direction: column;
+              gap: 1rem;
+              max-width: 480px;
+              margin-top: 1rem;
+            "
+          >
+            <a11y-input
+              id="demo-name"
+              label="Full Name"
+              placeholder="e.g. Alex Morgan"
+              required
+              helper-text="Used on your public profile"
+            ></a11y-input>
+
+            <a11y-input
+              id="demo-email"
+              type="email"
+              label="Email Address"
+              value="invalid-email"
+              error="Please provide a valid email address"
+              required
+            ></a11y-input>
+
+            <a11y-select id="demo-role" label="Role" required>
+              <option value="">Select your role...</option>
+              <option value="dev">Developer</option>
+              <option value="designer">Designer</option>
+              <option value="pm">Product Manager</option>
+            </a11y-select>
+
+            <a11y-textarea
+              id="demo-bio"
+              label="Biography"
+              placeholder="Brief summary..."
+              rows="3"
+              max-length="200"
+              show-count
+              helper-text="Maximum 200 characters"
+            ></a11y-textarea>
+
+            <a11y-checkbox
+              id="demo-terms"
+              label="I agree to the Terms of Service"
+              required
+            ></a11y-checkbox>
+
+            <div style="display: flex; gap: 1.5rem; margin-top: 0.5rem">
+              <a11y-radio
+                name="demo-theme"
+                value="system"
+                label="System Theme"
+                checked
+              ></a11y-radio>
+              <a11y-radio name="demo-theme" value="light" label="Light"></a11y-radio>
+              <a11y-radio name="demo-theme" value="dark" label="Dark"></a11y-radio>
+            </div>
+          </div>
+        </a11y-fieldset>
+      </section>
     </main>
 
     <!-- Load Web Components bundle (works over both http:// and file://) -->

@@ -26,6 +26,12 @@ declare module 'react' {
       'a11y-accordion': CustomElementProps;
       'a11y-accordion-item': CustomElementProps;
       'a11y-modal': CustomElementProps;
+      'a11y-input': CustomElementProps;
+      'a11y-textarea': CustomElementProps;
+      'a11y-select': CustomElementProps;
+      'a11y-checkbox': CustomElementProps;
+      'a11y-radio': CustomElementProps;
+      'a11y-fieldset': CustomElementProps;
     }
   }
 }
@@ -38,6 +44,12 @@ declare global {
       'a11y-accordion': CustomElementProps;
       'a11y-accordion-item': CustomElementProps;
       'a11y-modal': CustomElementProps;
+      'a11y-input': CustomElementProps;
+      'a11y-textarea': CustomElementProps;
+      'a11y-select': CustomElementProps;
+      'a11y-checkbox': CustomElementProps;
+      'a11y-radio': CustomElementProps;
+      'a11y-fieldset': CustomElementProps;
     }
   }
 }

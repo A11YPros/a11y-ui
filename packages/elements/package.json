@@ -27,6 +27,30 @@
       "types": "./dist/components/modal/a11y-modal.d.ts",
       "import": "./dist/components/modal/a11y-modal.js"
     },
+    "./input": {
+      "types": "./dist/components/form/a11y-input.d.ts",
+      "import": "./dist/components/form/a11y-input.js"
+    },
+    "./textarea": {
+      "types": "./dist/components/form/a11y-textarea.d.ts",
+      "import": "./dist/components/form/a11y-textarea.js"
+    },
+    "./select": {
+      "types": "./dist/components/form/a11y-select.d.ts",
+      "import": "./dist/components/form/a11y-select.js"
+    },
+    "./checkbox": {
+      "types": "./dist/components/form/a11y-checkbox.d.ts",
+      "import": "./dist/components/form/a11y-checkbox.js"
+    },
+    "./radio": {
+      "types": "./dist/components/form/a11y-radio.d.ts",
+      "import": "./dist/components/form/a11y-radio.js"
+    },
+    "./fieldset": {
+      "types": "./dist/components/form/a11y-fieldset.d.ts",
+      "import": "./dist/components/form/a11y-fieldset.js"
+    },
     "./package.json": "./package.json"
   },
   "publishConfig": {
