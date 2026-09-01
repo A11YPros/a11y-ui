@@ -70,22 +70,49 @@ export class A11yMenubar extends HTMLElement {
     bar.id = this.id || this._uniqueId;
     bar.setAttribute('role', 'menubar');
     bar.className = 'a11y-menubar';
+    if (this.orientation === 'vertical') {
+      bar.classList.add('a11y-menubar--vertical');
+    }
     bar.setAttribute('aria-orientation', this.orientation);
     if (this.label) bar.setAttribute('aria-label', this.label);
 
+    // Attach bar FIRST so that menus added to it have a valid closest('a11y-menubar')
+    this.appendChild(bar);
+    this._container = bar;
+
     initialMenus.forEach((menu, index) => {
       bar.appendChild(menu);
+      menu.setAttribute('role', 'none');
       const trigger = menu.querySelector<HTMLElement>('[aria-haspopup="menu"]');
       if (trigger) {
+        trigger.className = '';
         trigger.setAttribute('role', 'menuitem');
         trigger.tabIndex = index === 0 ? 0 : -1;
       }
     });
 
-    bar.addEventListener('keydown', (e) => this._handleKeyDown(e));
+    // Single active menu coordination: when one menu opens, close all other menus!
+    bar.addEventListener('menu-open', (e) => {
+      const targetMenu = (e.target as HTMLElement).closest('a11y-menu');
+      const allMenus = bar.querySelectorAll<any>('a11y-menu');
+      allMenus.forEach((m) => {
+        if (m !== targetMenu && m.open) {
+          m.open = false;
+        }
+      });
+    });
 
-    this.appendChild(bar);
-    this._container = bar;
+    // Close all menus when clicking outside menubar
+    document.addEventListener('click', (e) => {
+      if (!bar.contains(e.target as Node)) {
+        const allMenus = bar.querySelectorAll<any>('a11y-menu');
+        allMenus.forEach((m) => {
+          if (m.open) m.open = false;
+        });
+      }
+    });
+
+    bar.addEventListener('keydown', (e) => this._handleKeyDown(e));
   }
 
   private _handleKeyDown(e: KeyboardEvent): void {
@@ -95,13 +122,17 @@ export class A11yMenubar extends HTMLElement {
 
     if (currentIndex === -1) return;
 
-    if (e.key === 'ArrowRight') {
+    const isHorizontal = this.orientation === 'horizontal';
+    const nextKey = isHorizontal ? 'ArrowRight' : 'ArrowDown';
+    const prevKey = isHorizontal ? 'ArrowLeft' : 'ArrowUp';
+
+    if (e.key === nextKey) {
       e.preventDefault();
       const next = (currentIndex + 1) % triggers.length;
       triggers[currentIndex].tabIndex = -1;
       triggers[next].tabIndex = 0;
       triggers[next]?.focus();
-    } else if (e.key === 'ArrowLeft') {
+    } else if (e.key === prevKey) {
       e.preventDefault();
       const prev = (currentIndex - 1 + triggers.length) % triggers.length;
       triggers[currentIndex].tabIndex = -1;
@@ -127,6 +158,11 @@ export class A11yMenubar extends HTMLElement {
       this._container.setAttribute('aria-label', this.label);
     } else {
       this._container.removeAttribute('aria-label');
+    }
+    if (this.orientation === 'vertical') {
+      this._container.classList.add('a11y-menubar--vertical');
+    } else {
+      this._container.classList.remove('a11y-menubar--vertical');
     }
   }
 }

@@ -27,6 +27,39 @@ describe('A11yMenubar (<a11y-menubar>)', () => {
     expect(bar?.classList.contains('a11y-menubar')).toBe(true);
   });
 
+  it('ensures only one menu is open at a time and trigger has no btn classes', () => {
+    const menubar = document.createElement('a11y-menubar') as A11yMenubar;
+    menubar.innerHTML = `
+      <a11y-menu id="menu-file" label="File">
+        <a11y-menu-item shortcut="⌘N">New</a11y-menu-item>
+      </a11y-menu>
+      <a11y-menu id="menu-edit" label="Edit">
+        <a11y-menu-item shortcut="⌘Z">Undo</a11y-menu-item>
+      </a11y-menu>
+    `;
+    document.body.appendChild(menubar);
+
+    const fileMenu = menubar.querySelector('#menu-file') as any;
+    const editMenu = menubar.querySelector('#menu-edit') as any;
+
+    const fileTrigger = fileMenu.querySelector('button') as HTMLButtonElement;
+    expect(fileTrigger.classList.contains('btn')).toBe(false);
+
+    // Open file menu
+    fileMenu.open = true;
+    expect(fileMenu.open).toBe(true);
+    expect(editMenu.open).toBe(false);
+
+    // Open edit menu -> file menu should close automatically
+    editMenu.open = true;
+    expect(fileMenu.open).toBe(false);
+    expect(editMenu.open).toBe(true);
+
+    // Verify label text in Undo item is not duplicated with shortcut
+    const undoLabel = editMenu.querySelector('.a11y-menu-item__label')?.textContent;
+    expect(undoLabel).toBe('Undo');
+  });
+
   it('passes axe accessibility audit with zero violations', async () => {
     const menubar = document.createElement('a11y-menubar') as A11yMenubar;
     menubar.setAttribute('label', 'Top Navigation');

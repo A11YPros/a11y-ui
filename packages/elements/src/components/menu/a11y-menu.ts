@@ -78,6 +78,9 @@ export class A11yMenuItem extends HTMLElement {
     }
   }
 
+  private _rawLabel: string | null = null;
+  private _iconEl: Element | null = null;
+
   get href(): string | null {
     return this.getAttribute('href');
   }
@@ -94,12 +97,23 @@ export class A11yMenuItem extends HTMLElement {
     this._render();
   }
 
-  attributeChangedCallback(): void {
+  attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
+    if (oldValue === newValue) return;
+    if (name === 'label') {
+      this._rawLabel = newValue;
+    }
     this._render();
   }
 
   private _render(): void {
-    const rawLabel = this.getAttribute('label') || this.textContent || '';
+    if (this._rawLabel === null) {
+      const existingSvg = this.querySelector('svg');
+      if (existingSvg) {
+        this._iconEl = existingSvg.cloneNode(true) as Element;
+      }
+      this._rawLabel = this.getAttribute('label') || this.textContent?.trim() || '';
+    }
+    const rawLabel = this.getAttribute('label') || this._rawLabel;
     const shortcut = this.getAttribute('shortcut');
     const href = this.href;
 
@@ -123,6 +137,14 @@ export class A11yMenuItem extends HTMLElement {
     ]
       .filter(Boolean)
       .join(' ');
+
+    if (this._iconEl) {
+      const iconSpan = document.createElement('span');
+      iconSpan.className = 'a11y-menu-item__icon';
+      iconSpan.setAttribute('aria-hidden', 'true');
+      iconSpan.appendChild(this._iconEl.cloneNode(true));
+      el.appendChild(iconSpan);
+    }
 
     const labelSpan = document.createElement('span');
     labelSpan.className = 'a11y-menu-item__label';
@@ -207,10 +229,17 @@ export class A11yMenu extends HTMLElement {
   }
 
   set open(val: boolean) {
+    const wasOpen = this.hasAttribute('open');
     if (val) {
       this.setAttribute('open', '');
+      if (!wasOpen) {
+        this.dispatchEvent(new CustomEvent('menu-open', { bubbles: true, composed: true }));
+      }
     } else {
       this.removeAttribute('open');
+      if (wasOpen) {
+        this.dispatchEvent(new CustomEvent('menu-close', { bubbles: true, composed: true }));
+      }
     }
   }
 
@@ -240,6 +269,13 @@ export class A11yMenu extends HTMLElement {
 
   attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
     if (!this._isInitialized || oldValue === newValue) return;
+    if (name === 'open') {
+      if (this.open) {
+        this.dispatchEvent(new CustomEvent('menu-open', { bubbles: true, composed: true }));
+      } else {
+        this.dispatchEvent(new CustomEvent('menu-close', { bubbles: true, composed: true }));
+      }
+    }
     this._updateState();
   }
 
@@ -289,11 +325,23 @@ export class A11yMenu extends HTMLElement {
       this.toggle();
     });
 
+    trigger.addEventListener('mouseenter', () => {
+      const menubar = this.closest('a11y-menubar');
+      if (menubar) {
+        const anyOpen = menubar.querySelector('a11y-menu[open]');
+        if (anyOpen && anyOpen !== this) {
+          (anyOpen as A11yMenu).open = false;
+          this.open = true;
+          this.focusFirstItem();
+        }
+      }
+    });
+
     trigger.addEventListener('keydown', (e) => {
       if (e.key === 'ArrowDown' || e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
         this.open = true;
-        this._focusFirstItem();
+        this.focusFirstItem();
       }
     });
 
@@ -328,7 +376,7 @@ export class A11yMenu extends HTMLElement {
     this._menuDropdown = dropdown;
   }
 
-  private _focusFirstItem(): void {
+  public focusFirstItem(): void {
     requestAnimationFrame(() => {
       const item = this.querySelector<HTMLElement>('[role="menuitem"]:not([aria-disabled="true"])');
       item?.focus();
@@ -336,6 +384,26 @@ export class A11yMenu extends HTMLElement {
   }
 
   private _handleMenuKeyDown(e: KeyboardEvent): void {
+    const isMenubarItem = Boolean(this.closest('a11y-menubar'));
+    if (isMenubarItem && (e.key === 'ArrowRight' || e.key === 'ArrowLeft')) {
+      const menubar = this.closest('a11y-menubar');
+      if (menubar) {
+        e.preventDefault();
+        const menus = Array.from(menubar.querySelectorAll<A11yMenu>('a11y-menu'));
+        const currentIdx = menus.indexOf(this);
+        if (currentIdx !== -1) {
+          this.open = false;
+          const nextIdx = e.key === 'ArrowRight'
+            ? (currentIdx + 1) % menus.length
+            : (currentIdx - 1 + menus.length) % menus.length;
+          const nextMenu = menus[nextIdx];
+          nextMenu.open = true;
+          nextMenu.focusFirstItem();
+          return;
+        }
+      }
+    }
+
     const items = Array.from(
       this.querySelectorAll<HTMLElement>('[role="menuitem"]:not([aria-disabled="true"])')
     );
@@ -369,6 +437,11 @@ export class A11yMenu extends HTMLElement {
     const isMenubarItem = Boolean(this.closest('a11y-menubar'));
     if (!isMenubarItem && !this.querySelector('[slot="trigger"]')) {
       this._triggerBtn.className = `btn btn--${this.variant} btn--${this.size}`;
+      if (this.label) {
+        this._triggerBtn.textContent = this.label;
+      }
+    } else if (isMenubarItem && !this.querySelector('[slot="trigger"]')) {
+      this._triggerBtn.className = '';
       if (this.label) {
         this._triggerBtn.textContent = this.label;
       }
