@@ -54,22 +54,23 @@ export default function LabelPage() {
             language: 'html',
             code: `// Import once in your app or component
 import '@a11ypros/a11y-ui-elements/label';
+import '@a11ypros/a11y-ui-elements/input';
 
 <div class="example-column">
   <a11y-label for="full-name" required>Full name</a11y-label>
-  <input id="full-name" class="form-input" placeholder="Taylor Morgan" required />
+  <a11y-input id="full-name" name="fullName" placeholder="Taylor Morgan" required></a11y-input>
 </div>`,
             preview: (
               <div className="example-column">
                 <a11y-label for="full-name-wc" required>
                   Full name
                 </a11y-label>
-                <input
+                <a11y-input
                   id="full-name-wc"
-                  className="form-input"
+                  name="fullName"
                   placeholder="Taylor Morgan"
                   required
-                />
+                ></a11y-input>
               </div>
             ),
           },

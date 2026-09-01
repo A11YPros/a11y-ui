@@ -35,13 +35,23 @@ describe('A11yLabel (<a11y-label>)', () => {
     expect(req.textContent).toBe(' *');
   });
 
-  it('passes axe accessibility audit with zero violations', async () => {
+  it('passes axe accessibility audit when paired with a11y-input', async () => {
+    // import/register a11y-input
+    await import('./a11y-input');
     const wrapper = document.createElement('div');
     wrapper.innerHTML = `
-      <a11y-label for="first-name">First Name</a11y-label>
-      <input id="first-name" type="text" />
+      <a11y-label for="full-name" required>Full name</a11y-label>
+      <a11y-input id="full-name" name="fullName" placeholder="Taylor Morgan" required></a11y-input>
     `;
     document.body.appendChild(wrapper);
+
+    const input = wrapper.querySelector('input') as HTMLInputElement;
+    expect(input).not.toBeNull();
+    expect(input.id).toBe('full-name');
+
+    const label = wrapper.querySelector('label') as HTMLLabelElement;
+    expect(label).not.toBeNull();
+    expect(label.htmlFor).toBe('full-name');
 
     const results = await axe(wrapper);
     expect(results).toHaveNoViolations();

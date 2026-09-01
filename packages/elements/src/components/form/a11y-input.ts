@@ -138,8 +138,19 @@ export class A11yInput extends HTMLElement {
     this._updateState();
   }
 
+  override focus(options?: FocusOptions): void {
+    this._inputElement?.focus(options);
+  }
+
   private _render(): void {
-    const finalId = this.id || this._uniqueId;
+    const hostId = this.getAttribute('id');
+    const finalId = this.getAttribute('input-id') || hostId || this._uniqueId;
+
+    if (this.hasAttribute('id')) {
+      this.removeAttribute('id');
+      this.setAttribute('data-input-id', finalId);
+    }
+
     const errorId = `${finalId}-error`;
     const helperId = `${finalId}-helper`;
 
@@ -195,7 +206,7 @@ export class A11yInput extends HTMLElement {
       return;
     }
 
-    const finalId = this.id || this._uniqueId;
+    const finalId = this._inputElement.id;
     const errorId = `${finalId}-error`;
     const helperId = `${finalId}-helper`;
 
