@@ -15,7 +15,7 @@
     "release": "node scripts/release-publish.mjs",
     "build:netlify": "netlify build --offline",
     "build:netlify:debug": "netlify build --debug --offline",
-    "build:local": "yarn install && yarn build-storybook && yarn workspace @apps/web build",
+    "build:local": "yarn install && yarn workspace @a11ypros/a11y-ui-elements build && yarn build-storybook && yarn workspace @apps/web build",
     "build:local:clean": "rm -rf apps/web/.next apps/web/out apps/web/public/storybook-static node_modules/.cache && yarn build:local",
     "build:simulate": "netlify build --offline",
     "build-storybook": "storybook build --config-dir .storybook --output-dir apps/web/public/storybook-static && node scripts/fix-storybook-paths.js",
