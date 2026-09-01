@@ -60,6 +60,50 @@ describe('A11yMenubar (<a11y-menubar>)', () => {
     expect(undoLabel).toBe('Undo');
   });
 
+  it('navigates between parent menu items with arrow keys and shows adjacent submenu when open', () => {
+    const menubar = document.createElement('a11y-menubar') as A11yMenubar;
+    menubar.innerHTML = `
+      <a11y-menu id="menu-file" label="File">
+        <a11y-menu-item>New</a11y-menu-item>
+      </a11y-menu>
+      <a11y-menu id="menu-edit" label="Edit">
+        <a11y-menu-item>Undo</a11y-menu-item>
+      </a11y-menu>
+      <a11y-menu id="menu-view" label="View">
+        <a11y-menu-item>Zoom</a11y-menu-item>
+      </a11y-menu>
+    `;
+    document.body.appendChild(menubar);
+
+    const fileMenu = menubar.querySelector('#menu-file') as any;
+    const editMenu = menubar.querySelector('#menu-edit') as any;
+    const viewMenu = menubar.querySelector('#menu-view') as any;
+
+    const fileTrigger = fileMenu.querySelector('button') as HTMLButtonElement;
+    const editTrigger = editMenu.querySelector('button') as HTMLButtonElement;
+
+    // File menu trigger is focused and its submenu is open
+    fileTrigger.focus();
+    fileMenu.open = true;
+    expect(fileMenu.open).toBe(true);
+    expect(editMenu.open).toBe(false);
+
+    // Press ArrowRight on menubar: moves to Edit, opens Edit submenu, closes File submenu
+    const bar = menubar.querySelector('.a11y-menubar') as HTMLElement;
+    bar.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true }));
+
+    expect(fileMenu.open).toBe(false);
+    expect(editMenu.open).toBe(true);
+    expect(document.activeElement).toBe(editTrigger);
+
+    // Press ArrowLeft: moves back to File, opens File submenu, closes Edit submenu
+    bar.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowLeft', bubbles: true }));
+
+    expect(fileMenu.open).toBe(true);
+    expect(editMenu.open).toBe(false);
+    expect(document.activeElement).toBe(fileTrigger);
+  });
+
   it('passes axe accessibility audit with zero violations', async () => {
     const menubar = document.createElement('a11y-menubar') as A11yMenubar;
     menubar.setAttribute('label', 'Top Navigation');

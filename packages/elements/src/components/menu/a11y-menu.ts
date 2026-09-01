@@ -326,22 +326,32 @@ export class A11yMenu extends HTMLElement {
     });
 
     trigger.addEventListener('mouseenter', () => {
-      const menubar = this.closest('a11y-menubar');
+      const menubar = this.closest('a11y-menubar') as any;
       if (menubar) {
         const anyOpen = menubar.querySelector('a11y-menu[open]');
         if (anyOpen && anyOpen !== this) {
           (anyOpen as A11yMenu).open = false;
           this.open = true;
-          this.focusFirstItem();
+          this.focusTrigger();
         }
       }
     });
 
     trigger.addEventListener('keydown', (e) => {
+      const isMenubar = Boolean(this.closest('a11y-menubar'));
       if (e.key === 'ArrowDown' || e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
         this.open = true;
         this.focusFirstItem();
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        this.open = true;
+        this.focusLastItem();
+      } else if (isMenubar && e.key === 'Escape') {
+        if (this.open) {
+          e.preventDefault();
+          this.close();
+        }
       }
     });
 
@@ -378,34 +388,37 @@ export class A11yMenu extends HTMLElement {
 
   public focusFirstItem(): void {
     requestAnimationFrame(() => {
-      const item = this.querySelector<HTMLElement>('[role="menuitem"]:not([aria-disabled="true"])');
+      const item = this._menuDropdown?.querySelector<HTMLElement>('[role="menuitem"]:not([aria-disabled="true"])');
       item?.focus();
     });
+  }
+
+  public focusLastItem(): void {
+    requestAnimationFrame(() => {
+      const items = this._menuDropdown?.querySelectorAll<HTMLElement>('[role="menuitem"]:not([aria-disabled="true"])');
+      if (items && items.length > 0) {
+        items[items.length - 1]?.focus();
+      }
+    });
+  }
+
+  public focusTrigger(): void {
+    this._triggerBtn?.focus();
   }
 
   private _handleMenuKeyDown(e: KeyboardEvent): void {
     const isMenubarItem = Boolean(this.closest('a11y-menubar'));
     if (isMenubarItem && (e.key === 'ArrowRight' || e.key === 'ArrowLeft')) {
-      const menubar = this.closest('a11y-menubar');
-      if (menubar) {
+      const menubar = this.closest('a11y-menubar') as any;
+      if (menubar && typeof menubar.switchMenu === 'function') {
         e.preventDefault();
-        const menus = Array.from(menubar.querySelectorAll<A11yMenu>('a11y-menu'));
-        const currentIdx = menus.indexOf(this);
-        if (currentIdx !== -1) {
-          this.open = false;
-          const nextIdx = e.key === 'ArrowRight'
-            ? (currentIdx + 1) % menus.length
-            : (currentIdx - 1 + menus.length) % menus.length;
-          const nextMenu = menus[nextIdx];
-          nextMenu.open = true;
-          nextMenu.focusFirstItem();
-          return;
-        }
+        menubar.switchMenu(this, e.key === 'ArrowRight' ? 'next' : 'prev', true);
+        return;
       }
     }
 
     const items = Array.from(
-      this.querySelectorAll<HTMLElement>('[role="menuitem"]:not([aria-disabled="true"])')
+      this._menuDropdown?.querySelectorAll<HTMLElement>('[role="menuitem"]:not([aria-disabled="true"])') || []
     );
     const activeEl = document.activeElement as HTMLElement;
     const currentIndex = items.indexOf(activeEl);

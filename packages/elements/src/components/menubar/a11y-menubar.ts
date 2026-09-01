@@ -115,8 +115,35 @@ export class A11yMenubar extends HTMLElement {
     bar.addEventListener('keydown', (e) => this._handleKeyDown(e));
   }
 
+  public switchMenu(currentMenu: any, direction: 'next' | 'prev', focusFirstItem = false): void {
+    const menus = Array.from(this.querySelectorAll<any>('a11y-menu'));
+    if (menus.length <= 1) return;
+
+    const currentIdx = menus.indexOf(currentMenu);
+    if (currentIdx === -1) return;
+
+    const nextIdx = direction === 'next'
+      ? (currentIdx + 1) % menus.length
+      : (currentIdx - 1 + menus.length) % menus.length;
+
+    const nextMenu = menus[nextIdx];
+    currentMenu.open = false;
+    nextMenu.open = true;
+
+    this._updateRovingTabIndex(nextIdx);
+
+    if (focusFirstItem && typeof nextMenu.focusFirstItem === 'function') {
+      nextMenu.focusFirstItem();
+    } else if (typeof nextMenu.focusTrigger === 'function') {
+      nextMenu.focusTrigger();
+    }
+  }
+
   private _handleKeyDown(e: KeyboardEvent): void {
-    const triggers = Array.from(this.querySelectorAll<HTMLElement>('[aria-haspopup="menu"]'));
+    const menus = Array.from(this.querySelectorAll('a11y-menu')) as any[];
+    const triggers = menus
+      .map((m) => m.querySelector('[aria-haspopup="menu"]') as HTMLElement | null)
+      .filter(Boolean) as HTMLElement[];
     const activeEl = document.activeElement as HTMLElement;
     const currentIndex = triggers.indexOf(activeEl);
 
@@ -126,29 +153,55 @@ export class A11yMenubar extends HTMLElement {
     const nextKey = isHorizontal ? 'ArrowRight' : 'ArrowDown';
     const prevKey = isHorizontal ? 'ArrowLeft' : 'ArrowUp';
 
+    const anyOpenMenu = menus.find((m) => m.open);
+    const isSubmenuOpen = Boolean(anyOpenMenu);
+
     if (e.key === nextKey) {
       e.preventDefault();
-      const next = (currentIndex + 1) % triggers.length;
-      triggers[currentIndex].tabIndex = -1;
-      triggers[next].tabIndex = 0;
-      triggers[next]?.focus();
+      const nextIdx = (currentIndex + 1) % menus.length;
+      if (isSubmenuOpen) {
+        anyOpenMenu!.open = false;
+        menus[nextIdx].open = true;
+      }
+      this._updateRovingTabIndex(nextIdx);
+      triggers[nextIdx]?.focus();
     } else if (e.key === prevKey) {
       e.preventDefault();
-      const prev = (currentIndex - 1 + triggers.length) % triggers.length;
-      triggers[currentIndex].tabIndex = -1;
-      triggers[prev].tabIndex = 0;
-      triggers[prev]?.focus();
+      const prevIdx = (currentIndex - 1 + menus.length) % menus.length;
+      if (isSubmenuOpen) {
+        anyOpenMenu!.open = false;
+        menus[prevIdx].open = true;
+      }
+      this._updateRovingTabIndex(prevIdx);
+      triggers[prevIdx]?.focus();
     } else if (e.key === 'Home') {
       e.preventDefault();
-      triggers[currentIndex].tabIndex = -1;
-      triggers[0].tabIndex = 0;
+      if (isSubmenuOpen) {
+        anyOpenMenu!.open = false;
+        menus[0].open = true;
+      }
+      this._updateRovingTabIndex(0);
       triggers[0]?.focus();
     } else if (e.key === 'End') {
       e.preventDefault();
-      triggers[currentIndex].tabIndex = -1;
-      triggers[triggers.length - 1].tabIndex = 0;
-      triggers[triggers.length - 1]?.focus();
+      const lastIdx = menus.length - 1;
+      if (isSubmenuOpen) {
+        anyOpenMenu!.open = false;
+        menus[lastIdx].open = true;
+      }
+      this._updateRovingTabIndex(lastIdx);
+      triggers[lastIdx]?.focus();
     }
+  }
+
+  private _updateRovingTabIndex(activeIdx: number): void {
+    const menus = Array.from(this.querySelectorAll('a11y-menu')) as any[];
+    menus.forEach((menu, idx) => {
+      const trigger = menu.querySelector('[aria-haspopup="menu"]') as HTMLElement | null;
+      if (trigger) {
+        trigger.tabIndex = idx === activeIdx ? 0 : -1;
+      }
+    });
   }
 
   private _updateState(): void {
