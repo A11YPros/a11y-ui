@@ -1,19 +1,30 @@
 let nextRadioId = 0;
 
+export interface RadioOption {
+  value: string;
+  label: string;
+  disabled?: boolean;
+}
+
 /**
  * Accessible Radio Web Component (<a11y-radio>)
  *
  * Exact HTML5 parity with React Radio:
- * - WCAG 1.3.1 Info and Relationships: Native <label for="..."> association
- * - WCAG 2.1.1 Keyboard: Native arrow key navigation within group
- * - WCAG 4.1.2 Name, Role, Value: Radio input semantics
+ * - WCAG 1.3.1 Info and Relationships: Proper fieldset/legend semantics or radiogroup with aria-labelledby
+ * - WCAG 2.1.1 Keyboard: Native arrow key navigation within radio group
+ * - WCAG 4.1.2 Name, Role, Value: Radio input and radiogroup ARIA attributes
  * - Light DOM rendering preserving CSS classes 1:1 with Radio.css
  *
- * @example
- * ```html
- * <a11y-radio name="plan" value="free" label="Free Tier" checked></a11y-radio>
- * <a11y-radio name="plan" value="pro" label="Pro Tier"></a11y-radio>
- * ```
+ * Supports both:
+ * 1. Radio Group mode with `options` array (identical to React <Radio>):
+ *    `<a11y-radio name="contact" label="Preferred contact method" options='[{"value":"email","label":"Email"},{"value":"phone","label":"Phone"}]' value="email"></a11y-radio>`
+ * 2. Composable child options:
+ *    `<a11y-radio name="contact" label="Preferred contact method" value="email">
+ *       <a11y-radio-option value="email" label="Email"></a11y-radio-option>
+ *       <a11y-radio-option value="phone" label="Phone"></a11y-radio-option>
+ *     </a11y-radio>`
+ * 3. Standalone single radio mode:
+ *    `<a11y-radio name="plan" value="free" label="Free Tier" checked></a11y-radio>`
  */
 export class A11yRadio extends HTMLElement {
   private static readonly OBSERVED_ATTRS = [
@@ -25,17 +36,14 @@ export class A11yRadio extends HTMLElement {
     'helper-text',
     'required',
     'disabled',
+    'options',
   ];
 
   public static get observedAttributes(): string[] {
     return A11yRadio.OBSERVED_ATTRS;
   }
 
-  private _wrapper: HTMLDivElement | null = null;
-  private _inputElement: HTMLInputElement | null = null;
-  private _labelElement: HTMLLabelElement | null = null;
-  private _helperElement: HTMLSpanElement | null = null;
-  private _errorElement: HTMLSpanElement | null = null;
+  private _options: RadioOption[] = [];
   private _uniqueId: string;
   private _isInitialized = false;
 
@@ -44,17 +52,32 @@ export class A11yRadio extends HTMLElement {
     this._uniqueId = `a11y-radio-${++nextRadioId}`;
   }
 
+  get options(): RadioOption[] {
+    return this._options;
+  }
+
+  set options(val: RadioOption[]) {
+    this._options = Array.isArray(val) ? [...val] : [];
+    if (this._isInitialized) {
+      this._render();
+    }
+  }
+
   get checked(): boolean {
-    return this._inputElement ? this._inputElement.checked : this.hasAttribute('checked');
+    const checkedInput = this.querySelector<HTMLInputElement>('input[type="radio"]:checked');
+    if (checkedInput) return true;
+    return this.hasAttribute('checked');
   }
 
   set checked(val: boolean) {
     if (val) {
       this.setAttribute('checked', '');
-      if (this._inputElement) this._inputElement.checked = true;
+      const input = this.querySelector<HTMLInputElement>('input[type="radio"]');
+      if (input) input.checked = true;
     } else {
       this.removeAttribute('checked');
-      if (this._inputElement) this._inputElement.checked = false;
+      const input = this.querySelector<HTMLInputElement>('input[type="radio"]');
+      if (input) input.checked = false;
     }
   }
 
@@ -67,11 +90,17 @@ export class A11yRadio extends HTMLElement {
   }
 
   get value(): string {
+    const checkedInput = this.querySelector<HTMLInputElement>('input[type="radio"]:checked');
+    if (checkedInput) return checkedInput.value;
     return this.getAttribute('value') || '';
   }
 
   set value(val: string) {
     this.setAttribute('value', val);
+    const inputs = this.querySelectorAll<HTMLInputElement>('input[type="radio"]');
+    inputs.forEach((input) => {
+      input.checked = input.value === val;
+    });
   }
 
   get label(): string {
@@ -131,35 +160,198 @@ export class A11yRadio extends HTMLElement {
   }
 
   connectedCallback(): void {
-    if (!this._isInitialized) {
-      this._render();
-      this._isInitialized = true;
+    // Extract options from attribute if provided as JSON and not already set
+    if (this._options.length === 0 && this.hasAttribute('options')) {
+      try {
+        const parsed = JSON.parse(this.getAttribute('options') || '[]');
+        if (Array.isArray(parsed)) this._options = parsed;
+      } catch {
+        this._options = [];
+      }
     }
-    this._updateState();
+
+    // Extract options from child elements if provided
+    if (this._options.length === 0) {
+      const childOptions = Array.from(this.querySelectorAll('a11y-radio-option'));
+      if (childOptions.length > 0) {
+        this._options = childOptions.map((opt) => ({
+          value: opt.getAttribute('value') || '',
+          label: opt.getAttribute('label') || opt.textContent?.trim() || '',
+          disabled: opt.hasAttribute('disabled'),
+        }));
+      }
+    }
+
+    this._render();
+    this._isInitialized = true;
   }
 
   attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
     if (!this._isInitialized || oldValue === newValue) return;
-    this._updateState();
+
+    if (name === 'options') {
+      try {
+        const parsed = JSON.parse(newValue || '[]');
+        this._options = Array.isArray(parsed) ? parsed : [];
+      } catch {
+        this._options = [];
+      }
+      this._render();
+      return;
+    }
+
+    if (name === 'value') {
+      const inputs = this.querySelectorAll<HTMLInputElement>('input[type="radio"]');
+      inputs.forEach((input) => {
+        input.checked = input.value === newValue;
+      });
+      return;
+    }
+
+    this._render();
   }
 
   private _render(): void {
     const finalId = this.id || this._uniqueId;
     const errorId = `${finalId}-error`;
     const helperId = `${finalId}-helper`;
+    const labelId = `${finalId}-label`;
+
+    const describedBy = [
+      this.getAttribute('aria-describedby'),
+      this.error ? errorId : null,
+      this.helperText ? helperId : null,
+    ]
+      .filter(Boolean)
+      .join(' ');
 
     this.innerHTML = '';
 
     const wrapper = document.createElement('div');
     wrapper.className = 'form-radio-wrapper';
 
-    const inputWrapper = document.createElement('div');
-    inputWrapper.className = 'form-radio-input-wrapper';
+    // If options array is provided: Render Full Radio Group (1:1 with React Radio)
+    if (this._options.length > 0) {
+      if (this.label) {
+        const labelDiv = document.createElement('div');
+        labelDiv.className = 'form-radio-label';
+
+        const labelSpan = document.createElement('span');
+        labelSpan.id = labelId;
+        labelSpan.className = 'form-label';
+        labelSpan.textContent = this.label;
+
+        if (this.required) {
+          const reqSpan = document.createElement('span');
+          reqSpan.className = 'form-label__required';
+          reqSpan.setAttribute('aria-hidden', 'true');
+          reqSpan.textContent = ' *';
+          labelSpan.appendChild(reqSpan);
+        }
+
+        labelDiv.appendChild(labelSpan);
+        wrapper.appendChild(labelDiv);
+      }
+
+      const groupDiv = document.createElement('div');
+      groupDiv.className = 'form-radio-group';
+      groupDiv.setAttribute('role', 'radiogroup');
+      if (this.label) {
+        groupDiv.setAttribute('aria-labelledby', labelId);
+      }
+      if (describedBy) {
+        groupDiv.setAttribute('aria-describedby', describedBy);
+      }
+      if (this.error) {
+        groupDiv.setAttribute('aria-invalid', 'true');
+      }
+
+      this._options.forEach((option, index) => {
+        const optionId = `${finalId}-${index}`;
+        const optionDiv = document.createElement('div');
+        optionDiv.className = 'form-radio-option';
+
+        const input = document.createElement('input');
+        input.id = optionId;
+        input.type = 'radio';
+        input.name = this.name;
+        input.value = option.value;
+        input.className = ['form-radio', this.error ? 'form-radio--error' : '']
+          .filter(Boolean)
+          .join(' ');
+        input.disabled = Boolean(option.disabled || this.disabled);
+        if (this.required) input.required = true;
+
+        if (this.value === option.value) {
+          input.checked = true;
+        }
+
+        input.addEventListener('change', () => {
+          if (input.checked) {
+            this.setAttribute('value', option.value);
+            this.dispatchEvent(
+              new CustomEvent('change', {
+                bubbles: true,
+                composed: true,
+                detail: { value: option.value },
+              })
+            );
+          }
+        });
+
+        const optLabel = document.createElement('label');
+        optLabel.htmlFor = optionId;
+        optLabel.className = 'form-radio-label';
+        optLabel.textContent = option.label;
+
+        optionDiv.appendChild(input);
+        optionDiv.appendChild(optLabel);
+        groupDiv.appendChild(optionDiv);
+      });
+
+      wrapper.appendChild(groupDiv);
+
+      if (this.helperText && !this.error) {
+        const helper = document.createElement('span');
+        helper.id = helperId;
+        helper.className = 'form-helper-text';
+        helper.textContent = this.helperText;
+        wrapper.appendChild(helper);
+      }
+
+      if (this.error) {
+        const errorSpan = document.createElement('span');
+        errorSpan.id = errorId;
+        errorSpan.className = 'form-error-text';
+        errorSpan.setAttribute('role', 'alert');
+        errorSpan.textContent = this.error;
+        wrapper.appendChild(errorSpan);
+      }
+
+      this.appendChild(wrapper);
+      return;
+    }
+
+    // Standalone single radio option mode
+    const optionDiv = document.createElement('div');
+    optionDiv.className = 'form-radio-option';
 
     const input = document.createElement('input');
     input.id = finalId;
     input.type = 'radio';
-    input.className = 'form-radio';
+    input.name = this.name;
+    input.value = this.value;
+    input.className = ['form-radio', this.error ? 'form-radio--error' : ''].filter(Boolean).join(' ');
+    input.checked = this.hasAttribute('checked');
+    input.disabled = this.disabled;
+    if (this.required) input.required = true;
+
+    if (this.error) {
+      input.setAttribute('aria-invalid', 'true');
+      input.setAttribute('aria-describedby', errorId);
+    } else if (this.helperText) {
+      input.setAttribute('aria-describedby', helperId);
+    }
 
     input.addEventListener('change', () => {
       if (input.checked) {
@@ -176,98 +368,50 @@ export class A11yRadio extends HTMLElement {
       );
     });
 
-    const label = document.createElement('label');
-    label.htmlFor = finalId;
-    label.className = 'form-radio-label';
+    const optLabel = document.createElement('label');
+    optLabel.htmlFor = finalId;
+    optLabel.className = 'form-radio-label';
+    optLabel.textContent = this.label;
 
-    inputWrapper.appendChild(input);
-    inputWrapper.appendChild(label);
+    optionDiv.appendChild(input);
+    optionDiv.appendChild(optLabel);
+    wrapper.appendChild(optionDiv);
 
-    const helper = document.createElement('span');
-    helper.id = helperId;
-    helper.className = 'form-helper-text';
+    if (this.helperText && !this.error) {
+      const helper = document.createElement('span');
+      helper.id = helperId;
+      helper.className = 'form-helper-text';
+      helper.textContent = this.helperText;
+      wrapper.appendChild(helper);
+    }
 
-    const error = document.createElement('span');
-    error.id = errorId;
-    error.className = 'form-error-text';
-    error.setAttribute('role', 'alert');
+    if (this.error) {
+      const errorSpan = document.createElement('span');
+      errorSpan.id = errorId;
+      errorSpan.className = 'form-error-text';
+      errorSpan.setAttribute('role', 'alert');
+      errorSpan.textContent = this.error;
+      wrapper.appendChild(errorSpan);
+    }
 
-    wrapper.appendChild(inputWrapper);
-    wrapper.appendChild(helper);
-    wrapper.appendChild(error);
     this.appendChild(wrapper);
-
-    this._wrapper = wrapper;
-    this._inputElement = input;
-    this._labelElement = label;
-    this._helperElement = helper;
-    this._errorElement = error;
   }
+}
 
-  private _updateState(): void {
-    if (!this._inputElement || !this._labelElement || !this._helperElement || !this._errorElement) {
-      return;
-    }
-
-    const finalId = this.id || this._uniqueId;
-    const errorId = `${finalId}-error`;
-    const helperId = `${finalId}-helper`;
-
-    this._inputElement.checked = this.hasAttribute('checked');
-    this._inputElement.name = this.name;
-    this._inputElement.value = this.value;
-    this._inputElement.disabled = this.disabled;
-
-    if (this.required) {
-      this._inputElement.setAttribute('required', '');
-    } else {
-      this._inputElement.removeAttribute('required');
-    }
-
-    // Label
-    if (this.label) {
-      this._labelElement.style.display = '';
-      this._labelElement.textContent = this.label;
-      if (this.required) {
-        const reqSpan = document.createElement('span');
-        reqSpan.className = 'form-label__required';
-        reqSpan.setAttribute('aria-hidden', 'true');
-        reqSpan.textContent = ' *';
-        this._labelElement.appendChild(reqSpan);
-      }
-    } else {
-      this._labelElement.style.display = 'none';
-    }
-
-    // Classes & ARIA
-    const isError = Boolean(this.error);
-    const classes = ['form-radio', isError ? 'form-radio--error' : ''].filter(Boolean).join(' ');
-    this._inputElement.className = classes;
-
-    if (isError) {
-      this._inputElement.setAttribute('aria-invalid', 'true');
-      this._inputElement.setAttribute('aria-describedby', errorId);
-      this._errorElement.textContent = this.error;
-      this._errorElement.style.display = '';
-      this._helperElement.style.display = 'none';
-    } else {
-      this._inputElement.removeAttribute('aria-invalid');
-      this._errorElement.style.display = 'none';
-      if (this.helperText) {
-        this._inputElement.setAttribute('aria-describedby', helperId);
-        this._helperElement.textContent = this.helperText;
-        this._helperElement.style.display = '';
-      } else {
-        this._inputElement.removeAttribute('aria-describedby');
-        this._helperElement.style.display = 'none';
-      }
-    }
+export class A11yRadioOption extends HTMLElement {
+  public static get observedAttributes(): string[] {
+    return ['value', 'label', 'disabled'];
   }
 }
 
 export function registerRadio(): void {
-  if (typeof customElements !== 'undefined' && !customElements.get('a11y-radio')) {
-    customElements.define('a11y-radio', A11yRadio);
+  if (typeof customElements !== 'undefined') {
+    if (!customElements.get('a11y-radio')) {
+      customElements.define('a11y-radio', A11yRadio);
+    }
+    if (!customElements.get('a11y-radio-option')) {
+      customElements.define('a11y-radio-option', A11yRadioOption);
+    }
   }
 }
 

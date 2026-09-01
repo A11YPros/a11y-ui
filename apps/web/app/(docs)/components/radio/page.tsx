@@ -72,17 +72,28 @@ export default function RadioPage() {
             code: `// Import once in your app or component
 import '@a11ypros/a11y-ui-elements/radio';
 
-<div class="example-column">
-  <a11y-radio name="contact" value="email" label="Email" checked></a11y-radio>
-  <a11y-radio name="contact" value="phone" label="Phone"></a11y-radio>
-  <a11y-radio name="contact" value="sms" label="SMS"></a11y-radio>
-</div>`,
+<a11y-radio
+  name="contact-method"
+  label="Preferred contact method"
+  options='[
+    {"value": "email", "label": "Email"},
+    {"value": "phone", "label": "Phone"},
+    {"value": "sms", "label": "SMS"}
+  ]'
+  value="email"
+></a11y-radio>`,
             preview: (
-              <div className="example-column">
-                <a11y-radio name="contact-wc" value="email" label="Email" checked></a11y-radio>
-                <a11y-radio name="contact-wc" value="phone" label="Phone"></a11y-radio>
-                <a11y-radio name="contact-wc" value="sms" label="SMS"></a11y-radio>
-              </div>
+              <a11y-radio
+                name="contact-method-wc"
+                label="Preferred contact method"
+                value={value}
+                options={JSON.stringify([
+                  { value: 'email', label: 'Email' },
+                  { value: 'phone', label: 'Phone' },
+                  { value: 'sms', label: 'SMS' },
+                ])}
+                onChange={(e: any) => setValue(e.detail?.value || e.target?.value)}
+              ></a11y-radio>
             ),
           },
         ]}
