@@ -32,6 +32,16 @@ declare module 'react' {
       'a11y-checkbox': CustomElementProps;
       'a11y-radio': CustomElementProps;
       'a11y-fieldset': CustomElementProps;
+      'a11y-banner': CustomElementProps;
+      'a11y-link': CustomElementProps;
+      'a11y-tabs': CustomElementProps;
+      'a11y-tab-panel': CustomElementProps;
+      'a11y-tooltip': CustomElementProps;
+      'a11y-menu': CustomElementProps;
+      'a11y-menu-item': CustomElementProps;
+      'a11y-menu-divider': CustomElementProps;
+      'a11y-menubar': CustomElementProps;
+      'a11y-data-table': CustomElementProps;
     }
   }
 }
@@ -50,6 +60,16 @@ declare global {
       'a11y-checkbox': CustomElementProps;
       'a11y-radio': CustomElementProps;
       'a11y-fieldset': CustomElementProps;
+      'a11y-banner': CustomElementProps;
+      'a11y-link': CustomElementProps;
+      'a11y-tabs': CustomElementProps;
+      'a11y-tab-panel': CustomElementProps;
+      'a11y-tooltip': CustomElementProps;
+      'a11y-menu': CustomElementProps;
+      'a11y-menu-item': CustomElementProps;
+      'a11y-menu-divider': CustomElementProps;
+      'a11y-menubar': CustomElementProps;
+      'a11y-data-table': CustomElementProps;
     }
   }
 }

@@ -51,6 +51,34 @@
       "types": "./dist/components/form/a11y-fieldset.d.ts",
       "import": "./dist/components/form/a11y-fieldset.js"
     },
+    "./banner": {
+      "types": "./dist/components/banner/a11y-banner.d.ts",
+      "import": "./dist/components/banner/a11y-banner.js"
+    },
+    "./link": {
+      "types": "./dist/components/link/a11y-link.d.ts",
+      "import": "./dist/components/link/a11y-link.js"
+    },
+    "./tabs": {
+      "types": "./dist/components/tabs/a11y-tabs.d.ts",
+      "import": "./dist/components/tabs/a11y-tabs.js"
+    },
+    "./tooltip": {
+      "types": "./dist/components/tooltip/a11y-tooltip.d.ts",
+      "import": "./dist/components/tooltip/a11y-tooltip.js"
+    },
+    "./menu": {
+      "types": "./dist/components/menu/a11y-menu.d.ts",
+      "import": "./dist/components/menu/a11y-menu.js"
+    },
+    "./menubar": {
+      "types": "./dist/components/menubar/a11y-menubar.d.ts",
+      "import": "./dist/components/menubar/a11y-menubar.js"
+    },
+    "./table": {
+      "types": "./dist/components/table/a11y-data-table.d.ts",
+      "import": "./dist/components/table/a11y-data-table.js"
+    },
     "./package.json": "./package.json"
   },
   "publishConfig": {
