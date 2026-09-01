@@ -69,9 +69,61 @@ describe('A11yDataTable (<a11y-data-table>)', () => {
     expect(th.getAttribute('aria-sort')).toBe('descending');
   });
 
+  it('supports selectable rows with auto-injected checkboxes and selection events', () => {
+    const table = document.createElement('a11y-data-table') as A11yDataTable;
+    table.setAttribute('caption', 'Selectable Items');
+    table.setAttribute('selectable', '');
+    table.innerHTML = `
+      <table>
+        <thead>
+          <tr>
+            <th>Item</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Item 1</td>
+          </tr>
+          <tr>
+            <td>Item 2</td>
+          </tr>
+        </tbody>
+      </table>
+    `;
+    document.body.appendChild(table);
+
+    const headerCheckbox = table.querySelector('.data-table-header--checkbox input') as HTMLInputElement;
+    expect(headerCheckbox).not.toBeNull();
+    expect(headerCheckbox.getAttribute('aria-label')).toBe('Select all rows');
+
+    const rowCheckboxes = table.querySelectorAll<HTMLInputElement>('.data-table-cell--checkbox input');
+    expect(rowCheckboxes.length).toBe(2);
+
+    let selectedIndices: number[] = [];
+    table.addEventListener('selectionchange', (e: any) => {
+      selectedIndices = e.detail.selectedIndices;
+    });
+
+    // Select first row
+    rowCheckboxes[0].checked = true;
+    rowCheckboxes[0].dispatchEvent(new Event('change'));
+
+    expect(selectedIndices).toEqual([0]);
+    expect(headerCheckbox.indeterminate).toBe(true);
+
+    // Select all via header
+    headerCheckbox.checked = true;
+    headerCheckbox.dispatchEvent(new Event('change'));
+
+    expect(rowCheckboxes[0].checked).toBe(true);
+    expect(rowCheckboxes[1].checked).toBe(true);
+    expect(selectedIndices).toEqual([0, 1]);
+  });
+
   it('passes axe accessibility audit with zero violations', async () => {
     const table = document.createElement('a11y-data-table') as A11yDataTable;
     table.setAttribute('caption', 'Employee Directory');
+    table.setAttribute('selectable', '');
     table.innerHTML = `
       <table>
         <thead>

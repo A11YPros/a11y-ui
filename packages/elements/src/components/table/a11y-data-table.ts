@@ -107,6 +107,24 @@ export class A11yDataTable extends HTMLElement {
       if (this.caption) captionEl.textContent = this.caption;
     }
 
+    // If selectable, inject header checkbox
+    if (this.selectable) {
+      const headerRow = existingTable.querySelector('thead tr');
+      if (headerRow && !headerRow.querySelector('.data-table-header--checkbox')) {
+        const thCheckbox = document.createElement('th');
+        thCheckbox.setAttribute('scope', 'col');
+        thCheckbox.className = 'data-table-header data-table-header--checkbox';
+
+        const allCheck = document.createElement('input');
+        allCheck.type = 'checkbox';
+        allCheck.className = 'form-checkbox';
+        allCheck.setAttribute('aria-label', 'Select all rows');
+
+        thCheckbox.appendChild(allCheck);
+        headerRow.prepend(thCheckbox);
+      }
+    }
+
     // Enhance headers
     const ths = existingTable.querySelectorAll('th');
     ths.forEach((th, index) => {
@@ -153,11 +171,94 @@ export class A11yDataTable extends HTMLElement {
     });
 
     // Enhance cells & rows
-    existingTable.querySelectorAll('tr').forEach((tr) => {
-      if (tr.parentElement?.tagName === 'TBODY') {
-        tr.classList.add('data-table-row');
+    const bodyRows = Array.from(existingTable.querySelectorAll('tbody tr'));
+    const allCheckInput = existingTable.querySelector<HTMLInputElement>(
+      '.data-table-header--checkbox input'
+    );
+
+    const updateHeaderCheckbox = () => {
+      if (!allCheckInput) return;
+      const rowChecks = existingTable.querySelectorAll<HTMLInputElement>(
+        '.data-table-cell--checkbox input'
+      );
+      const checkedCount = Array.from(rowChecks).filter((c) => c.checked).length;
+      if (checkedCount === 0) {
+        allCheckInput.checked = false;
+        allCheckInput.indeterminate = false;
+      } else if (checkedCount === rowChecks.length) {
+        allCheckInput.checked = true;
+        allCheckInput.indeterminate = false;
+      } else {
+        allCheckInput.checked = false;
+        allCheckInput.indeterminate = true;
+      }
+    };
+
+    bodyRows.forEach((tr, rowIndex) => {
+      tr.classList.add('data-table-row');
+
+      if (this.selectable && !tr.querySelector('.data-table-cell--checkbox')) {
+        const tdCheck = document.createElement('td');
+        tdCheck.className = 'data-table-cell data-table-cell--checkbox';
+
+        const rowCheck = document.createElement('input');
+        rowCheck.type = 'checkbox';
+        rowCheck.className = 'form-checkbox';
+        rowCheck.setAttribute('aria-label', `Select row ${rowIndex + 1}`);
+
+        rowCheck.addEventListener('change', () => {
+          tr.classList.toggle('data-table-row--selected', rowCheck.checked);
+          tr.setAttribute('aria-selected', String(rowCheck.checked));
+          updateHeaderCheckbox();
+
+          const selectedIndices = bodyRows
+            .map((r, idx) =>
+              r.querySelector<HTMLInputElement>('.data-table-cell--checkbox input')?.checked
+                ? idx
+                : -1
+            )
+            .filter((idx) => idx !== -1);
+
+          this.dispatchEvent(
+            new CustomEvent('selectionchange', {
+              bubbles: true,
+              composed: true,
+              detail: { selectedIndices },
+            })
+          );
+        });
+
+        tdCheck.appendChild(rowCheck);
+        tr.prepend(tdCheck);
       }
     });
+
+    if (allCheckInput) {
+      allCheckInput.addEventListener('change', () => {
+        const isChecked = allCheckInput.checked;
+        const rowChecks = existingTable.querySelectorAll<HTMLInputElement>(
+          '.data-table-cell--checkbox input'
+        );
+
+        rowChecks.forEach((c) => {
+          c.checked = isChecked;
+          const tr = c.closest('tr');
+          if (tr) {
+            tr.classList.toggle('data-table-row--selected', isChecked);
+            tr.setAttribute('aria-selected', String(isChecked));
+          }
+        });
+
+        const selectedIndices = isChecked ? bodyRows.map((_, i) => i) : [];
+        this.dispatchEvent(
+          new CustomEvent('selectionchange', {
+            bubbles: true,
+            composed: true,
+            detail: { selectedIndices },
+          })
+        );
+      });
+    }
 
     existingTable.querySelectorAll('td').forEach((td) => {
       td.classList.add('data-table-cell');

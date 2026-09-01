@@ -85,7 +85,7 @@ export default function TablePage() {
             code: `// Import once in your app or component
 import '@a11ypros/a11y-ui-elements/table';
 
-<a11y-data-table caption="User directory">
+<a11y-data-table caption="User directory" selectable>
   <table>
     <thead>
       <tr>
@@ -114,7 +114,7 @@ import '@a11ypros/a11y-ui-elements/table';
   </table>
 </a11y-data-table>`,
             preview: (
-              <a11y-data-table caption="User directory">
+              <a11y-data-table caption="User directory" selectable>
                 <table>
                   <thead>
                     <tr>
