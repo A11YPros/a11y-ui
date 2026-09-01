@@ -80,6 +80,9 @@ export class A11yMenuItem extends HTMLElement {
 
   private _rawLabel: string | null = null;
   private _iconEl: Element | null = null;
+  private _labelSpan: HTMLSpanElement | null = null;
+  private _innerBtn: HTMLElement | null = null;
+  private _observer: MutationObserver | null = null;
 
   get href(): string | null {
     return this.getAttribute('href');
@@ -95,6 +98,36 @@ export class A11yMenuItem extends HTMLElement {
 
   connectedCallback(): void {
     this._render();
+
+    // If label wasn't ready at connectedCallback time (common with React/HTML parsers appending children after attach),
+    // watch for child additions or character changes to populate the label.
+    if (!this._rawLabel && !this.hasAttribute('label')) {
+      this._observer?.disconnect();
+      this._observer = new MutationObserver(() => {
+        const text = this._extractLabel();
+        if (text) {
+          if (this._labelSpan) {
+            this._labelSpan.textContent = text;
+          } else {
+            this._render();
+          }
+          // Clean up any direct text nodes that React or parser may have appended after the inner button
+          Array.from(this.childNodes).forEach((node) => {
+            if (node !== this._innerBtn) {
+              node.remove();
+            }
+          });
+          this._observer?.disconnect();
+          this._observer = null;
+        }
+      });
+      this._observer.observe(this, { childList: true, characterData: true, subtree: true });
+    }
+  }
+
+  disconnectedCallback(): void {
+    this._observer?.disconnect();
+    this._observer = null;
   }
 
   attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
@@ -105,17 +138,51 @@ export class A11yMenuItem extends HTMLElement {
     this._render();
   }
 
-  private _render(): void {
-    if (this._rawLabel === null) {
-      const existingSvg = this.querySelector('svg');
-      if (existingSvg) {
-        this._iconEl = existingSvg.cloneNode(true) as Element;
-      }
-      this._rawLabel = this.getAttribute('label') || this.textContent?.trim() || '';
+  private _extractLabel(): string {
+    if (this.hasAttribute('label')) {
+      return this.getAttribute('label') || '';
     }
-    const rawLabel = this.getAttribute('label') || this._rawLabel;
+    if (this._rawLabel) {
+      return this._rawLabel;
+    }
+    // If label span already exists and has text, use it
+    if (this._labelSpan && this._labelSpan.textContent?.trim()) {
+      this._rawLabel = this._labelSpan.textContent.trim();
+      return this._rawLabel;
+    }
+
+    // Walk text nodes ignoring shortcuts and without cloning elements
+    let text = '';
+    const walker = document.createTreeWalker(this, NodeFilter.SHOW_TEXT, {
+      acceptNode(node) {
+        if (node.parentElement?.closest('kbd, .a11y-menu-item__shortcut')) {
+          return NodeFilter.FILTER_REJECT;
+        }
+        return NodeFilter.FILTER_ACCEPT;
+      },
+    });
+
+    let currentNode: Node | null;
+    while ((currentNode = walker.nextNode())) {
+      text += currentNode.textContent || '';
+    }
+    text = text.trim();
+    if (text) {
+      this._rawLabel = text;
+      return text;
+    }
+    return '';
+  }
+
+  private _render(): void {
+    const rawLabel = this._extractLabel();
     const shortcut = this.getAttribute('shortcut');
     const href = this.href;
+
+    const existingSvg = this.querySelector('svg');
+    if (existingSvg) {
+      this._iconEl = existingSvg.cloneNode(true) as Element;
+    }
 
     this.innerHTML = '';
     const el = href ? document.createElement('a') : document.createElement('button');
@@ -150,6 +217,7 @@ export class A11yMenuItem extends HTMLElement {
     labelSpan.className = 'a11y-menu-item__label';
     labelSpan.textContent = rawLabel;
     el.appendChild(labelSpan);
+    this._labelSpan = labelSpan;
 
     if (shortcut) {
       const kbd = document.createElement('kbd');
@@ -168,6 +236,7 @@ export class A11yMenuItem extends HTMLElement {
     });
 
     this.appendChild(el);
+    this._innerBtn = el;
   }
 }
 

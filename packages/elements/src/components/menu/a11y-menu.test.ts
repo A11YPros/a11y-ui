@@ -77,6 +77,22 @@ describe('A11yMenu (<a11y-menu>)', () => {
     expect(menu.open).toBe(false);
   });
 
+  it('correctly populates label when child text node is attached after element connection', async () => {
+    const item = document.createElement('a11y-menu-item');
+    item.setAttribute('shortcut', '⌘N');
+    document.body.appendChild(item);
+
+    item.appendChild(document.createTextNode('New File'));
+
+    await new Promise((resolve) => setTimeout(resolve, 20));
+
+    const labelSpan = item.querySelector('.a11y-menu-item__label');
+    expect(labelSpan?.textContent).toBe('New File');
+
+    const shortcut = item.querySelector('.a11y-menu-item__shortcut');
+    expect(shortcut?.textContent).toBe('⌘N');
+  });
+
   it('passes axe accessibility audit with zero violations', async () => {
     const menu = document.createElement('a11y-menu') as A11yMenu;
     menu.setAttribute('label', 'File Actions');
