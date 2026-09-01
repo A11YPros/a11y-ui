@@ -53,6 +53,30 @@ describe('A11yMenu (<a11y-menu>)', () => {
     expect(menu.open).toBe(false);
   });
 
+  it('fires click and select events when a11y-menu-item is clicked', () => {
+    const menu = document.createElement('a11y-menu') as A11yMenu;
+    menu.innerHTML = '<a11y-menu-item id="item-edit">Edit</a11y-menu-item>';
+    document.body.appendChild(menu);
+
+    const item = menu.querySelector('#item-edit') as HTMLElement;
+    let clicked = false;
+    let selected = false;
+
+    item.addEventListener('click', () => {
+      clicked = true;
+    });
+    item.addEventListener('select', () => {
+      selected = true;
+    });
+
+    const innerBtn = item.querySelector('button') as HTMLButtonElement;
+    innerBtn.click();
+
+    expect(clicked).toBe(true);
+    expect(selected).toBe(true);
+    expect(menu.open).toBe(false);
+  });
+
   it('passes axe accessibility audit with zero violations', async () => {
     const menu = document.createElement('a11y-menu') as A11yMenu;
     menu.setAttribute('label', 'File Actions');
