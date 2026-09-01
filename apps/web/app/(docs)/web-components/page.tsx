@@ -73,9 +73,28 @@ export default function WebComponentsGuidePage() {
         <pre className="code-block">
           <code>npm install @a11ypros/a11y-ui-elements @a11ypros/a11y-ui-components</code>
         </pre>
-        <p style={{ marginTop: '1rem' }}>
-          Or load directly via a <code>&lt;script&gt;</code> tag for static HTML, WordPress, or
-          Rails apps:
+
+        <h3 style={{ marginTop: '1.25rem', marginBottom: '0.5rem' }}>Import into your app (recommended)</h3>
+        <p>
+          Just like CrowdStrike Glide Core, import the element once in your app or component entry point.
+          The custom element is registered automatically:
+        </p>
+        <pre className="code-block">
+          <code>{`import '@a11ypros/a11y-ui-elements/switch';
+import '@a11ypros/a11y-ui-elements/button';
+
+// Or import all elements:
+import '@a11ypros/a11y-ui-elements';`}</code>
+        </pre>
+        <p style={{ marginTop: '0.75rem' }}>Then use the tag directly in your markup without any script tags:</p>
+        <pre className="code-block">
+          <code>{`<a11y-switch label="Notifications" checked></a11y-switch>
+<a11y-button variant="primary">Submit</a11y-button>`}</code>
+        </pre>
+
+        <h3 style={{ marginTop: '1.25rem', marginBottom: '0.5rem' }}>Without a bundler (Static HTML / CMS)</h3>
+        <p>
+          For static sites, WordPress, or Rails without an npm pipeline, load the standalone bundle:
         </p>
         <pre className="code-block">
           <code>{`<!-- Stylesheet with tokens & component styles -->

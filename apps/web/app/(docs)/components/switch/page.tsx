@@ -52,18 +52,10 @@ export default function SwitchPage() {
           {
             label: 'Web Component (HTML)',
             language: 'html',
-            code: `<!-- Load Web Components -->
-<script type="module" src="@a11ypros/a11y-ui-elements"></script>
+            code: `// Import once in your app or component
+import '@a11ypros/a11y-ui-elements/switch';
 
-<!-- Standard custom element -->
-<a11y-switch id="airplane-mode" label="Airplane Mode"></a11y-switch>
-
-<script>
-  const el = document.getElementById('airplane-mode');
-  el.addEventListener('change', (e) => {
-    console.log('Airplane mode:', e.detail.checked);
-  });
-</script>`,
+<a11y-switch id="airplane-mode" label="Airplane Mode"></a11y-switch>`,
           },
         ]}
       >

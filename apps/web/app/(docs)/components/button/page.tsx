@@ -50,8 +50,8 @@ export default function ButtonPage() {
           {
             label: 'Web Component (HTML)',
             language: 'html',
-            code: `<!-- Load Web Components -->
-<script type="module" src="@a11ypros/a11y-ui-elements"></script>
+            code: `// Import once in your app or component
+import '@a11ypros/a11y-ui-elements/button';
 
 <div class="example-row">
   <a11y-button variant="primary">Primary</a11y-button>
