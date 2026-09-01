@@ -169,7 +169,7 @@ export class A11yMenuItem extends HTMLElement {
  * ```
  */
 export class A11yMenu extends HTMLElement {
-  private static readonly OBSERVED_ATTRS = ['label', 'open', 'placement'];
+  private static readonly OBSERVED_ATTRS = ['label', 'open', 'placement', 'variant', 'size'];
 
   public static get observedAttributes(): string[] {
     return A11yMenu.OBSERVED_ATTRS;
@@ -184,6 +184,22 @@ export class A11yMenu extends HTMLElement {
   constructor() {
     super();
     this._uniqueId = `a11y-menu-${++nextMenuId}`;
+  }
+
+  get variant(): string {
+    return this.getAttribute('variant') || 'secondary';
+  }
+
+  set variant(val: string) {
+    this.setAttribute('variant', val);
+  }
+
+  get size(): string {
+    return this.getAttribute('size') || 'md';
+  }
+
+  set size(val: string) {
+    this.setAttribute('size', val);
   }
 
   get open(): boolean {
@@ -238,7 +254,7 @@ export class A11yMenu extends HTMLElement {
 
   private _render(): void {
     const triggerSlot = this.querySelector('[slot="trigger"]');
-    const items = Array.from(this.querySelectorAll('a11y-menu-item, a11y-menu-divider'));
+    const items = Array.from(this.querySelectorAll('a11y-menu-item, a11y-menu-divider, a11y-menu-group'));
 
     this.innerHTML = '';
 
@@ -246,6 +262,7 @@ export class A11yMenu extends HTMLElement {
     wrapper.className = 'a11y-menu-wrapper';
 
     // Trigger
+    const isMenubarItem = Boolean(this.closest('a11y-menubar'));
     let trigger: HTMLElement;
     if (triggerSlot) {
       triggerSlot.removeAttribute('slot');
@@ -253,12 +270,11 @@ export class A11yMenu extends HTMLElement {
     } else {
       const btn = document.createElement('button');
       btn.type = 'button';
-      btn.className = 'btn btn--secondary';
+      btn.className = isMenubarItem ? '' : `btn btn--${this.variant} btn--${this.size}`;
       btn.textContent = this.label || 'Menu';
       trigger = btn;
     }
 
-    const isMenubarItem = Boolean(this.closest('a11y-menubar'));
     if (isMenubarItem) {
       this.setAttribute('role', 'none');
       wrapper.setAttribute('role', 'none');
@@ -350,6 +366,13 @@ export class A11yMenu extends HTMLElement {
     if (!this._triggerBtn || !this._menuDropdown) return;
 
     this._triggerBtn.setAttribute('aria-expanded', String(this.open));
+    const isMenubarItem = Boolean(this.closest('a11y-menubar'));
+    if (!isMenubarItem && !this.querySelector('[slot="trigger"]')) {
+      this._triggerBtn.className = `btn btn--${this.variant} btn--${this.size}`;
+      if (this.label) {
+        this._triggerBtn.textContent = this.label;
+      }
+    }
     this._menuDropdown.className = `a11y-menu a11y-menu--${this.placement}`;
     this._menuDropdown.style.display = this.open ? '' : 'none';
   }

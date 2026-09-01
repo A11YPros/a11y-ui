@@ -21,9 +21,12 @@ describe('A11yMenu (<a11y-menu>)', () => {
     `;
     document.body.appendChild(menu);
 
-    const trigger = menu.querySelector('[aria-haspopup="menu"]');
+    const trigger = menu.querySelector('button') as HTMLButtonElement;
     expect(trigger).not.toBeNull();
-    expect(trigger?.getAttribute('aria-expanded')).toBe('false');
+    expect(trigger.getAttribute('aria-expanded')).toBe('false');
+    expect(trigger.classList.contains('btn')).toBe(true);
+    expect(trigger.classList.contains('btn--secondary')).toBe(true);
+    expect(trigger.classList.contains('btn--md')).toBe(true);
 
     const dropdown = menu.querySelector('[role="menu"]');
     expect(dropdown).not.toBeNull();
