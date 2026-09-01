@@ -1,0 +1,42 @@
+{
+  "name": "@a11ypros/a11y-ui-elements",
+  "version": "0.1.0",
+  "description": "Accessible, framework-agnostic Web Components (Custom Elements) built for WCAG 2.1/2.2 AA & AAA compliance.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "module": "./dist/index.js",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./switch": {
+      "types": "./dist/components/switch/a11y-switch.d.ts",
+      "import": "./dist/components/switch/a11y-switch.js"
+    },
+    "./button": {
+      "types": "./dist/components/button/a11y-button.d.ts",
+      "import": "./dist/components/button/a11y-button.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build:tsc": "tsc",
+    "build:bundle": "esbuild src/index.ts --bundle --outfile=dist/bundle.js --format=iife",
+    "build:css": "esbuild src/styles.css --bundle --outfile=dist/styles.css",
+    "build": "npm run build:tsc && npm run build:bundle && npm run build:css",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.3",
+    "vitest": "^1.1.0"
+  },
+  "author": "Ryan Mack <ryan@a11ypros.com>",
+  "license": "MIT"
+}
