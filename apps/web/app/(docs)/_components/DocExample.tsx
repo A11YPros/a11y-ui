@@ -15,6 +15,7 @@ export interface CodeSnippet {
   label: string;
   code: string;
   language?: 'tsx' | 'ts' | 'jsx' | 'js' | 'css' | 'html' | 'json' | 'bash';
+  preview?: ReactNode;
 }
 
 interface DocExampleProps {
@@ -25,7 +26,7 @@ interface DocExampleProps {
   snippets?: CodeSnippet[];
   githubUrl?: string;
   description?: string;
-  children: ReactNode;
+  children?: ReactNode;
 }
 
 export function DocExample({
@@ -132,7 +133,9 @@ export function DocExample({
       <h2 id={id}>{title}</h2>
       {description ? <p className="doc-example__description">{description}</p> : null}
 
-      <div className="doc-example__preview">{children}</div>
+      <div className="doc-example__preview">
+        {activeSnippet.preview !== undefined ? activeSnippet.preview : children}
+      </div>
 
       <div className="doc-example__code" role="group" aria-labelledby={codeTitleId}>
         <div className="doc-example__code-header">

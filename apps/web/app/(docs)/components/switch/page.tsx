@@ -48,6 +48,14 @@ export default function SwitchPage() {
   checked={airplaneMode}
   onChange={(checked) => setAirplaneMode(checked)}
 />`,
+            preview: (
+              <Switch
+                id="airplane-mode"
+                label="Airplane Mode"
+                checked={airplaneMode}
+                onChange={(checked) => setAirplaneMode(checked)}
+              />
+            ),
           },
           {
             label: 'Web Component (HTML)',
@@ -56,6 +64,13 @@ export default function SwitchPage() {
 import '@a11ypros/a11y-ui-elements/switch';
 
 <a11y-switch id="airplane-mode" label="Airplane Mode"></a11y-switch>`,
+            preview: (
+              <a11y-switch
+                id="airplane-mode"
+                label="Airplane Mode"
+                checked={airplaneMode ? '' : undefined}
+              />
+            ),
           },
         ]}
       >
@@ -82,6 +97,18 @@ import '@a11ypros/a11y-ui-elements/switch';
   checked={notifications}
   onChange={(checked) => setNotifications(checked)}
 />`,
+            preview: (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                <Switch
+                  id="notifications"
+                  size="md"
+                  label="Push notifications"
+                  helperText="Receive real-time alerts on your device"
+                  checked={notifications}
+                  onChange={(checked) => setNotifications(checked)}
+                />
+              </div>
+            ),
           },
           {
             label: 'Web Component (HTML)',
@@ -93,6 +120,17 @@ import '@a11ypros/a11y-ui-elements/switch';
   helper-text="Receive real-time alerts on your device"
   checked
 ></a11y-switch>`,
+            preview: (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                <a11y-switch
+                  id="notifications"
+                  size="md"
+                  label="Push notifications"
+                  helper-text="Receive real-time alerts on your device"
+                  checked={notifications ? '' : undefined}
+                />
+              </div>
+            ),
           },
         ]}
       >

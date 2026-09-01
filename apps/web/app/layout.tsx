@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Script from 'next/script';
+import { ClientElementsProvider } from './_components/ClientElementsProvider';
 import './styles/globals.css';
 
 export const metadata: Metadata = {
@@ -8,13 +9,15 @@ export const metadata: Metadata = {
     default: 'A11Y UI - Accessibility-first React Components',
     template: '%s',
   },
-  description: 'Accessibility-first React components, patterns, and documentation built for production teams.',
+  description:
+    'Accessibility-first React components, patterns, and documentation built for production teams.',
   alternates: {
     canonical: '/',
   },
   openGraph: {
     title: 'A11Y UI - Accessibility-first React Components',
-    description: 'Build inclusive interfaces faster with WCAG compliant components, keyboard navigation, and screen reader support.',
+    description:
+      'Build inclusive interfaces faster with WCAG compliant components, keyboard navigation, and screen reader support.',
     url: 'https://ui.a11ypros.com',
     siteName: 'A11Y UI',
     locale: 'en_US',
@@ -31,7 +34,8 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'A11Y UI - Accessibility-first React Components',
-    description: 'Build inclusive interfaces faster with WCAG compliant components, keyboard navigation, and screen reader support.',
+    description:
+      'Build inclusive interfaces faster with WCAG compliant components, keyboard navigation, and screen reader support.',
     images: ['/logo.png'],
   },
   robots: {
@@ -60,6 +64,7 @@ function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
 gtag('config', 'G-W8QRH1S6R6');`}
         </Script>
+        <ClientElementsProvider />
         <a className="skip-link" href="#main-content">
           Skip to main content
         </a>

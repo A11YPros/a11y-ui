@@ -46,6 +46,14 @@ export default function ButtonPage() {
   <Button variant="ghost">Ghost</Button>
   <Button variant="danger">Danger</Button>
 </div>`,
+            preview: (
+              <div className="example-row">
+                <Button variant="primary">Primary</Button>
+                <Button variant="secondary">Secondary</Button>
+                <Button variant="ghost">Ghost</Button>
+                <Button variant="danger">Danger</Button>
+              </div>
+            ),
           },
           {
             label: 'Web Component (HTML)',
@@ -59,6 +67,14 @@ import '@a11ypros/a11y-ui-elements/button';
   <a11y-button variant="ghost">Ghost</a11y-button>
   <a11y-button variant="danger">Danger</a11y-button>
 </div>`,
+            preview: (
+              <div className="example-row">
+                <a11y-button variant="primary">Primary</a11y-button>
+                <a11y-button variant="secondary">Secondary</a11y-button>
+                <a11y-button variant="ghost">Ghost</a11y-button>
+                <a11y-button variant="danger">Danger</a11y-button>
+              </div>
+            ),
           },
         ]}
       >
@@ -85,6 +101,15 @@ import '@a11ypros/a11y-ui-elements/button';
   <Button loading>Loading</Button>
   <Button disabled>Disabled</Button>
 </div>`,
+            preview: (
+              <div className="example-row">
+                <Button size="sm">Small</Button>
+                <Button size="md">Medium</Button>
+                <Button size="lg">Large</Button>
+                <Button loading>Loading</Button>
+                <Button disabled>Disabled</Button>
+              </div>
+            ),
           },
           {
             label: 'Web Component (HTML)',
@@ -96,6 +121,15 @@ import '@a11ypros/a11y-ui-elements/button';
   <a11y-button loading>Loading</a11y-button>
   <a11y-button disabled>Disabled</a11y-button>
 </div>`,
+            preview: (
+              <div className="example-row">
+                <a11y-button size="sm">Small</a11y-button>
+                <a11y-button size="md">Medium</a11y-button>
+                <a11y-button size="lg">Large</a11y-button>
+                <a11y-button loading>Loading</a11y-button>
+                <a11y-button disabled>Disabled</a11y-button>
+              </div>
+            ),
           },
         ]}
       >

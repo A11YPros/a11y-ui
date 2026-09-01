@@ -46,6 +46,17 @@ export default function ModalPage() {
   <p>This is a modal dialog. Press ESC to close or click outside.</p>
   <Button onClick={() => setIsOpen(false)}>Close</Button>
 </Modal>`,
+            preview: (
+              <div>
+                <Button onClick={() => setIsOpen(true)}>Open Modal</Button>
+                <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} title="Example Modal">
+                  <p>This is a modal dialog. Press ESC to close or click outside.</p>
+                  <div className="example-row example-row--spaced">
+                    <Button onClick={() => setIsOpen(false)}>Close</Button>
+                  </div>
+                </Modal>
+              </div>
+            ),
           },
           {
             label: 'Web Component (HTML)',
@@ -66,6 +77,25 @@ import '@a11ypros/a11y-ui-elements/button';
     modal.showModal();
   });
 </script>`,
+            preview: (
+              <div>
+                <a11y-button
+                  variant="primary"
+                  onClick={() => {
+                    const m = document.getElementById('wc-doc-modal') as any;
+                    m?.showModal();
+                  }}
+                >
+                  Open Modal
+                </a11y-button>
+                <a11y-modal id="wc-doc-modal" title="Example Modal">
+                  <p>
+                    This is a native Web Component modal dialog using HTML5 &lt;dialog&gt;. Press
+                    ESC to close or click outside.
+                  </p>
+                </a11y-modal>
+              </div>
+            ),
           },
         ]}
       >
