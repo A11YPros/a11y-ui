@@ -85,16 +85,16 @@ export default function MenubarPage() {
                       Redo
                     </MenuItem>
                     <MenuDivider />
-                    <MenuItem shortcut="⌘X">Cut</MenuItem>
-                    <MenuItem shortcut="⌘C">Copy</MenuItem>
-                    <MenuItem shortcut="⌘V">Paste</MenuItem>
+                    <MenuItem shortcut="⌘X" onClick={() => alert('Cut')}>Cut</MenuItem>
+                    <MenuItem shortcut="⌘C" onClick={() => alert('Copy')}>Copy</MenuItem>
+                    <MenuItem shortcut="⌘V" onClick={() => alert('Paste')}>Paste</MenuItem>
                   </Menu>
 
                   <Menu trigger={<button type="button">View</button>}>
-                    <MenuItem shortcut="⌘+">Zoom In</MenuItem>
-                    <MenuItem shortcut="⌘-">Zoom Out</MenuItem>
+                    <MenuItem shortcut="⌘+" onClick={() => alert('Zoom In')}>Zoom In</MenuItem>
+                    <MenuItem shortcut="⌘-" onClick={() => alert('Zoom Out')}>Zoom Out</MenuItem>
                     <MenuDivider />
-                    <MenuItem shortcut="⌃⌘F">Full Screen</MenuItem>
+                    <MenuItem shortcut="⌃⌘F" onClick={() => alert('Full Screen')}>Full Screen</MenuItem>
                   </Menu>
 
                   <Menu trigger={<button type="button">Help</button>}>
@@ -118,7 +118,7 @@ import '@a11ypros/a11y-ui-elements/menu';
     <a11y-menu-item shortcut="⌘O" onclick="alert('Open')">Open...</a11y-menu-item>
     <a11y-menu-item shortcut="⌘S" onclick="alert('Save')">Save</a11y-menu-item>
     <a11y-menu-divider></a11y-menu-divider>
-    <a11y-menu-item danger shortcut="⌘Q" onclick="alert('Quit')">Quit</a11y-menu-item>
+    <a11y-menu-item danger shortcut="⌘Q" onclick="alert('Quit')">Quit Application</a11y-menu-item>
   </a11y-menu>
 
   <a11y-menu label="Edit">
@@ -128,6 +128,18 @@ import '@a11ypros/a11y-ui-elements/menu';
     <a11y-menu-item shortcut="⌘X" onclick="alert('Cut')">Cut</a11y-menu-item>
     <a11y-menu-item shortcut="⌘C" onclick="alert('Copy')">Copy</a11y-menu-item>
     <a11y-menu-item shortcut="⌘V" onclick="alert('Paste')">Paste</a11y-menu-item>
+  </a11y-menu>
+
+  <a11y-menu label="View">
+    <a11y-menu-item shortcut="⌘+" onclick="alert('Zoom In')">Zoom In</a11y-menu-item>
+    <a11y-menu-item shortcut="⌘-" onclick="alert('Zoom Out')">Zoom Out</a11y-menu-item>
+    <a11y-menu-divider></a11y-menu-divider>
+    <a11y-menu-item shortcut="⌃⌘F" onclick="alert('Full Screen')">Full Screen</a11y-menu-item>
+  </a11y-menu>
+
+  <a11y-menu label="Help">
+    <a11y-menu-item href="/getting-started">Documentation</a11y-menu-item>
+    <a11y-menu-item onclick="alert('About A11y UI')">About</a11y-menu-item>
   </a11y-menu>
 </a11y-menubar>`,
             preview: (
@@ -145,7 +157,7 @@ import '@a11ypros/a11y-ui-elements/menu';
                     </a11y-menu-item>
                     <a11y-menu-divider></a11y-menu-divider>
                     <a11y-menu-item danger shortcut="⌘Q" onClick={() => alert('Quit')}>
-                      Quit
+                      Quit Application
                     </a11y-menu-item>
                   </a11y-menu>
 
@@ -166,6 +178,24 @@ import '@a11ypros/a11y-ui-elements/menu';
                     <a11y-menu-item shortcut="⌘V" onClick={() => alert('Paste')}>
                       Paste
                     </a11y-menu-item>
+                  </a11y-menu>
+
+                  <a11y-menu label="View">
+                    <a11y-menu-item shortcut="⌘+" onClick={() => alert('Zoom In')}>
+                      Zoom In
+                    </a11y-menu-item>
+                    <a11y-menu-item shortcut="⌘-" onClick={() => alert('Zoom Out')}>
+                      Zoom Out
+                    </a11y-menu-item>
+                    <a11y-menu-divider></a11y-menu-divider>
+                    <a11y-menu-item shortcut="⌃⌘F" onClick={() => alert('Full Screen')}>
+                      Full Screen
+                    </a11y-menu-item>
+                  </a11y-menu>
+
+                  <a11y-menu label="Help">
+                    <a11y-menu-item href="/getting-started">Documentation</a11y-menu-item>
+                    <a11y-menu-item onClick={() => alert('About A11y UI')}>About</a11y-menu-item>
                   </a11y-menu>
                 </a11y-menubar>
               </div>
