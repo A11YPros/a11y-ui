@@ -43,6 +43,8 @@ export function DocExample({
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
   const [copyState, setCopyState] = useState<'idle' | 'copied' | 'failed'>('idle');
   const [activeSnippetIndex, setActiveSnippetIndex] = useState(0);
+  const [liveAnnouncement, setLiveAnnouncement] = useState('');
+  const isInitialMount = useRef(true);
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
   const activeSnippet = useMemo(() => {
@@ -55,6 +57,16 @@ export function DocExample({
       language: defaultLanguage,
     };
   }, [snippets, activeSnippetIndex, defaultCode, defaultLanguage]);
+
+  useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      return;
+    }
+    const isReact = activeSnippet.label.toLowerCase().includes('react');
+    const frameworkName = isReact ? 'React' : 'HTML5 Web Component';
+    setLiveAnnouncement(`Switched to ${frameworkName} preview for ${title}. Component re-rendered.`);
+  }, [activeSnippetIndex, activeSnippet.label, title]);
 
   useEffect(() => {
     const root = document.documentElement;
@@ -104,6 +116,40 @@ export function DocExample({
     }
   };
 
+  const [isRendering, setIsRendering] = useState(false);
+  const renderTimeoutRef = useRef<number | null>(null);
+
+  const handleTabChange = (index: number) => {
+    if (index === activeSnippetIndex) return;
+
+    const prefersReducedMotion =
+      typeof window !== 'undefined' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (prefersReducedMotion) {
+      setActiveSnippetIndex(index);
+      return;
+    }
+
+    setIsRendering(true);
+    setActiveSnippetIndex(index);
+
+    if (renderTimeoutRef.current) {
+      window.clearTimeout(renderTimeoutRef.current);
+    }
+    renderTimeoutRef.current = window.setTimeout(() => {
+      setIsRendering(false);
+    }, 800);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (renderTimeoutRef.current) {
+        window.clearTimeout(renderTimeoutRef.current);
+      }
+    };
+  }, []);
+
   const handleTabKeyDown = (e: React.KeyboardEvent, index: number) => {
     if (!snippets || snippets.length <= 1) return;
 
@@ -123,7 +169,7 @@ export function DocExample({
     }
 
     if (targetIndex !== index) {
-      setActiveSnippetIndex(targetIndex);
+      handleTabChange(targetIndex);
       tabRefs.current[targetIndex]?.focus();
     }
   };
@@ -133,8 +179,69 @@ export function DocExample({
       <h2 id={id}>{title}</h2>
       {description ? <p className="doc-example__description">{description}</p> : null}
 
-      <div className="doc-example__preview">
-        {activeSnippet.preview !== undefined ? activeSnippet.preview : children}
+      <div
+        className={`doc-example__preview ${isRendering ? 'doc-example__preview--rendering' : ''}`}
+        aria-busy={isRendering}
+      >
+        {snippets && snippets.length > 1 ? (
+          <div className="doc-example__preview-header">
+            <span className="doc-example__preview-title">Interactive Preview</span>
+            <span
+              className={`doc-example__preview-badge doc-example__preview-badge--${
+                activeSnippet.label.toLowerCase().includes('react') ? 'react' : 'wc'
+              }`}
+              aria-hidden="true"
+            >
+              <span className="doc-example__preview-badge-dot" />
+              {activeSnippet.label.toLowerCase().includes('react')
+                ? 'React Component'
+                : 'HTML5 Web Component'}
+            </span>
+          </div>
+        ) : null}
+
+        <div className="doc-example__preview-body">
+          {isRendering && (
+            <div className="doc-example__loader" aria-hidden="true">
+              <div className="doc-example__loader-backdrop" />
+              <div className="doc-example__loader-card">
+                <div className="doc-example__loader-orbit">
+                  <div className="doc-example__loader-ring doc-example__loader-ring--outer" />
+                  <div className="doc-example__loader-ring doc-example__loader-ring--inner" />
+                  <span className="doc-example__loader-icon">
+                    {activeSnippet.label.toLowerCase().includes('react') ? '⚛️' : '🌐'}
+                  </span>
+                </div>
+                <div className="doc-example__loader-text">
+                  <span className="doc-example__loader-title">
+                    Mounting {activeSnippet.label.toLowerCase().includes('react') ? 'React' : 'HTML5'} Component
+                  </span>
+                  <span className="doc-example__loader-subtitle">Rendering live DOM tree...</span>
+                </div>
+              </div>
+            </div>
+          )}
+
+          <div
+            key={`${id}-preview-${activeSnippetIndex}`}
+            className={`doc-example__preview-content ${
+              isRendering
+                ? 'doc-example__preview-content--transitioning'
+                : 'doc-example__preview-content--animated'
+            }`}
+          >
+            {activeSnippet.preview !== undefined ? activeSnippet.preview : children}
+          </div>
+        </div>
+      </div>
+
+      <div
+        className="visually-hidden"
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+      >
+        {liveAnnouncement}
       </div>
 
       <div className="doc-example__code" role="group" aria-labelledby={codeTitleId}>
@@ -161,7 +268,7 @@ export function DocExample({
                     aria-controls={`${id}-tabpanel`}
                     tabIndex={isActive ? 0 : -1}
                     className={`doc-example__tab${isActive ? ' doc-example__tab--active' : ''}`}
-                    onClick={() => setActiveSnippetIndex(idx)}
+                    onClick={() => handleTabChange(idx)}
                     onKeyDown={(e) => handleTabKeyDown(e, idx)}
                   >
                     {snip.label}

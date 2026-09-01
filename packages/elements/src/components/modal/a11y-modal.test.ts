@@ -106,6 +106,44 @@ describe('A11yModal (<a11y-modal>)', () => {
     expect(dialog.classList.contains('modal--lg')).toBe(true);
   });
 
+  it('traps Tab key navigation inside modal', () => {
+    const modal = document.createElement('a11y-modal') as A11yModal;
+    modal.setAttribute('title', 'Focus Trap Test');
+    modal.innerHTML = `
+      <button id="modal-btn-1">Button 1</button>
+      <button id="modal-btn-2">Button 2</button>
+    `;
+    document.body.appendChild(modal);
+
+    modal.showModal();
+
+    const closeBtn = modal.querySelector('.modal-close') as HTMLButtonElement;
+    const btn1 = modal.querySelector('#modal-btn-1') as HTMLButtonElement;
+    const btn2 = modal.querySelector('#modal-btn-2') as HTMLButtonElement;
+
+    // Focus last item (btn2) and press Tab -> should wrap to first item (closeBtn)
+    btn2.focus();
+    const tabEvent = new KeyboardEvent('keydown', { key: 'Tab', bubbles: true, cancelable: true });
+    const dialog = modal.querySelector('dialog') as HTMLDialogElement;
+    dialog.dispatchEvent(tabEvent);
+
+    expect(tabEvent.defaultPrevented).toBe(true);
+    expect(document.activeElement).toBe(closeBtn);
+
+    // Focus first item (closeBtn) and press Shift+Tab -> should wrap to last item (btn2)
+    closeBtn.focus();
+    const shiftTabEvent = new KeyboardEvent('keydown', {
+      key: 'Tab',
+      shiftKey: true,
+      bubbles: true,
+      cancelable: true,
+    });
+    dialog.dispatchEvent(shiftTabEvent);
+
+    expect(shiftTabEvent.defaultPrevented).toBe(true);
+    expect(document.activeElement).toBe(btn2);
+  });
+
   it('has no accessibility violations in axe audit', async () => {
     const modal = document.createElement('a11y-modal') as A11yModal;
     modal.setAttribute('title', 'Accessible Modal Dialog');

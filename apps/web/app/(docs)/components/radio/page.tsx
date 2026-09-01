@@ -87,11 +87,11 @@ import '@a11ypros/a11y-ui-elements/radio';
                 name="contact-method-wc"
                 label="Preferred contact method"
                 value={value}
-                options={JSON.stringify([
+                options={[
                   { value: 'email', label: 'Email' },
                   { value: 'phone', label: 'Phone' },
                   { value: 'sms', label: 'SMS' },
-                ])}
+                ]}
                 onChange={(e: any) => setValue(e.detail?.value || e.target?.value)}
               ></a11y-radio>
             ),

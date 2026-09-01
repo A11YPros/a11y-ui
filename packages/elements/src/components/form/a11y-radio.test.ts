@@ -109,6 +109,25 @@ describe('A11yRadio (<a11y-radio>)', () => {
     expect(selectedValue).toBe('email');
   });
 
+  it('supports options as a JSON string attribute or property', () => {
+    const radio = document.createElement('a11y-radio') as A11yRadio;
+    radio.setAttribute('name', 'contact-method');
+    radio.setAttribute('label', 'Contact Method');
+    radio.setAttribute(
+      'options',
+      JSON.stringify([
+        { value: 'email', label: 'Email' },
+        { value: 'phone', label: 'Phone' },
+      ])
+    );
+    document.body.appendChild(radio);
+
+    const inputs = radio.querySelectorAll<HTMLInputElement>('input[type="radio"]');
+    expect(inputs.length).toBe(2);
+    expect(inputs[0].value).toBe('email');
+    expect(inputs[1].value).toBe('phone');
+  });
+
   it('passes axe accessibility audit with zero violations in group mode', async () => {
     const radio = document.createElement('a11y-radio') as A11yRadio;
     radio.setAttribute('name', 'plan');

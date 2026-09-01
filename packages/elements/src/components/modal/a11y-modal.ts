@@ -43,6 +43,7 @@ export class A11yModal extends HTMLElement {
   private _contentElement: HTMLDivElement | null = null;
   private _closeButton: HTMLButtonElement | null = null;
   private _previousActiveElement: HTMLElement | null = null;
+  private _observer: MutationObserver | null = null;
   private _uniqueId: string;
   private _isInitialized = false;
 
@@ -104,6 +105,11 @@ export class A11yModal extends HTMLElement {
     this._updateState();
   }
 
+  disconnectedCallback(): void {
+    this._observer?.disconnect();
+    this._observer = null;
+  }
+
   attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
     if (!this._isInitialized || oldValue === newValue) return;
 
@@ -135,8 +141,57 @@ export class A11yModal extends HTMLElement {
     this._closeDialog();
   }
 
+  private _getFocusableElements(container: HTMLElement = this._dialogElement!): HTMLElement[] {
+    if (!container) return [];
+    const focusableSelectors = [
+      'a[href]:not([tabindex="-1"])',
+      'button:not([disabled]):not([tabindex="-1"])',
+      'textarea:not([disabled]):not([tabindex="-1"])',
+      'input:not([disabled]):not([tabindex="-1"])',
+      'select:not([disabled]):not([tabindex="-1"])',
+      '[tabindex]:not([tabindex="-1"])',
+    ].join(', ');
+
+    return Array.from(container.querySelectorAll<HTMLElement>(focusableSelectors)).filter((el) => {
+      if (el.hasAttribute('disabled')) return false;
+      if (el.getAttribute('aria-hidden') === 'true') return false;
+      return true;
+    });
+  }
+
+  private _handleTabKey(e: KeyboardEvent): void {
+    if (!this._dialogElement) return;
+    const focusable = this._getFocusableElements(this._dialogElement);
+    if (focusable.length === 0) {
+      e.preventDefault();
+      return;
+    }
+
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    const active = document.activeElement;
+
+    if (e.shiftKey) {
+      if (active === first || active === this._dialogElement || !this._dialogElement.contains(active)) {
+        e.preventDefault();
+        last.focus();
+      }
+    } else {
+      if (active === last || !this._dialogElement.contains(active)) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
+  }
+
   private _openDialog(): void {
     if (!this._dialogElement) return;
+
+    if (!this._previousActiveElement && document.activeElement instanceof HTMLElement) {
+      if (!this.contains(document.activeElement)) {
+        this._previousActiveElement = document.activeElement;
+      }
+    }
 
     if (!this._dialogElement.open) {
       if (typeof this._dialogElement.showModal === 'function') {
@@ -146,6 +201,15 @@ export class A11yModal extends HTMLElement {
       }
     }
     this._updateState();
+
+    // Focus management: move focus into the modal (WCAG 2.4.3 Focus Order)
+    requestAnimationFrame(() => {
+      if (!this._dialogElement || !this.open) return;
+      const contentFocusable = this._contentElement ? this._getFocusableElements(this._contentElement)[0] : null;
+      const allFocusable = this._getFocusableElements(this._dialogElement);
+      const target = contentFocusable || allFocusable[0] || this._closeButton || this._dialogElement;
+      target?.focus();
+    });
   }
 
   private _closeDialog(): void {
@@ -162,9 +226,12 @@ export class A11yModal extends HTMLElement {
     this._updateState();
 
     // Return focus to previous element (WCAG 2.1.2)
-    if (this._previousActiveElement && typeof this._previousActiveElement.focus === 'function') {
-      this._previousActiveElement.focus();
-      this._previousActiveElement = null;
+    const prev = this._previousActiveElement;
+    this._previousActiveElement = null;
+    if (prev && typeof prev.focus === 'function') {
+      requestAnimationFrame(() => {
+        prev.focus();
+      });
     }
 
     this.dispatchEvent(new CustomEvent('close', { bubbles: true, composed: true }));
@@ -220,6 +287,23 @@ export class A11yModal extends HTMLElement {
     wrapper.appendChild(contentDiv);
     dialog.appendChild(wrapper);
     this.appendChild(dialog);
+
+    // Watch for late-bound children added by React/DOM parser and place inside contentDiv
+    this._observer?.disconnect();
+    this._observer = new MutationObserver(() => {
+      const extraNodes = Array.from(this.childNodes).filter((n) => n !== dialog);
+      if (extraNodes.length > 0) {
+        extraNodes.forEach((node) => contentDiv.appendChild(node));
+      }
+    });
+    this._observer.observe(this, { childList: true });
+
+    // Focus trap: trap Tab and Shift+Tab key navigation within modal (WCAG 2.1.2 & 2.4.3)
+    dialog.addEventListener('keydown', (e: KeyboardEvent) => {
+      if (e.key === 'Tab') {
+        this._handleTabKey(e);
+      }
+    });
 
     // Backdrop click dismiss
     dialog.addEventListener('click', (e: MouseEvent) => {

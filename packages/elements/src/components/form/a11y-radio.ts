@@ -56,8 +56,19 @@ export class A11yRadio extends HTMLElement {
     return this._options;
   }
 
-  set options(val: RadioOption[]) {
-    this._options = Array.isArray(val) ? [...val] : [];
+  set options(val: RadioOption[] | string) {
+    if (typeof val === 'string') {
+      try {
+        const parsed = JSON.parse(val);
+        this._options = Array.isArray(parsed) ? parsed : [];
+      } catch {
+        this._options = [];
+      }
+    } else if (Array.isArray(val)) {
+      this._options = [...val];
+    } else {
+      this._options = [];
+    }
     if (this._isInitialized) {
       this._render();
     }
@@ -160,17 +171,15 @@ export class A11yRadio extends HTMLElement {
   }
 
   connectedCallback(): void {
-    // Extract options from attribute if provided as JSON and not already set
+    // If options was passed as attribute string and not yet parsed
     if (this._options.length === 0 && this.hasAttribute('options')) {
-      try {
-        const parsed = JSON.parse(this.getAttribute('options') || '[]');
-        if (Array.isArray(parsed)) this._options = parsed;
-      } catch {
-        this._options = [];
+      const attrVal = this.getAttribute('options');
+      if (attrVal) {
+        this.options = attrVal;
       }
     }
 
-    // Extract options from child elements if provided
+    // Extract options from child <a11y-radio-option> elements if provided
     if (this._options.length === 0) {
       const childOptions = Array.from(this.querySelectorAll('a11y-radio-option'));
       if (childOptions.length > 0) {
@@ -190,13 +199,7 @@ export class A11yRadio extends HTMLElement {
     if (!this._isInitialized || oldValue === newValue) return;
 
     if (name === 'options') {
-      try {
-        const parsed = JSON.parse(newValue || '[]');
-        this._options = Array.isArray(parsed) ? parsed : [];
-      } catch {
-        this._options = [];
-      }
-      this._render();
+      this.options = newValue || '';
       return;
     }
 

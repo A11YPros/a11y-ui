@@ -69,6 +69,9 @@ import '@a11ypros/a11y-ui-elements/button';
 
 <a11y-modal id="my-modal" title="Example Modal">
   <p>This is a modal dialog. Press ESC to close or click outside.</p>
+  <div class="example-row example-row--spaced">
+    <a11y-button id="close-btn">Close</a11y-button>
+  </div>
 </a11y-modal>
 
 <script>
@@ -76,10 +79,14 @@ import '@a11ypros/a11y-ui-elements/button';
   document.getElementById('open-btn').addEventListener('click', () => {
     modal.showModal();
   });
+  document.getElementById('close-btn').addEventListener('click', () => {
+    modal.close();
+  });
 </script>`,
             preview: (
               <div>
                 <a11y-button
+                  id="wc-open-modal-btn"
                   variant="primary"
                   onClick={() => {
                     const m = document.getElementById('wc-doc-modal') as any;
@@ -93,6 +100,16 @@ import '@a11ypros/a11y-ui-elements/button';
                     This is a native Web Component modal dialog using HTML5 &lt;dialog&gt;. Press
                     ESC to close or click outside.
                   </p>
+                  <div className="example-row example-row--spaced">
+                    <a11y-button
+                      onClick={() => {
+                        const m = document.getElementById('wc-doc-modal') as any;
+                        m?.close();
+                      }}
+                    >
+                      Close
+                    </a11y-button>
+                  </div>
                 </a11y-modal>
               </div>
             ),
