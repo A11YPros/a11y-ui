@@ -35,6 +35,7 @@ export class A11yButton extends HTMLElement {
   private _spinnerElement: SVGElement | null = null;
   private _statusElement: HTMLSpanElement | null = null;
   private _isInitialized = false;
+  private _observer: MutationObserver | null = null;
 
   /* --------------------------------------------------------------------------
    * Properties (Getters / Setters)
@@ -96,11 +97,19 @@ export class A11yButton extends HTMLElement {
    * -------------------------------------------------------------------------- */
 
   connectedCallback(): void {
+    if (!this.style.display) {
+      this.style.display = 'inline-block';
+    }
     if (!this._isInitialized) {
       this._render();
       this._isInitialized = true;
     }
     this._updateState();
+  }
+
+  disconnectedCallback(): void {
+    this._observer?.disconnect();
+    this._observer = null;
   }
 
   attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
@@ -131,45 +140,54 @@ export class A11yButton extends HTMLElement {
     // Spinner SVG for loading state
     const svgNS = 'http://www.w3.org/2000/svg';
     const svg = document.createElementNS(svgNS, 'svg');
-    svg.setAttribute('class', 'btn__spinner');
-    svg.setAttribute('viewBox', '0 0 24 24');
+    svg.setAttribute('class', 'btn__spinner btn__spinner-icon');
+    svg.setAttribute('viewBox', '0 0 16 16');
+    svg.setAttribute('width', '16');
+    svg.setAttribute('height', '16');
     svg.setAttribute('fill', 'none');
     svg.setAttribute('aria-hidden', 'true');
+    svg.style.display = 'none';
 
     const circle = document.createElementNS(svgNS, 'circle');
-    circle.setAttribute('cx', '12');
-    circle.setAttribute('cy', '12');
-    circle.setAttribute('r', '10');
+    circle.setAttribute('class', 'btn__spinner-circle');
+    circle.setAttribute('cx', '8');
+    circle.setAttribute('cy', '8');
+    circle.setAttribute('r', '6');
     circle.setAttribute('stroke', 'currentColor');
-    circle.setAttribute('stroke-width', '4');
-    circle.setAttribute('opacity', '0.25');
-
-    const path = document.createElementNS(svgNS, 'path');
-    path.setAttribute('fill', 'currentColor');
-    path.setAttribute(
-      'd',
-      'M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z'
-    );
-    path.setAttribute('opacity', '0.75');
+    circle.setAttribute('stroke-width', '2');
+    circle.setAttribute('stroke-linecap', 'round');
+    circle.setAttribute('stroke-dasharray', '31.416');
+    circle.setAttribute('stroke-dashoffset', '31.416');
 
     svg.appendChild(circle);
-    svg.appendChild(path);
 
-    // Text content container
+    // Text content container matching React .btn__content exactly
     const contentSpan = document.createElement('span');
-    contentSpan.className = 'btn__text';
+    contentSpan.className = 'btn__content';
     initialNodes.forEach((node) => contentSpan.appendChild(node));
 
-    // Screen reader loading status
+    // Screen reader loading status - absolutely positioned so it never affects flex gap/width
     const statusSpan = document.createElement('span');
     statusSpan.className = 'btn__sr-status';
     statusSpan.setAttribute('role', 'status');
     statusSpan.setAttribute('aria-live', 'polite');
+    statusSpan.style.cssText =
+      'position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;display:none;';
 
     button.appendChild(svg);
     button.appendChild(contentSpan);
     button.appendChild(statusSpan);
     this.appendChild(button);
+
+    // Watch for late-bound children added by React/HTML parser and route into contentSpan
+    this._observer?.disconnect();
+    this._observer = new MutationObserver(() => {
+      const extraNodes = Array.from(this.childNodes).filter((n) => n !== button);
+      if (extraNodes.length > 0) {
+        extraNodes.forEach((node) => contentSpan.appendChild(node));
+      }
+    });
+    this._observer.observe(this, { childList: true });
 
     // Form submit delegation if type is submit/reset
     button.addEventListener('click', (e) => {
@@ -208,14 +226,16 @@ export class A11yButton extends HTMLElement {
     this._buttonElement.type = this.type;
     this._buttonElement.disabled = isDisabled;
 
-    // ARIA attributes
+    // ARIA attributes & loading states
     if (isLoading) {
       this._buttonElement.setAttribute('aria-busy', 'true');
       this._spinnerElement.style.display = '';
+      this._statusElement.style.display = '';
       this._statusElement.textContent = 'Loading...';
     } else {
       this._buttonElement.removeAttribute('aria-busy');
       this._spinnerElement.style.display = 'none';
+      this._statusElement.style.display = 'none';
       this._statusElement.textContent = '';
     }
 
