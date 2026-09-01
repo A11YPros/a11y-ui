@@ -134,6 +134,61 @@
           <a11y-button variant="secondary" disabled>Disabled</a11y-button>
         </div>
       </section>
+
+      <!-- Accordion Component Section -->
+      <section class="section">
+        <h2>&lt;a11y-accordion&gt; Component</h2>
+        <p>
+          Native HTML5 <code>&lt;details&gt;</code> and <code>&lt;summary&gt;</code> elements with
+          custom styling, animated chevron, and single-expand coordination.
+        </p>
+
+        <a11y-accordion allow-multiple="false">
+          <a11y-accordion-item title="What is WCAG AA conformance?" open>
+            <p>
+              WCAG 2.1 AA requires minimum 4.5:1 text contrast, full keyboard accessibility, visible
+              focus indicators, and semantic HTML structure.
+            </p>
+          </a11y-accordion-item>
+          <a11y-accordion-item title="Why use Light DOM for Web Components?">
+            <p>
+              Light DOM avoids the shadow boundary issue where ARIA attributes (aria-labelledby,
+              aria-describedby) cannot reference IDs across shadow roots.
+            </p>
+          </a11y-accordion-item>
+          <a11y-accordion-item title="Does this work in Vue, Svelte, and React?">
+            <p>
+              Yes! Because these are standard HTML Custom Elements, they work in any framework
+              without requiring adapters.
+            </p>
+          </a11y-accordion-item>
+        </a11y-accordion>
+      </section>
+
+      <!-- Modal Component Section -->
+      <section class="section">
+        <h2>&lt;a11y-modal&gt; Component</h2>
+        <p>
+          Native HTML5 <code>&lt;dialog&gt;</code> element with top-layer backdrop, focus trapping,
+          Escape dismissal, and focus restoration to the trigger button.
+        </p>
+
+        <div class="component-grid">
+          <a11y-button id="open-modal-btn" variant="primary">Open Accessible Modal</a11y-button>
+        </div>
+
+        <a11y-modal id="demo-modal" title="Confirm Account Action">
+          <p>
+            This dialog uses the native HTML5 <code>&lt;dialog&gt;</code> element. Focus is trapped
+            inside, the page behind is inert, and pressing Escape or clicking outside dismisses the
+            dialog.
+          </p>
+          <div style="display: flex; gap: 0.75rem; margin-top: 1.5rem; justify-content: flex-end">
+            <a11y-button id="modal-cancel-btn" variant="ghost">Cancel</a11y-button>
+            <a11y-button id="modal-confirm-btn" variant="primary">Confirm</a11y-button>
+          </div>
+        </a11y-modal>
+      </section>
     </main>
 
     <!-- Load Web Components bundle (works over both http:// and file://) -->
@@ -148,6 +203,22 @@
         const next = current === 'dark' ? 'light' : 'dark';
         html.setAttribute('data-theme', next);
         themeBtn.textContent = next === 'dark' ? 'Switch to Light Theme' : 'Switch to Dark Theme';
+      });
+
+      // Modal demo
+      const openModalBtn = document.getElementById('open-modal-btn');
+      const demoModal = document.getElementById('demo-modal');
+      const modalCancelBtn = document.getElementById('modal-cancel-btn');
+      const modalConfirmBtn = document.getElementById('modal-confirm-btn');
+
+      openModalBtn?.addEventListener('click', () => {
+        demoModal?.showModal();
+      });
+      modalCancelBtn?.addEventListener('click', () => {
+        demoModal?.close();
+      });
+      modalConfirmBtn?.addEventListener('click', () => {
+        demoModal?.close();
       });
 
       // Event logging

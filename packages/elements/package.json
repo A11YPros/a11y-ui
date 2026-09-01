@@ -19,8 +19,29 @@
       "types": "./dist/components/button/a11y-button.d.ts",
       "import": "./dist/components/button/a11y-button.js"
     },
+    "./accordion": {
+      "types": "./dist/components/accordion/a11y-accordion.d.ts",
+      "import": "./dist/components/accordion/a11y-accordion.js"
+    },
+    "./modal": {
+      "types": "./dist/components/modal/a11y-modal.d.ts",
+      "import": "./dist/components/modal/a11y-modal.js"
+    },
     "./package.json": "./package.json"
   },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/A11YPros/a11y-ui.git",
+    "directory": "packages/elements"
+  },
+  "bugs": {
+    "url": "https://github.com/A11YPros/a11y-ui/issues"
+  },
+  "homepage": "https://ui.a11ypros.com",
   "files": [
     "dist",
     "README.md"
@@ -30,6 +51,7 @@
     "build:bundle": "esbuild src/index.ts --bundle --outfile=dist/bundle.js --format=iife",
     "build:css": "esbuild src/styles.css --bundle --outfile=dist/styles.css",
     "build": "npm run build:tsc && npm run build:bundle && npm run build:css",
+    "prepublishOnly": "npm run build",
     "test": "vitest run",
     "test:watch": "vitest"
   },

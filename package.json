@@ -20,6 +20,8 @@
     "build:simulate": "netlify build --offline",
     "build-storybook": "storybook build --config-dir .storybook --output-dir apps/web/public/storybook-static && node scripts/fix-storybook-paths.js",
     "build:storybook": "storybook build --config-dir .storybook --output-dir apps/web/public/storybook-static && node scripts/fix-storybook-paths.js",
+    "build:packages": "npm --prefix packages/design-system run build && npm --prefix packages/elements run build",
+    "test:all": "npm --prefix packages/design-system test && npm --prefix packages/elements test",
     "build:elements": "npm --prefix packages/elements run build",
     "test:elements": "npm --prefix packages/elements test",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,css,md}\"",
