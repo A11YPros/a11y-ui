@@ -35,16 +35,41 @@ export default function TooltipPage() {
         id="tooltip-interactive-example"
         title="Wrapping Interactive Elements"
         githubUrl="https://github.com/A11YPros/a11y-ui/blob/main/packages/design-system/src/components/Tooltip/Tooltip.tsx"
-        code={`<Tooltip content="Print current report as PDF" placement="top">
+        snippets={[
+          {
+            label: 'React',
+            language: 'tsx',
+            code: `<Tooltip content="Print current report as PDF" placement="top">
   <Button variant="secondary">Print Report</Button>
-</Tooltip>`}
-      >
-        <div style={{ padding: '2.5rem 1rem' }}>
-          <Tooltip content="Print current report as PDF" placement="top">
-            <Button variant="secondary">Print Report</Button>
-          </Tooltip>
-        </div>
-      </DocExample>
+</Tooltip>`,
+            preview: (
+              <div style={{ padding: '2.5rem 1rem' }}>
+                <Tooltip content="Print current report as PDF" placement="top">
+                  <Button variant="secondary">Print Report</Button>
+                </Tooltip>
+              </div>
+            ),
+          },
+          {
+            label: 'Web Component (HTML)',
+            language: 'html',
+            code: `// Import once in your app or component
+import '@a11ypros/a11y-ui-elements/tooltip';
+import '@a11ypros/a11y-ui-elements/button';
+
+<a11y-tooltip content="Print current report as PDF" placement="top">
+  <a11y-button variant="secondary">Print Report</a11y-button>
+</a11y-tooltip>`,
+            preview: (
+              <div style={{ padding: '2.5rem 1rem' }}>
+                <a11y-tooltip content="Print current report as PDF" placement="top">
+                  <a11y-button variant="secondary">Print Report</a11y-button>
+                </a11y-tooltip>
+              </div>
+            ),
+          },
+        ]}
+      />
 
       <DocExample
         id="tooltip-icon-example"

@@ -51,6 +51,10 @@
       "types": "./dist/components/form/a11y-fieldset.d.ts",
       "import": "./dist/components/form/a11y-fieldset.js"
     },
+    "./label": {
+      "types": "./dist/components/form/a11y-label.d.ts",
+      "import": "./dist/components/form/a11y-label.js"
+    },
     "./banner": {
       "types": "./dist/components/banner/a11y-banner.d.ts",
       "import": "./dist/components/banner/a11y-banner.js"

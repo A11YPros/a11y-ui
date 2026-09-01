@@ -8,6 +8,7 @@ import { registerSelect } from './components/form/a11y-select.js';
 import { registerCheckbox } from './components/form/a11y-checkbox.js';
 import { registerRadio } from './components/form/a11y-radio.js';
 import { registerFieldset } from './components/form/a11y-fieldset.js';
+import { registerLabel } from './components/form/a11y-label.js';
 
 import { registerBanner } from './components/banner/a11y-banner.js';
 import { registerLink } from './components/link/a11y-link.js';
@@ -28,6 +29,7 @@ export * from './components/form/a11y-select.js';
 export * from './components/form/a11y-checkbox.js';
 export * from './components/form/a11y-radio.js';
 export * from './components/form/a11y-fieldset.js';
+export * from './components/form/a11y-label.js';
 export * from './components/banner/a11y-banner.js';
 export * from './components/link/a11y-link.js';
 export * from './components/tabs/a11y-tabs.js';
@@ -50,6 +52,7 @@ export function registerAllElements(): void {
   registerCheckbox();
   registerRadio();
   registerFieldset();
+  registerLabel();
   registerBanner();
   registerLink();
   registerTabs();

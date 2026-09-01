@@ -14,9 +14,15 @@ export default function SelectPage() {
     <article className="doc-page">
       <nav aria-label="Breadcrumb" className="docs-breadcrumb">
         <ol>
-          <li><Link href="/">Home</Link></li>
-          <li><Link href="/components">Components</Link></li>
-          <li><span aria-current="page">Select</span></li>
+          <li>
+            <Link href="/">Home</Link>
+          </li>
+          <li>
+            <Link href="/components">Components</Link>
+          </li>
+          <li>
+            <span aria-current="page">Select</span>
+          </li>
         </ol>
       </nav>
 
@@ -29,7 +35,11 @@ export default function SelectPage() {
         id="select-example-title"
         title="Example"
         githubUrl="https://github.com/A11YPros/a11y-ui/blob/main/packages/design-system/src/components/Form/Select.tsx"
-        code={`const [value, setValue] = useState('');
+        snippets={[
+          {
+            label: 'React',
+            language: 'tsx',
+            code: `const [value, setValue] = useState('');
 
 <Select
   label="Country"
@@ -41,20 +51,44 @@ export default function SelectPage() {
   ]}
   value={value}
   onChange={(event) => setValue(event.target.value)}
-/>`}
-      >
-        <Select
-          label="Country"
-          placeholder="Choose a country"
-          options={[
-            { value: 'us', label: 'United States' },
-            { value: 'ca', label: 'Canada' },
-            { value: 'uk', label: 'United Kingdom' },
-          ]}
-          value={value}
-          onChange={(event) => setValue(event.target.value)}
-        />
-      </DocExample>
+/>`,
+            preview: (
+              <Select
+                label="Country"
+                placeholder="Choose a country"
+                options={[
+                  { value: 'us', label: 'United States' },
+                  { value: 'ca', label: 'Canada' },
+                  { value: 'uk', label: 'United Kingdom' },
+                ]}
+                value={value}
+                onChange={(event) => setValue(event.target.value)}
+              />
+            ),
+          },
+          {
+            label: 'Web Component (HTML)',
+            language: 'html',
+            code: `// Import once in your app or component
+import '@a11ypros/a11y-ui-elements/select';
+
+<a11y-select label="Country">
+  <option value="">Choose a country</option>
+  <option value="us">United States</option>
+  <option value="ca">Canada</option>
+  <option value="uk">United Kingdom</option>
+</a11y-select>`,
+            preview: (
+              <a11y-select label="Country" value={value}>
+                <option value="">Choose a country</option>
+                <option value="us">United States</option>
+                <option value="ca">Canada</option>
+                <option value="uk">United Kingdom</option>
+              </a11y-select>
+            ),
+          },
+        ]}
+      />
 
       <ApiReference sections={selectApi} />
 
@@ -69,7 +103,10 @@ export default function SelectPage() {
 
       <section aria-labelledby="select-playground-title" className="doc-section">
         <h2 id="select-playground-title">Playground</h2>
-        <a className="playground-link" href="/storybook-static/index.html?path=/docs/components-form-select--docs">
+        <a
+          className="playground-link"
+          href="/storybook-static/index.html?path=/docs/components-form-select--docs"
+        >
           Open Select stories
         </a>
       </section>

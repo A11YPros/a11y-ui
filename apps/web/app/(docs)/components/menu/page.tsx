@@ -35,7 +35,11 @@ export default function MenuPage() {
         id="menu-basic-example"
         title="Basic Action Menu"
         githubUrl="https://github.com/A11YPros/a11y-ui/blob/main/packages/design-system/src/components/Menu/Menu.tsx"
-        code={`<Menu trigger={<Button variant="secondary">Actions ▾</Button>}>
+        snippets={[
+          {
+            label: 'React',
+            language: 'tsx',
+            code: `<Menu trigger={<Button variant="secondary">Actions ▾</Button>}>
   <MenuItem onClick={() => alert('Edit')}>Edit</MenuItem>
   <MenuItem onClick={() => alert('Duplicate')}>Duplicate</MenuItem>
   <MenuItem disabled>Archive (Disabled)</MenuItem>
@@ -43,20 +47,48 @@ export default function MenuPage() {
   <MenuItem danger onClick={() => alert('Delete')}>
     Delete
   </MenuItem>
-</Menu>`}
-      >
-        <div style={{ padding: '2rem 1rem 8rem 1rem' }}>
-          <Menu trigger={<Button variant="secondary">Actions ▾</Button>}>
-            <MenuItem onClick={() => alert('Edit selected')}>Edit</MenuItem>
-            <MenuItem onClick={() => alert('Duplicate selected')}>Duplicate</MenuItem>
-            <MenuItem disabled>Archive (Disabled)</MenuItem>
-            <MenuDivider />
-            <MenuItem danger onClick={() => alert('Delete selected')}>
-              Delete
-            </MenuItem>
-          </Menu>
-        </div>
-      </DocExample>
+</Menu>`,
+            preview: (
+              <div style={{ padding: '2rem 1rem 8rem 1rem' }}>
+                <Menu trigger={<Button variant="secondary">Actions ▾</Button>}>
+                  <MenuItem onClick={() => alert('Edit selected')}>Edit</MenuItem>
+                  <MenuItem onClick={() => alert('Duplicate selected')}>Duplicate</MenuItem>
+                  <MenuItem disabled>Archive (Disabled)</MenuItem>
+                  <MenuDivider />
+                  <MenuItem danger onClick={() => alert('Delete selected')}>
+                    Delete
+                  </MenuItem>
+                </Menu>
+              </div>
+            ),
+          },
+          {
+            label: 'Web Component (HTML)',
+            language: 'html',
+            code: `// Import once in your app or component
+import '@a11ypros/a11y-ui-elements/menu';
+
+<a11y-menu label="Actions ▾">
+  <a11y-menu-item>Edit</a11y-menu-item>
+  <a11y-menu-item>Duplicate</a11y-menu-item>
+  <a11y-menu-item disabled>Archive (Disabled)</a11y-menu-item>
+  <a11y-menu-divider></a11y-menu-divider>
+  <a11y-menu-item danger>Delete</a11y-menu-item>
+</a11y-menu>`,
+            preview: (
+              <div style={{ padding: '2rem 1rem 8rem 1rem' }}>
+                <a11y-menu label="Actions ▾">
+                  <a11y-menu-item>Edit</a11y-menu-item>
+                  <a11y-menu-item>Duplicate</a11y-menu-item>
+                  <a11y-menu-item disabled>Archive (Disabled)</a11y-menu-item>
+                  <a11y-menu-divider></a11y-menu-divider>
+                  <a11y-menu-item danger>Delete</a11y-menu-item>
+                </a11y-menu>
+              </div>
+            ),
+          },
+        ]}
+      />
 
       <DocExample
         id="menu-icons-example"

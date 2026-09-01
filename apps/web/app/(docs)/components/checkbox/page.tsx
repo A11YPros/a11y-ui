@@ -14,9 +14,15 @@ export default function CheckboxPage() {
     <article className="doc-page">
       <nav aria-label="Breadcrumb" className="docs-breadcrumb">
         <ol>
-          <li><Link href="/">Home</Link></li>
-          <li><Link href="/components">Components</Link></li>
-          <li><span aria-current="page">Checkbox</span></li>
+          <li>
+            <Link href="/">Home</Link>
+          </li>
+          <li>
+            <Link href="/components">Components</Link>
+          </li>
+          <li>
+            <span aria-current="page">Checkbox</span>
+          </li>
         </ol>
       </nav>
 
@@ -29,22 +35,47 @@ export default function CheckboxPage() {
         id="checkbox-example-title"
         title="Example"
         githubUrl="https://github.com/A11YPros/a11y-ui/blob/main/packages/design-system/src/components/Form/Checkbox.tsx"
-        code={`const [checked, setChecked] = useState(false);
+        snippets={[
+          {
+            label: 'React',
+            language: 'tsx',
+            code: `const [checked, setChecked] = useState(false);
 
 <Checkbox
   id="terms"
   label="I agree to the terms and conditions"
   checked={checked}
   onChange={(event) => setChecked(event.target.checked)}
-/>`}
-      >
-        <Checkbox
-          id="terms"
-          label="I agree to the terms and conditions"
-          checked={checked}
-          onChange={(event) => setChecked(event.target.checked)}
-        />
-      </DocExample>
+/>`,
+            preview: (
+              <Checkbox
+                id="terms"
+                label="I agree to the terms and conditions"
+                checked={checked}
+                onChange={(event) => setChecked(event.target.checked)}
+              />
+            ),
+          },
+          {
+            label: 'Web Component (HTML)',
+            language: 'html',
+            code: `// Import once in your app or component
+import '@a11ypros/a11y-ui-elements/checkbox';
+
+<a11y-checkbox
+  id="terms"
+  label="I agree to the terms and conditions"
+></a11y-checkbox>`,
+            preview: (
+              <a11y-checkbox
+                id="terms-wc"
+                label="I agree to the terms and conditions"
+                checked={checked ? '' : undefined}
+              ></a11y-checkbox>
+            ),
+          },
+        ]}
+      />
 
       <ApiReference sections={checkboxApi} />
 
@@ -59,7 +90,10 @@ export default function CheckboxPage() {
 
       <section aria-labelledby="checkbox-playground-title" className="doc-section">
         <h2 id="checkbox-playground-title">Playground</h2>
-        <a className="playground-link" href="/storybook-static/index.html?path=/docs/components-form-checkbox--docs">
+        <a
+          className="playground-link"
+          href="/storybook-static/index.html?path=/docs/components-form-checkbox--docs"
+        >
           Open Checkbox stories
         </a>
       </section>

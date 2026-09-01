@@ -9,9 +9,15 @@ export default function FieldsetPage() {
     <article className="doc-page">
       <nav aria-label="Breadcrumb" className="docs-breadcrumb">
         <ol>
-          <li><Link href="/">Home</Link></li>
-          <li><Link href="/components">Components</Link></li>
-          <li><span aria-current="page">Fieldset</span></li>
+          <li>
+            <Link href="/">Home</Link>
+          </li>
+          <li>
+            <Link href="/components">Components</Link>
+          </li>
+          <li>
+            <span aria-current="page">Fieldset</span>
+          </li>
         </ol>
       </nav>
 
@@ -24,16 +30,41 @@ export default function FieldsetPage() {
         id="fieldset-example-title"
         title="Example"
         githubUrl="https://github.com/A11YPros/a11y-ui/blob/main/packages/design-system/src/components/Form/Fieldset.tsx"
-        code={`<Fieldset legend="Shipping address" required>
+        snippets={[
+          {
+            label: 'React',
+            language: 'tsx',
+            code: `<Fieldset legend="Shipping address" required>
   <Input label="Street" name="street" placeholder="123 Main St" required />
   <Input label="City" name="city" placeholder="San Diego" required />
-</Fieldset>`}
-      >
-        <Fieldset legend="Shipping address" required>
-          <Input label="Street" name="street" placeholder="123 Main St" required />
-          <Input label="City" name="city" placeholder="San Diego" required />
-        </Fieldset>
-      </DocExample>
+</Fieldset>`,
+            preview: (
+              <Fieldset legend="Shipping address" required>
+                <Input label="Street" name="street" placeholder="123 Main St" required />
+                <Input label="City" name="city" placeholder="San Diego" required />
+              </Fieldset>
+            ),
+          },
+          {
+            label: 'Web Component (HTML)',
+            language: 'html',
+            code: `// Import once in your app or component
+import '@a11ypros/a11y-ui-elements/fieldset';
+import '@a11ypros/a11y-ui-elements/input';
+
+<a11y-fieldset legend="Shipping address" required>
+  <a11y-input label="Street" placeholder="123 Main St" required></a11y-input>
+  <a11y-input label="City" placeholder="San Diego" required></a11y-input>
+</a11y-fieldset>`,
+            preview: (
+              <a11y-fieldset legend="Shipping address" required>
+                <a11y-input label="Street" placeholder="123 Main St" required></a11y-input>
+                <a11y-input label="City" placeholder="San Diego" required></a11y-input>
+              </a11y-fieldset>
+            ),
+          },
+        ]}
+      />
 
       <ApiReference sections={fieldsetApi} />
 
@@ -48,7 +79,10 @@ export default function FieldsetPage() {
 
       <section aria-labelledby="fieldset-playground-title" className="doc-section">
         <h2 id="fieldset-playground-title">Playground</h2>
-        <a className="playground-link" href="/storybook-static/index.html?path=/docs/components-form-fieldset--docs">
+        <a
+          className="playground-link"
+          href="/storybook-static/index.html?path=/docs/components-form-fieldset--docs"
+        >
           Open Fieldset stories
         </a>
       </section>

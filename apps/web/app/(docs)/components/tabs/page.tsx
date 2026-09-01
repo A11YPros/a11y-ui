@@ -32,51 +32,95 @@ export default function TabsPage() {
         id="tabs-example-title"
         title="Example"
         githubUrl="https://github.com/A11YPros/a11y-ui/blob/main/packages/design-system/src/components/Tabs/Tabs.tsx"
-        code={`<Tabs
+        snippets={[
+          {
+            label: 'React',
+            language: 'tsx',
+            code: `<Tabs
   aria-label="Settings tabs"
   items={[
     { id: 'general', label: 'General', content: <p>Configure general settings.</p> },
     { id: 'account', label: 'Account', content: <p>Manage account preferences.</p> },
     { id: 'privacy', label: 'Privacy', content: <p>Control privacy settings.</p> },
   ]}
-/>`}
-      >
-        <Tabs
-          aria-label="Settings tabs"
-          items={[
-            {
-              id: 'general',
-              label: 'General',
-              content: (
-                <div>
+/>`,
+            preview: (
+              <Tabs
+                aria-label="Settings tabs"
+                items={[
+                  {
+                    id: 'general',
+                    label: 'General',
+                    content: (
+                      <div>
+                        <h3>General Settings</h3>
+                        <p>Configure general application settings here.</p>
+                      </div>
+                    ),
+                  },
+                  {
+                    id: 'account',
+                    label: 'Account',
+                    content: (
+                      <div>
+                        <h3>Account Settings</h3>
+                        <p>Manage your account preferences.</p>
+                      </div>
+                    ),
+                  },
+                  {
+                    id: 'privacy',
+                    label: 'Privacy',
+                    content: (
+                      <div>
+                        <h3>Privacy Settings</h3>
+                        <p>Control your privacy and data settings.</p>
+                      </div>
+                    ),
+                  },
+                ]}
+              />
+            ),
+          },
+          {
+            label: 'Web Component (HTML)',
+            language: 'html',
+            code: `// Import once in your app or component
+import '@a11ypros/a11y-ui-elements/tabs';
+
+<a11y-tabs aria-label="Settings tabs">
+  <a11y-tab-panel label="General">
+    <h3>General Settings</h3>
+    <p>Configure general application settings here.</p>
+  </a11y-tab-panel>
+  <a11y-tab-panel label="Account">
+    <h3>Account Settings</h3>
+    <p>Manage your account preferences.</p>
+  </a11y-tab-panel>
+  <a11y-tab-panel label="Privacy">
+    <h3>Privacy Settings</h3>
+    <p>Control your privacy and data settings.</p>
+  </a11y-tab-panel>
+</a11y-tabs>`,
+            preview: (
+              <a11y-tabs aria-label="Settings tabs">
+                <a11y-tab-panel label="General">
                   <h3>General Settings</h3>
                   <p>Configure general application settings here.</p>
-                </div>
-              ),
-            },
-            {
-              id: 'account',
-              label: 'Account',
-              content: (
-                <div>
+                </a11y-tab-panel>
+                <a11y-tab-panel label="Account">
                   <h3>Account Settings</h3>
                   <p>Manage your account preferences.</p>
-                </div>
-              ),
-            },
-            {
-              id: 'privacy',
-              label: 'Privacy',
-              content: (
-                <div>
+                </a11y-tab-panel>
+                <a11y-tab-panel label="Privacy">
                   <h3>Privacy Settings</h3>
                   <p>Control your privacy and data settings.</p>
-                </div>
-              ),
-            },
-          ]}
-        />
-      </DocExample>
+                </a11y-tab-panel>
+              </a11y-tabs>
+            ),
+          },
+        ]}
+      />
 
       <ApiReference sections={tabsApi} />
 
@@ -91,7 +135,10 @@ export default function TabsPage() {
 
       <section aria-labelledby="tabs-playground-title" className="doc-section">
         <h2 id="tabs-playground-title">Playground</h2>
-        <a className="playground-link" href="/storybook-static/index.html?path=/docs/components-tabs--docs">
+        <a
+          className="playground-link"
+          href="/storybook-static/index.html?path=/docs/components-tabs--docs"
+        >
           Open Tabs stories
         </a>
       </section>

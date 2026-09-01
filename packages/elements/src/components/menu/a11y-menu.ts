@@ -11,6 +11,42 @@ export class A11yMenuDivider extends HTMLElement {
 }
 
 /**
+ * Menu Group component (<a11y-menu-group>)
+ */
+export class A11yMenuGroup extends HTMLElement {
+  public static get observedAttributes(): string[] {
+    return ['label'];
+  }
+
+  connectedCallback(): void {
+    this._render();
+  }
+
+  attributeChangedCallback(): void {
+    this._render();
+  }
+
+  private _render(): void {
+    const label = this.getAttribute('label');
+    this.setAttribute('role', 'group');
+    if (label) this.setAttribute('aria-label', label);
+    this.className = 'a11y-menu-group';
+
+    let labelEl = this.querySelector('.a11y-menu-group__label');
+    if (label) {
+      if (!labelEl) {
+        labelEl = document.createElement('div');
+        labelEl.className = 'a11y-menu-group__label';
+        this.prepend(labelEl);
+      }
+      labelEl.textContent = label;
+    } else if (labelEl) {
+      labelEl.remove();
+    }
+  }
+}
+
+/**
  * Menu Item component (<a11y-menu-item>)
  */
 export class A11yMenuItem extends HTMLElement {

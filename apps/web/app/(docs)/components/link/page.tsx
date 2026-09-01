@@ -32,7 +32,11 @@ export default function LinkPage() {
         id="link-usage-title"
         title="Usage"
         githubUrl="https://github.com/A11YPros/a11y-ui/blob/main/packages/design-system/src/components/Link/Link.tsx"
-        code={`import { Link } from '@a11ypros/a11y-ui-components';
+        snippets={[
+          {
+            label: 'React',
+            language: 'tsx',
+            code: `import { Link } from '@a11ypros/a11y-ui-components';
 
 <div className="example-column">
   <Link href="/components">Internal Link</Link>
@@ -42,18 +46,44 @@ export default function LinkPage() {
   <Link href="#main-content" skip>
     Skip Link
   </Link>
-</div>`}
-      >
-        <div className="example-column">
-          <Link href="/components">Internal Link</Link>
-          <Link href="https://example.com" external>
-            External Link
-          </Link>
-          <Link href="#main-content" skip>
-            Skip Link
-          </Link>
-        </div>
-      </DocExample>
+</div>`,
+            preview: (
+              <div className="example-column">
+                <Link href="/components">Internal Link</Link>
+                <Link href="https://example.com" external>
+                  External Link
+                </Link>
+                <Link href="#main-content" skip>
+                  Skip Link
+                </Link>
+              </div>
+            ),
+          },
+          {
+            label: 'Web Component (HTML)',
+            language: 'html',
+            code: `// Import once in your app or component
+import '@a11ypros/a11y-ui-elements/link';
+
+<div class="example-column">
+  <a11y-link href="/components">Internal Link</a11y-link>
+  <a11y-link href="https://example.com" external>External Link</a11y-link>
+  <a11y-link href="#main-content" skip>Skip Link</a11y-link>
+</div>`,
+            preview: (
+              <div className="example-column">
+                <a11y-link href="/components">Internal Link</a11y-link>
+                <a11y-link href="https://example.com" external>
+                  External Link
+                </a11y-link>
+                <a11y-link href="#main-content" skip>
+                  Skip Link
+                </a11y-link>
+              </div>
+            ),
+          },
+        ]}
+      />
 
       <ApiReference sections={linkApi} />
 
