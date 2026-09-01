@@ -1,7 +1,7 @@
 'use client';
 
 import type { ComponentType, ReactNode } from 'react';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
 import type { SyntaxHighlighterProps } from 'react-syntax-highlighter';
 import { oneDark, oneLight } from 'react-syntax-highlighter/dist/esm/styles/prism';
@@ -11,11 +11,18 @@ const SyntaxHighlighter = dynamic(
   { ssr: false }
 ) as unknown as ComponentType<SyntaxHighlighterProps>;
 
+export interface CodeSnippet {
+  label: string;
+  code: string;
+  language?: 'tsx' | 'ts' | 'jsx' | 'js' | 'css' | 'html' | 'json' | 'bash';
+}
+
 interface DocExampleProps {
   id: string;
   title: string;
-  code: string;
+  code?: string;
   language?: 'tsx' | 'ts' | 'jsx' | 'js' | 'css' | 'html' | 'json' | 'bash';
+  snippets?: CodeSnippet[];
   githubUrl?: string;
   description?: string;
   children: ReactNode;
@@ -24,8 +31,9 @@ interface DocExampleProps {
 export function DocExample({
   id,
   title,
-  code,
-  language = 'tsx',
+  code: defaultCode = '',
+  language: defaultLanguage = 'tsx',
+  snippets,
   githubUrl,
   description,
   children,
@@ -33,6 +41,19 @@ export function DocExample({
   const codeTitleId = `${id}-code-title`;
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
   const [copyState, setCopyState] = useState<'idle' | 'copied' | 'failed'>('idle');
+  const [activeSnippetIndex, setActiveSnippetIndex] = useState(0);
+  const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
+
+  const activeSnippet = useMemo(() => {
+    if (snippets && snippets.length > 0) {
+      return snippets[Math.min(activeSnippetIndex, snippets.length - 1)];
+    }
+    return {
+      label: 'Code',
+      code: defaultCode,
+      language: defaultLanguage,
+    };
+  }, [snippets, activeSnippetIndex, defaultCode, defaultLanguage]);
 
   useEffect(() => {
     const root = document.documentElement;
@@ -69,7 +90,7 @@ export function DocExample({
 
   const handleCopy = async () => {
     try {
-      await navigator.clipboard.writeText(code);
+      await navigator.clipboard.writeText(activeSnippet.code);
       setCopyState('copied');
       window.setTimeout(() => {
         setCopyState('idle');
@@ -82,18 +103,73 @@ export function DocExample({
     }
   };
 
+  const handleTabKeyDown = (e: React.KeyboardEvent, index: number) => {
+    if (!snippets || snippets.length <= 1) return;
+
+    let targetIndex = index;
+    if (e.key === 'ArrowRight') {
+      e.preventDefault();
+      targetIndex = (index + 1) % snippets.length;
+    } else if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      targetIndex = (index - 1 + snippets.length) % snippets.length;
+    } else if (e.key === 'Home') {
+      e.preventDefault();
+      targetIndex = 0;
+    } else if (e.key === 'End') {
+      e.preventDefault();
+      targetIndex = snippets.length - 1;
+    }
+
+    if (targetIndex !== index) {
+      setActiveSnippetIndex(targetIndex);
+      tabRefs.current[targetIndex]?.focus();
+    }
+  };
+
   return (
     <section aria-labelledby={id} className="doc-section doc-example">
       <h2 id={id}>{title}</h2>
       {description ? <p className="doc-example__description">{description}</p> : null}
 
-      <div className="doc-example__preview">
-        {children}
-      </div>
+      <div className="doc-example__preview">{children}</div>
 
       <div className="doc-example__code" role="group" aria-labelledby={codeTitleId}>
         <div className="doc-example__code-header">
-          <h3 id={codeTitleId}>Code</h3>
+          {snippets && snippets.length > 1 ? (
+            <div
+              className="doc-example__tabs"
+              role="tablist"
+              aria-label={`${title} code framework`}
+              id={codeTitleId}
+            >
+              {snippets.map((snip, idx) => {
+                const isActive = idx === activeSnippetIndex;
+                return (
+                  <button
+                    key={snip.label}
+                    ref={(el) => {
+                      tabRefs.current[idx] = el;
+                    }}
+                    type="button"
+                    role="tab"
+                    id={`${id}-tab-${idx}`}
+                    aria-selected={isActive}
+                    aria-controls={`${id}-tabpanel`}
+                    tabIndex={isActive ? 0 : -1}
+                    className={`doc-example__tab${isActive ? ' doc-example__tab--active' : ''}`}
+                    onClick={() => setActiveSnippetIndex(idx)}
+                    onKeyDown={(e) => handleTabKeyDown(e, idx)}
+                  >
+                    {snip.label}
+                  </button>
+                );
+              })}
+            </div>
+          ) : (
+            <h3 id={codeTitleId}>Code</h3>
+          )}
+
           <div className="doc-example__actions">
             {githubUrl ? (
               <a
@@ -126,7 +202,7 @@ export function DocExample({
               type="button"
               className="doc-example__copy-button"
               onClick={handleCopy}
-              aria-label={`Copy ${title} example code`}
+              aria-label={`Copy ${activeSnippet.label || title} example code`}
             >
               <svg
                 aria-hidden="true"
@@ -144,18 +220,26 @@ export function DocExample({
           </div>
         </div>
 
-        <SyntaxHighlighter
-          language={language}
-          style={theme === 'dark' ? oneDark : oneLight}
-          customStyle={{ margin: 0 }}
-          className="code-block"
-          wrapLongLines
+        <div
+          id={`${id}-tabpanel`}
+          role={snippets && snippets.length > 1 ? 'tabpanel' : undefined}
+          aria-labelledby={
+            snippets && snippets.length > 1 ? `${id}-tab-${activeSnippetIndex}` : undefined
+          }
         >
-          {code}
-        </SyntaxHighlighter>
+          <SyntaxHighlighter
+            language={activeSnippet.language || 'tsx'}
+            style={theme === 'dark' ? oneDark : oneLight}
+            customStyle={{ margin: 0 }}
+            className="code-block"
+            wrapLongLines
+          >
+            {activeSnippet.code}
+          </SyntaxHighlighter>
+        </div>
 
         <p className="visually-hidden" aria-live="polite" aria-atomic="true">
-          {copyState === 'copied' ? 'Code copied to clipboard.' : null}
+          {copyState === 'copied' ? `${activeSnippet.label} code copied to clipboard.` : null}
           {copyState === 'failed' ? 'Copy failed. Please copy manually.' : null}
         </p>
       </div>

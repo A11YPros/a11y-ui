@@ -36,14 +36,36 @@ export default function SwitchPage() {
         id="switch-example-title"
         title="Interactive Example"
         githubUrl="https://github.com/A11YPros/a11y-ui/blob/main/packages/design-system/src/components/Switch/Switch.tsx"
-        code={`const [airplaneMode, setAirplaneMode] = useState(false);
+        snippets={[
+          {
+            label: 'React',
+            language: 'tsx',
+            code: `const [airplaneMode, setAirplaneMode] = useState(false);
 
 <Switch
   id="airplane-mode"
   label="Airplane Mode"
   checked={airplaneMode}
   onChange={(checked) => setAirplaneMode(checked)}
-/>`}
+/>`,
+          },
+          {
+            label: 'Web Component (HTML)',
+            language: 'html',
+            code: `<!-- Load Web Components -->
+<script type="module" src="@a11ypros/a11y-ui-elements"></script>
+
+<!-- Standard custom element -->
+<a11y-switch id="airplane-mode" label="Airplane Mode"></a11y-switch>
+
+<script>
+  const el = document.getElementById('airplane-mode');
+  el.addEventListener('change', (e) => {
+    console.log('Airplane mode:', e.detail.checked);
+  });
+</script>`,
+          },
+        ]}
       >
         <Switch
           id="airplane-mode"
@@ -56,14 +78,31 @@ export default function SwitchPage() {
       <DocExample
         id="switch-helper-title"
         title="With Helper Text and Sizes"
-        code={`<Switch
+        snippets={[
+          {
+            label: 'React',
+            language: 'tsx',
+            code: `<Switch
   id="notifications"
   size="md"
   label="Push notifications"
   helperText="Receive real-time alerts on your device"
   checked={notifications}
   onChange={(checked) => setNotifications(checked)}
-/>`}
+/>`,
+          },
+          {
+            label: 'Web Component (HTML)',
+            language: 'html',
+            code: `<a11y-switch
+  id="notifications"
+  size="md"
+  label="Push notifications"
+  helper-text="Receive real-time alerts on your device"
+  checked
+></a11y-switch>`,
+          },
+        ]}
       >
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
           <Switch

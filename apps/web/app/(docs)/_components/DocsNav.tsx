@@ -35,6 +35,7 @@ export const headerLinks: NavLink[] = [
 
 export const guideLinks: NavLink[] = [
   { href: '/getting-started', label: 'Getting Started' },
+  { href: '/web-components', label: 'Web Components' },
   { href: '/theming', label: 'Theming Guide' },
 ];
 export const NPM_VERSION = packageMeta.version;
@@ -67,10 +68,7 @@ export function HeaderLinkIcon({ icon }: { icon?: 'github' | 'npm' }) {
   if (icon === 'npm') {
     return (
       <svg aria-hidden="true" viewBox="0 0 24 24" width="14" height="14" focusable="false">
-        <path
-          fill="currentColor"
-          d="M2 7.5v9h20v-9H2Zm18.5 7.5H19v-6H3.5v6H2V9h18.5v6Z"
-        />
+        <path fill="currentColor" d="M2 7.5v9h20v-9H2Zm18.5 7.5H19v-6H3.5v6H2V9h18.5v6Z" />
       </svg>
     );
   }
@@ -99,7 +97,13 @@ export function DocsHeaderNav({ onItemClick }: { onItemClick?: () => void } = {}
                   aria-label={`npm version ${NPM_VERSION}`}
                   onClick={onItemClick}
                 >
-                  <svg fill="currentColor" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+                  <svg
+                    fill="currentColor"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 16 16"
+                    aria-hidden="true"
+                  >
                     <rect width="16" height="16" fill="black"></rect>
                     <rect x="3" y="3" width="10" height="10" fill="white"></rect>
                     <path d="M8 5H11V13H8V5Z" fill="black"></path>
@@ -114,8 +118,7 @@ export function DocsHeaderNav({ onItemClick }: { onItemClick?: () => void } = {}
                   rel="noopener noreferrer"
                   onClick={onItemClick}
                 >
-                  <HeaderLinkIcon icon={link.icon} />{' '}
-                  {link.label}
+                  <HeaderLinkIcon icon={link.icon} /> {link.label}
                 </a>
               ) : (
                 <Link
@@ -170,11 +173,7 @@ export function DocsSidebarNav({ onItemClick }: { onItemClick?: () => void } = {
           const active = isActive(pathname, href);
           return (
             <li key={item.slug}>
-              <Link
-                href={href}
-                aria-current={active ? 'page' : undefined}
-                onClick={onItemClick}
-              >
+              <Link href={href} aria-current={active ? 'page' : undefined} onClick={onItemClick}>
                 {item.title}
               </Link>
             </li>
