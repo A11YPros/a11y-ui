@@ -64,4 +64,34 @@ describe('A11yTabs (<a11y-tabs>)', () => {
     const results = await axe(tabs);
     expect(results).toHaveNoViolations();
   });
+
+  it('dispatches change exactly once per selection and honors an initial selected-index', () => {
+    const tabs = document.createElement('a11y-tabs') as A11yTabs;
+    tabs.setAttribute('aria-label', 'Settings');
+    tabs.setAttribute('selected-index', '1');
+    tabs.innerHTML = `
+      <a11y-tab-panel label="General">General</a11y-tab-panel>
+      <a11y-tab-panel label="Security">Security</a11y-tab-panel>
+      <a11y-tab-panel label="Billing">Billing</a11y-tab-panel>
+    `;
+    document.body.appendChild(tabs);
+
+    const buttons = Array.from(tabs.querySelectorAll<HTMLButtonElement>('[role="tab"]'));
+    expect(buttons[1].getAttribute('aria-selected')).toBe('true');
+    expect(tabs.selectedIndex).toBe(1);
+
+    let changes = 0;
+    tabs.addEventListener('change', () => changes++);
+
+    buttons[2].click();
+    expect(changes).toBe(1);
+    expect(tabs.getAttribute('selected-index')).toBe('2');
+
+    tabs.selectedIndex = 0;
+    expect(changes).toBe(2);
+
+    tabs.setAttribute('selected-index', '1');
+    expect(changes).toBe(3);
+    expect(buttons[1].getAttribute('aria-selected')).toBe('true');
+  });
 });

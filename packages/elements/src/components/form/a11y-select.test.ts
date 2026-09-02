@@ -57,4 +57,24 @@ describe('A11ySelect (<a11y-select>)', () => {
     const results = await axe(select);
     expect(results).toHaveNoViolations();
   });
+
+  it('moves the host id onto the native select so label and describedby resolve', () => {
+    document.body.innerHTML = `
+      <a11y-select id="country" label="Country">
+        <option value="us">United States</option>
+      </a11y-select>
+    `;
+    const el = document.querySelector('a11y-select') as A11ySelect;
+    const select = el.querySelector('select') as HTMLSelectElement;
+    const label = el.querySelector('label') as HTMLLabelElement;
+
+    expect(el.hasAttribute('id')).toBe(false);
+    expect(el.getAttribute('data-select-id')).toBe('country');
+    expect(document.getElementById('country')).toBe(select);
+    expect(label.control).toBe(select);
+
+    el.setAttribute('error', 'Pick a country');
+    const describedBy = select.getAttribute('aria-describedby') as string;
+    expect(document.getElementById(describedBy)?.textContent).toBe('Pick a country');
+  });
 });

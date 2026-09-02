@@ -160,12 +160,33 @@ export class A11yTextarea extends HTMLElement {
 
   attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
     if (!this._isInitialized || oldValue === newValue) return;
+    if (name === 'value') {
+      // Only the `value` attribute may overwrite what the user has typed.
+      if (this._textareaElement) {
+        this._textareaElement.value = newValue || '';
+        this._updateCharCount();
+      }
+      return;
+    }
     this._updateState();
+  }
+
+  override focus(options?: FocusOptions): void {
+    this._textareaElement?.focus(options);
   }
 
   private _render(): void {
     const initialText = this.textContent || this.getAttribute('value') || '';
-    const finalId = this.id || this._uniqueId;
+    const hostId = this.getAttribute('id');
+    const finalId = this.getAttribute('textarea-id') || hostId || this._uniqueId;
+
+    // Move the id onto the native control so <label for> and aria-describedby
+    // resolve to the textarea rather than the (non-labelable) host element.
+    if (hostId) {
+      this.removeAttribute('id');
+      this.setAttribute('data-textarea-id', finalId);
+    }
+
     const errorId = `${finalId}-error`;
     const helperId = `${finalId}-helper`;
     const countId = `${finalId}-count`;
@@ -261,14 +282,11 @@ export class A11yTextarea extends HTMLElement {
       return;
     }
 
-    const finalId = this.id || this._uniqueId;
+    const finalId = this._textareaElement.id;
     const errorId = `${finalId}-error`;
     const helperId = `${finalId}-helper`;
     const countId = `${finalId}-count`;
 
-    if (this.hasAttribute('value')) {
-      this._textareaElement.value = this.getAttribute('value') || '';
-    }
     this._textareaElement.placeholder = this.getAttribute('placeholder') || '';
     this._textareaElement.name = this.getAttribute('name') || '';
     this._textareaElement.disabled = this.disabled;

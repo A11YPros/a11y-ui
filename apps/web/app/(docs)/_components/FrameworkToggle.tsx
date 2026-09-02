@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef } from 'react';
+import React, { useId, useRef } from 'react';
 import { useFramework, Framework } from './FrameworkContext';
 
 interface FrameworkToggleProps {
@@ -10,6 +10,9 @@ interface FrameworkToggleProps {
 
 export function FrameworkToggle({ className = '', showLabel = false }: FrameworkToggleProps) {
   const { framework, setFramework } = useFramework();
+  // The toggle mounts twice (desktop sidebar and mobile drawer), so the label id
+  // must be unique per instance for aria-labelledby to resolve correctly.
+  const labelId = useId();
   const reactBtnRef = useRef<HTMLButtonElement | null>(null);
   const wcBtnRef = useRef<HTMLButtonElement | null>(null);
 
@@ -32,14 +35,14 @@ export function FrameworkToggle({ className = '', showLabel = false }: Framework
   return (
     <div className={`framework-toggle-wrap ${className}`.trim()}>
       {showLabel && (
-        <span id="framework-toggle-label" className="framework-toggle-label">
+        <span id={labelId} className="framework-toggle-label">
           Framework:
         </span>
       )}
       <div
         className="framework-toggle"
         role="radiogroup"
-        aria-labelledby={showLabel ? 'framework-toggle-label' : undefined}
+        aria-labelledby={showLabel ? labelId : undefined}
         aria-label={!showLabel ? 'Component framework selection' : undefined}
         onKeyDown={handleKeyDown}
       >

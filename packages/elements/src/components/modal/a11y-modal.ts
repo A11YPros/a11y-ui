@@ -125,20 +125,27 @@ export class A11yModal extends HTMLElement {
   }
 
   public showModal(): void {
-    if (document.activeElement instanceof HTMLElement) {
+    if (document.activeElement instanceof HTMLElement && !this.contains(document.activeElement)) {
       this._previousActiveElement = document.activeElement;
     }
-    if (!this.hasAttribute('open')) {
+    // Route through the attribute when possible: attributeChangedCallback calls
+    // _openDialog exactly once. Fall back to a direct call if the attribute is
+    // already present or the element is not yet initialized.
+    if (this._isInitialized && !this.hasAttribute('open')) {
       this.setAttribute('open', '');
+    } else {
+      if (!this.hasAttribute('open')) this.setAttribute('open', '');
+      this._openDialog();
     }
-    this._openDialog();
   }
 
   public close(): void {
-    if (this.hasAttribute('open')) {
+    if (this._isInitialized && this.hasAttribute('open')) {
       this.removeAttribute('open');
+    } else {
+      if (this.hasAttribute('open')) this.removeAttribute('open');
+      this._closeDialog();
     }
-    this._closeDialog();
   }
 
   private _getFocusableElements(container: HTMLElement = this._dialogElement!): HTMLElement[] {
@@ -186,6 +193,10 @@ export class A11yModal extends HTMLElement {
 
   private _openDialog(): void {
     if (!this._dialogElement) return;
+    if (this._dialogElement.open) {
+      this._updateState();
+      return;
+    }
 
     if (!this._previousActiveElement && document.activeElement instanceof HTMLElement) {
       if (!this.contains(document.activeElement)) {
@@ -193,12 +204,10 @@ export class A11yModal extends HTMLElement {
       }
     }
 
-    if (!this._dialogElement.open) {
-      if (typeof this._dialogElement.showModal === 'function') {
-        this._dialogElement.showModal();
-      } else {
-        this._dialogElement.open = true;
-      }
+    if (typeof this._dialogElement.showModal === 'function') {
+      this._dialogElement.showModal();
+    } else {
+      this._dialogElement.open = true;
     }
     this._updateState();
 
@@ -215,12 +224,16 @@ export class A11yModal extends HTMLElement {
   private _closeDialog(): void {
     if (!this._dialogElement) return;
 
-    if (this._dialogElement.open) {
-      if (typeof this._dialogElement.close === 'function') {
-        this._dialogElement.close();
-      } else {
-        this._dialogElement.open = false;
-      }
+    // Only an actual open -> closed transition restores focus and emits `close`.
+    if (!this._dialogElement.open) {
+      this._updateState();
+      return;
+    }
+
+    if (typeof this._dialogElement.close === 'function') {
+      this._dialogElement.close();
+    } else {
+      this._dialogElement.open = false;
     }
 
     this._updateState();

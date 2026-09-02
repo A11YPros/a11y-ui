@@ -56,6 +56,7 @@ export class A11yDataTable extends HTMLElement {
   private _isInitialized = false;
   private _columns: TableColumn[] | null = null;
   private _data: TableRowData[] | null = null;
+  private _liveRegion: HTMLDivElement | null = null;
   private _observer: MutationObserver | null = null;
 
   constructor() {
@@ -102,7 +103,11 @@ export class A11yDataTable extends HTMLElement {
   }
 
   connectedCallback(): void {
-    this._render();
+    // Re-rendering on every reconnect (React re-parent, docs preview remount)
+    // would re-bind click/change listeners on the same elements.
+    if (!this._isInitialized) {
+      this._render();
+    }
     this._updateState();
   }
 
@@ -224,20 +229,24 @@ export class A11yDataTable extends HTMLElement {
     }
 
     // Status live region for screen reader announcements
-    let liveRegion = this.querySelector<HTMLDivElement>('.data-table-live-region');
-    if (!liveRegion) {
-      liveRegion = document.createElement('div');
-      liveRegion.className = 'data-table-live-region sr-only';
-      liveRegion.setAttribute('aria-live', 'polite');
-      liveRegion.setAttribute('aria-atomic', 'true');
-      liveRegion.style.cssText =
-        'position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border-width: 0;';
-      wrapper.appendChild(liveRegion);
-    }
+    const liveRegion = document.createElement('div');
+    liveRegion.className = 'data-table-live-region sr-only';
+    liveRegion.setAttribute('aria-live', 'polite');
+    liveRegion.setAttribute('aria-atomic', 'true');
+    liveRegion.style.cssText =
+      'position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border-width: 0;';
+    wrapper.appendChild(liveRegion);
+    this._liveRegion = liveRegion;
 
-    // Enhance headers
-    const ths = existingTable.querySelectorAll('th');
-    ths.forEach((th, index) => {
+    // Row headers in the body keep (or get) scope="row"; never force them to "col".
+    existingTable.querySelectorAll('tbody th').forEach((th) => {
+      if (!th.hasAttribute('scope')) th.setAttribute('scope', 'row');
+      th.classList.add('data-table-header');
+    });
+
+    // Enhance column headers
+    const ths = existingTable.querySelectorAll<HTMLTableCellElement>('thead th');
+    ths.forEach((th) => {
       th.setAttribute('scope', 'col');
       th.classList.add('data-table-header');
 
@@ -264,11 +273,18 @@ export class A11yDataTable extends HTMLElement {
           th.appendChild(button);
         }
 
+        if (button.dataset.a11yBound === 'true') return;
+        button.dataset.a11yBound = 'true';
+
         button.addEventListener('click', () => {
           const currentSort = th.getAttribute('aria-sort');
           const nextSort = currentSort === 'ascending' ? 'descending' : 'ascending';
+          // Resolve the column at click time: cellIndex stays correct after the
+          // selectable checkbox column is injected or row headers are present.
+          const index = th.cellIndex;
+          const columnHeaders = existingTable.querySelectorAll<HTMLTableCellElement>('thead th');
 
-          ths.forEach((otherTh) => {
+          columnHeaders.forEach((otherTh) => {
             if (otherTh !== th && otherTh.hasAttribute('data-sortable')) {
               otherTh.setAttribute('aria-sort', 'none');
               const otherBtn = otherTh.querySelector<HTMLButtonElement>('.data-table-sort-button');
@@ -326,9 +342,11 @@ export class A11yDataTable extends HTMLElement {
             rows.forEach((row) => tbody.appendChild(row));
           }
 
-          // Announce to screen readers
-          if (liveRegion) {
-            liveRegion.textContent = `Sorted by ${headerText}, ${nextSort}`;
+          // Announce to screen readers (look up at click time; re-renders replace the region)
+          const region =
+            this._liveRegion || this.querySelector<HTMLDivElement>('.data-table-live-region');
+          if (region) {
+            region.textContent = `Sorted by ${headerText}, ${nextSort}`;
           }
 
           this.dispatchEvent(
@@ -405,7 +423,8 @@ export class A11yDataTable extends HTMLElement {
       }
     });
 
-    if (allCheckInput) {
+    if (allCheckInput && allCheckInput.dataset.a11yBound !== 'true') {
+      allCheckInput.dataset.a11yBound = 'true';
       allCheckInput.addEventListener('change', () => {
         const isChecked = allCheckInput.checked;
         const rowChecks = existingTable.querySelectorAll<HTMLInputElement>(

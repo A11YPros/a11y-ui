@@ -194,22 +194,13 @@ export class A11yButton extends HTMLElement {
     });
     this._observer.observe(this, { childList: true });
 
-    // Form submit delegation if type is submit/reset
+    // The inner <button> lives in the light DOM, so it is a real form-associated
+    // element: the browser handles submit/reset natively. Do not re-trigger them
+    // here or every submit fires twice.
     button.addEventListener('click', (e) => {
       if (this.disabled || this.loading) {
         e.preventDefault();
         e.stopImmediatePropagation();
-        return;
-      }
-
-      if (this.type === 'submit') {
-        const form = this.closest('form');
-        if (form && e.target === button) {
-          form.requestSubmit ? form.requestSubmit() : form.submit();
-        }
-      } else if (this.type === 'reset') {
-        const form = this.closest('form');
-        form?.reset();
       }
     });
 

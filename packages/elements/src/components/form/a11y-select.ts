@@ -125,9 +125,22 @@ export class A11ySelect extends HTMLElement {
     this._updateState();
   }
 
+  override focus(options?: FocusOptions): void {
+    this._selectElement?.focus(options);
+  }
+
   private _render(): void {
     const initialChildren = Array.from(this.childNodes);
-    const finalId = this.id || this._uniqueId;
+    const hostId = this.getAttribute('id');
+    const finalId = this.getAttribute('select-id') || hostId || this._uniqueId;
+
+    // Move the id onto the native control so <label for> and aria-describedby
+    // resolve to the select rather than the (non-labelable) host element.
+    if (hostId) {
+      this.removeAttribute('id');
+      this.setAttribute('data-select-id', finalId);
+    }
+
     const errorId = `${finalId}-error`;
     const helperId = `${finalId}-helper`;
 
@@ -197,7 +210,7 @@ export class A11ySelect extends HTMLElement {
       return;
     }
 
-    const finalId = this.id || this._uniqueId;
+    const finalId = this._selectElement.id;
     const errorId = `${finalId}-error`;
     const helperId = `${finalId}-helper`;
 

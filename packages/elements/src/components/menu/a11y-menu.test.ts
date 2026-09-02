@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { axe, toHaveNoViolations } from 'jest-axe';
 import { A11yMenu, registerMenu } from './a11y-menu';
 
@@ -104,5 +104,77 @@ describe('A11yMenu (<a11y-menu>)', () => {
 
     const results = await axe(menu);
     expect(results).toHaveNoViolations();
+  });
+
+  it('registers <a11y-menu-group> with role="group" and a labelled heading', () => {
+    expect(customElements.get('a11y-menu-group')).toBeDefined();
+    const menu = document.createElement('a11y-menu') as A11yMenu;
+    menu.setAttribute('label', 'Actions');
+    menu.innerHTML = `
+      <a11y-menu-group label="Editing">
+        <a11y-menu-item>Edit</a11y-menu-item>
+      </a11y-menu-group>
+    `;
+    document.body.appendChild(menu);
+
+    const group = menu.querySelector('a11y-menu-group') as HTMLElement;
+    expect(group.getAttribute('role')).toBe('group');
+    const labelledBy = group.getAttribute('aria-labelledby') as string;
+    expect(document.getElementById(labelledBy)?.textContent).toBe('Editing');
+  });
+
+  it('preserves a custom slot="trigger" element instead of overwriting it', () => {
+    const menu = document.createElement('a11y-menu') as A11yMenu;
+    menu.setAttribute('label', 'Actions');
+    menu.innerHTML = `
+      <button slot="trigger" type="button" class="custom"><span class="ico">*</span>Actions ▾</button>
+      <a11y-menu-item>Edit</a11y-menu-item>
+    `;
+    document.body.appendChild(menu);
+
+    const trigger = menu.querySelector('button.custom') as HTMLButtonElement;
+    expect(trigger).not.toBeNull();
+    expect(trigger.querySelector('.ico')).not.toBeNull();
+    expect(trigger.textContent).toContain('Actions ▾');
+    expect(trigger.classList.contains('btn')).toBe(false);
+    expect(trigger.getAttribute('aria-haspopup')).toBe('menu');
+
+    menu.setAttribute('label', 'Renamed');
+    expect(trigger.textContent).toContain('Actions ▾');
+    expect(trigger.querySelector('.ico')).not.toBeNull();
+  });
+
+  it('dispatches menu-open and menu-close exactly once per transition', () => {
+    const menu = document.createElement('a11y-menu') as A11yMenu;
+    menu.setAttribute('label', 'Actions');
+    menu.innerHTML = '<a11y-menu-item>Edit</a11y-menu-item>';
+    document.body.appendChild(menu);
+
+    let opens = 0;
+    let closes = 0;
+    menu.addEventListener('menu-open', () => opens++);
+    menu.addEventListener('menu-close', () => closes++);
+
+    menu.open = true;
+    expect(opens).toBe(1);
+    menu.setAttribute('open', '');
+    expect(opens).toBe(1);
+
+    menu.open = false;
+    expect(closes).toBe(1);
+    menu.removeAttribute('open');
+    expect(closes).toBe(1);
+  });
+
+  it('removes its document click listener when disconnected', () => {
+    const menu = document.createElement('a11y-menu') as A11yMenu;
+    menu.setAttribute('label', 'Actions');
+    menu.innerHTML = '<a11y-menu-item>Edit</a11y-menu-item>';
+    document.body.appendChild(menu);
+
+    const removeSpy = vi.spyOn(document, 'removeEventListener');
+    menu.remove();
+    expect(removeSpy).toHaveBeenCalledWith('click', expect.any(Function));
+    removeSpy.mockRestore();
   });
 });

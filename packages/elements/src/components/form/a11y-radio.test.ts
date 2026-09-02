@@ -142,4 +142,63 @@ describe('A11yRadio (<a11y-radio>)', () => {
     const results = await axe(radio);
     expect(results).toHaveNoViolations();
   });
+
+  it('keeps the focused standalone radio in the DOM when checked or error changes', () => {
+    const radio = document.createElement('a11y-radio') as A11yRadio;
+    radio.setAttribute('name', 'plan');
+    radio.setAttribute('value', 'free');
+    radio.setAttribute('label', 'Free Tier');
+    document.body.appendChild(radio);
+
+    const input = radio.querySelector('input') as HTMLInputElement;
+    input.focus();
+    input.checked = true;
+    input.dispatchEvent(new Event('change', { bubbles: true }));
+
+    expect(radio.hasAttribute('checked')).toBe(true);
+    expect(input.isConnected).toBe(true);
+    expect(document.activeElement).toBe(input);
+
+    radio.setAttribute('error', 'Choose a plan');
+    radio.setAttribute('helper-text', 'Helper');
+    radio.setAttribute('disabled', '');
+    expect(radio.querySelector('input')).toBe(input);
+    expect(input.getAttribute('aria-invalid')).toBe('true');
+    expect(input.disabled).toBe(true);
+    const describedBy = input.getAttribute('aria-describedby') as string;
+    expect(document.getElementById(describedBy)?.textContent).toBe('Choose a plan');
+  });
+
+  it('updates a radio group in place when attributes change', () => {
+    const radio = document.createElement('a11y-radio') as A11yRadio;
+    radio.setAttribute('name', 'contact');
+    radio.setAttribute('label', 'Contact');
+    radio.setAttribute(
+      'options',
+      JSON.stringify([
+        { value: 'email', label: 'Email' },
+        { value: 'phone', label: 'Phone' },
+      ])
+    );
+    document.body.appendChild(radio);
+
+    const inputs = Array.from(radio.querySelectorAll('input'));
+    inputs[1].focus();
+
+    radio.setAttribute('error', 'Pick one');
+    radio.setAttribute('required', '');
+    radio.setAttribute('label', 'Preferred contact');
+
+    expect(Array.from(radio.querySelectorAll('input'))).toEqual(inputs);
+    expect(document.activeElement).toBe(inputs[1]);
+    expect(inputs.every((i) => i.required)).toBe(true);
+    expect(inputs.every((i) => i.classList.contains('form-radio--error'))).toBe(true);
+
+    const group = radio.querySelector('[role="radiogroup"]') as HTMLElement;
+    expect(group.getAttribute('aria-invalid')).toBe('true');
+    const describedBy = group.getAttribute('aria-describedby') as string;
+    expect(document.getElementById(describedBy)?.textContent).toBe('Pick one');
+    const labelledBy = group.getAttribute('aria-labelledby') as string;
+    expect(document.getElementById(labelledBy)?.textContent).toContain('Preferred contact');
+  });
 });

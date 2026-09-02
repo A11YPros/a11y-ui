@@ -135,6 +135,11 @@ export class A11yInput extends HTMLElement {
 
   attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
     if (!this._isInitialized || oldValue === newValue) return;
+    if (name === 'value') {
+      // Only the `value` attribute may overwrite what the user has typed.
+      if (this._inputElement) this._inputElement.value = newValue || '';
+      return;
+    }
     this._updateState();
   }
 
@@ -166,6 +171,7 @@ export class A11yInput extends HTMLElement {
     const input = document.createElement('input');
     input.id = finalId;
     input.className = 'form-input';
+    input.value = this.getAttribute('value') || '';
 
     input.addEventListener('input', (e) => {
       this.dispatchEvent(
@@ -211,7 +217,6 @@ export class A11yInput extends HTMLElement {
     const helperId = `${finalId}-helper`;
 
     this._inputElement.type = this.type;
-    this._inputElement.value = this.getAttribute('value') || '';
     this._inputElement.placeholder = this.getAttribute('placeholder') || '';
     this._inputElement.name = this.getAttribute('name') || '';
     this._inputElement.disabled = this.disabled;

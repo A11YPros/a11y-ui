@@ -64,6 +64,7 @@ export class A11yTabs extends HTMLElement {
   private _tabsButtons: HTMLButtonElement[] = [];
   private _panelDivs: HTMLDivElement[] = [];
   private _selectedIndex = 0;
+  private _syncingAttribute = false;
   private _uniqueId: string;
   private _isInitialized = false;
 
@@ -90,6 +91,10 @@ export class A11yTabs extends HTMLElement {
 
   connectedCallback(): void {
     if (!this._isInitialized) {
+      // Honor a `selected-index` set in markup; attributeChangedCallback ignores
+      // attributes that arrive before initialization.
+      const initial = parseInt(this.getAttribute('selected-index') || '', 10);
+      if (!isNaN(initial) && initial >= 0) this._selectedIndex = initial;
       this._render();
       this._isInitialized = true;
     }
@@ -99,6 +104,7 @@ export class A11yTabs extends HTMLElement {
   attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
     if (!this._isInitialized || oldValue === newValue) return;
     if (name === 'selected-index') {
+      if (this._syncingAttribute) return;
       const idx = parseInt(newValue || '0', 10);
       if (!isNaN(idx)) this._selectTab(idx, false);
     } else {
@@ -108,6 +114,7 @@ export class A11yTabs extends HTMLElement {
 
   private _selectTab(index: number, updateAttr = true): void {
     if (index < 0 || index >= this._tabsButtons.length) return;
+    const changed = index !== this._selectedIndex;
     this._selectedIndex = index;
 
     this._tabsButtons.forEach((btn, i) => {
@@ -125,17 +132,23 @@ export class A11yTabs extends HTMLElement {
       panel.style.display = i === index ? '' : 'none';
     });
 
-    if (updateAttr) {
+    if (updateAttr && this.getAttribute('selected-index') !== String(index)) {
+      // Reflect to the attribute without re-entering attributeChangedCallback,
+      // so `change` is dispatched exactly once per selection.
+      this._syncingAttribute = true;
       this.setAttribute('selected-index', String(index));
+      this._syncingAttribute = false;
     }
 
-    this.dispatchEvent(
-      new CustomEvent('change', {
-        bubbles: true,
-        composed: true,
-        detail: { selectedIndex: index },
-      })
-    );
+    if (changed) {
+      this.dispatchEvent(
+        new CustomEvent('change', {
+          bubbles: true,
+          composed: true,
+          detail: { selectedIndex: index },
+        })
+      );
+    }
   }
 
   private _handleKeyDown(e: KeyboardEvent, currentIndex: number): void {
@@ -186,6 +199,10 @@ export class A11yTabs extends HTMLElement {
 
     this._tabsButtons = [];
     this._panelDivs = [];
+
+    if (this._selectedIndex >= initialPanelElements.length) {
+      this._selectedIndex = 0;
+    }
 
     initialPanelElements.forEach((panelEl, index) => {
       const tabId = `${this._uniqueId}-tab-${index}`;
@@ -249,6 +266,11 @@ export class A11yTabs extends HTMLElement {
 
     if (this.hasAttribute('aria-label')) {
       this._tabList.setAttribute('aria-label', this.getAttribute('aria-label')!);
+    }
+    if (this.hasAttribute('aria-labelledby')) {
+      this._tabList.setAttribute('aria-labelledby', this.getAttribute('aria-labelledby')!);
+    } else {
+      this._tabList.removeAttribute('aria-labelledby');
     }
   }
 }

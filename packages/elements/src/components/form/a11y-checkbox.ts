@@ -143,8 +143,21 @@ export class A11yCheckbox extends HTMLElement {
     this._updateState();
   }
 
+  override focus(options?: FocusOptions): void {
+    this._inputElement?.focus(options);
+  }
+
   private _render(): void {
-    const finalId = this.id || this._uniqueId;
+    const hostId = this.getAttribute('id');
+    const finalId = this.getAttribute('input-id') || hostId || this._uniqueId;
+
+    // Move the id onto the native control so <label for> and aria-describedby
+    // resolve to the checkbox rather than the (non-labelable) host element.
+    if (hostId) {
+      this.removeAttribute('id');
+      this.setAttribute('data-input-id', finalId);
+    }
+
     const errorId = `${finalId}-error`;
     const helperId = `${finalId}-helper`;
 
@@ -209,7 +222,7 @@ export class A11yCheckbox extends HTMLElement {
       return;
     }
 
-    const finalId = this.id || this._uniqueId;
+    const finalId = this._inputElement.id;
     const errorId = `${finalId}-error`;
     const helperId = `${finalId}-helper`;
 

@@ -126,6 +126,16 @@ export class A11yAccordionItem extends HTMLElement {
     details.appendChild(contentDiv);
     this.appendChild(details);
 
+    // A disabled item must not toggle. <summary> toggles on click, and Enter/Space
+    // synthesize a click, so preventing the click covers both; the keydown guard is
+    // defensive. Programmatic `open` changes are still allowed.
+    summary.addEventListener('click', (e) => {
+      if (this.disabled) e.preventDefault();
+    });
+    summary.addEventListener('keydown', (e: KeyboardEvent) => {
+      if (this.disabled && (e.key === 'Enter' || e.key === ' ')) e.preventDefault();
+    });
+
     // Sync toggle state with attribute and dispatch custom event
     details.addEventListener('toggle', () => {
       if (details.open) {

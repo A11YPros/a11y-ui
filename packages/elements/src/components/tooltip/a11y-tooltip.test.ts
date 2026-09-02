@@ -20,8 +20,11 @@ describe('A11yTooltip (<a11y-tooltip>)', () => {
     expect(tooltip).not.toBeNull();
     expect(tooltip?.textContent).toContain('Helpful context');
 
+    // aria-describedby must sit on the focusable trigger, not the wrapper span
+    const trigger = tip.querySelector('button');
+    expect(trigger?.getAttribute('aria-describedby')).toBe(tooltip?.id);
     const triggerWrap = tip.querySelector('.a11y-tooltip-trigger-wrap');
-    expect(triggerWrap?.getAttribute('aria-describedby')).toBe(tooltip?.id);
+    expect(triggerWrap?.hasAttribute('aria-describedby')).toBe(false);
   });
 
   it('shows on show() and hides on hide()', () => {

@@ -106,4 +106,25 @@ describe('A11yAccordion and A11yAccordionItem', () => {
     const results = await axe(accordion);
     expect(results).toHaveNoViolations();
   });
+
+  it('prevents activation of a disabled item while still allowing programmatic open', () => {
+    const item = document.createElement('a11y-accordion-item') as A11yAccordionItem;
+    item.setAttribute('title', 'Locked');
+    item.setAttribute('disabled', '');
+    item.innerHTML = '<p>Hidden content</p>';
+    document.body.appendChild(item);
+
+    const summary = item.querySelector('summary') as HTMLElement;
+    const click = new MouseEvent('click', { bubbles: true, cancelable: true });
+    summary.dispatchEvent(click);
+    expect(click.defaultPrevented).toBe(true);
+    expect(item.open).toBe(false);
+
+    const enter = new KeyboardEvent('keydown', { key: 'Enter', bubbles: true, cancelable: true });
+    summary.dispatchEvent(enter);
+    expect(enter.defaultPrevented).toBe(true);
+
+    item.open = true;
+    expect(item.open).toBe(true);
+  });
 });

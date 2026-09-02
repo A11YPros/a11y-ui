@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { axe, toHaveNoViolations } from 'jest-axe';
 import { A11yMenubar, registerMenubar } from './a11y-menubar';
 import { registerMenu } from '../menu/a11y-menu';
@@ -114,5 +114,17 @@ describe('A11yMenubar (<a11y-menubar>)', () => {
 
     const results = await axe(menubar);
     expect(results).toHaveNoViolations();
+  });
+
+  it('removes its document click listener when disconnected', () => {
+    const bar = document.createElement('a11y-menubar') as A11yMenubar;
+    bar.setAttribute('label', 'App');
+    bar.innerHTML = '<a11y-menu label="File"><a11y-menu-item>New</a11y-menu-item></a11y-menu>';
+    document.body.appendChild(bar);
+
+    const removeSpy = vi.spyOn(document, 'removeEventListener');
+    bar.remove();
+    expect(removeSpy).toHaveBeenCalledWith('click', expect.any(Function));
+    removeSpy.mockRestore();
   });
 });

@@ -126,11 +126,15 @@ describe('A11yDataTable (<a11y-data-table>)', () => {
     `;
     document.body.appendChild(table);
 
-    const headerCheckbox = table.querySelector('.data-table-header--checkbox input') as HTMLInputElement;
+    const headerCheckbox = table.querySelector(
+      '.data-table-header--checkbox input'
+    ) as HTMLInputElement;
     expect(headerCheckbox).not.toBeNull();
     expect(headerCheckbox.getAttribute('aria-label')).toBe('Select all rows');
 
-    const rowCheckboxes = table.querySelectorAll<HTMLInputElement>('.data-table-cell--checkbox input');
+    const rowCheckboxes = table.querySelectorAll<HTMLInputElement>(
+      '.data-table-cell--checkbox input'
+    );
     expect(rowCheckboxes.length).toBe(2);
 
     let selectedIndices: number[] = [];
@@ -225,5 +229,64 @@ describe('A11yDataTable (<a11y-data-table>)', () => {
 
     const results = await axe(table);
     expect(results).toHaveNoViolations();
+  });
+
+  it('keeps row headers as scope="row" and sorts by the correct column', () => {
+    const table = document.createElement('a11y-data-table') as A11yDataTable;
+    table.innerHTML = `
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th data-sortable>Score</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row">Bravo</th><td>20</td></tr>
+          <tr><th>Alpha</th><td>10</td></tr>
+          <tr><th scope="row">Charlie</th><td>30</td></tr>
+        </tbody>
+      </table>
+    `;
+    document.body.appendChild(table);
+
+    const rowHeaders = Array.from(table.querySelectorAll('tbody th'));
+    expect(rowHeaders.every((th) => th.getAttribute('scope') === 'row')).toBe(true);
+    expect(table.querySelectorAll('thead th[scope="col"]').length).toBe(2);
+
+    const sortBtn = table.querySelector('.data-table-sort-button') as HTMLButtonElement;
+    let sortEvents = 0;
+    table.addEventListener('sort', (e: Event) => {
+      sortEvents++;
+      expect((e as CustomEvent).detail.columnIndex).toBe(1);
+    });
+
+    sortBtn.click();
+    const scores = Array.from(table.querySelectorAll('tbody tr td')).map((td) => td.textContent);
+    expect(scores).toEqual(['10', '20', '30']);
+    expect(sortEvents).toBe(1);
+  });
+
+  it('does not re-bind sort listeners when reconnected to the DOM', () => {
+    const table = document.createElement('a11y-data-table') as A11yDataTable;
+    table.innerHTML = `
+      <table>
+        <thead><tr><th data-sortable>Score</th></tr></thead>
+        <tbody><tr><td>2</td></tr><tr><td>1</td></tr></tbody>
+      </table>
+    `;
+    document.body.appendChild(table);
+
+    // Simulate a React re-parent / docs preview remount
+    table.remove();
+    document.body.appendChild(table);
+
+    let sortEvents = 0;
+    table.addEventListener('sort', () => sortEvents++);
+
+    const sortBtn = table.querySelector('.data-table-sort-button') as HTMLButtonElement;
+    sortBtn.click();
+    expect(sortEvents).toBe(1);
+    expect(table.querySelector('th')?.getAttribute('aria-sort')).toBe('ascending');
   });
 });

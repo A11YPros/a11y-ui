@@ -153,4 +153,28 @@ describe('A11yModal (<a11y-modal>)', () => {
     const results = await axe(modal);
     expect(results).toHaveNoViolations();
   });
+
+  it('dispatches close exactly once per close()', () => {
+    const modal = document.createElement('a11y-modal') as A11yModal;
+    modal.setAttribute('title', 'Once');
+    modal.innerHTML = '<p>Body</p>';
+    document.body.appendChild(modal);
+
+    let closes = 0;
+    modal.addEventListener('close', () => closes++);
+
+    modal.showModal();
+    expect(modal.open).toBe(true);
+    modal.close();
+    expect(closes).toBe(1);
+    expect(modal.open).toBe(false);
+
+    modal.open = true;
+    modal.open = false;
+    expect(closes).toBe(2);
+
+    modal.setAttribute('open', '');
+    modal.removeAttribute('open');
+    expect(closes).toBe(3);
+  });
 });

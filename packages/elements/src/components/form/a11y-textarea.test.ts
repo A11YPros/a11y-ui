@@ -64,4 +64,41 @@ describe('A11yTextarea (<a11y-textarea>)', () => {
     const results = await axe(textarea);
     expect(results).toHaveNoViolations();
   });
+
+  it('preserves typed text when an unrelated attribute such as error changes', () => {
+    const el = document.createElement('a11y-textarea') as A11yTextarea;
+    el.setAttribute('label', 'Bio');
+    document.body.appendChild(el);
+
+    const textarea = el.querySelector('textarea') as HTMLTextAreaElement;
+    textarea.value = 'Hello there';
+    textarea.dispatchEvent(new Event('input', { bubbles: true }));
+
+    el.setAttribute('error', 'Too short');
+    expect(textarea.value).toBe('Hello there');
+
+    el.setAttribute('value', 'Programmatic');
+    expect(textarea.value).toBe('Programmatic');
+  });
+
+  it('moves the host id onto the native textarea so label and describedby resolve', () => {
+    document.body.innerHTML = `
+      <label for="bio">Biography</label>
+      <a11y-textarea id="bio" helper-text="Tell us about yourself"></a11y-textarea>
+    `;
+    const el = document.querySelector('a11y-textarea') as A11yTextarea;
+    const textarea = el.querySelector('textarea') as HTMLTextAreaElement;
+    const externalLabel = document.querySelector('label[for="bio"]') as HTMLLabelElement;
+
+    expect(el.hasAttribute('id')).toBe(false);
+    expect(el.getAttribute('data-textarea-id')).toBe('bio');
+    expect(document.getElementById('bio')).toBe(textarea);
+    expect(externalLabel.control).toBe(textarea);
+
+    el.setAttribute('error', 'Required');
+    const describedBy = textarea.getAttribute('aria-describedby') as string;
+    const described = document.getElementById(describedBy);
+    expect(described).not.toBeNull();
+    expect(described?.textContent).toBe('Required');
+  });
 });

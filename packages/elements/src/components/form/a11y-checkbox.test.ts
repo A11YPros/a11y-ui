@@ -59,4 +59,22 @@ describe('A11yCheckbox (<a11y-checkbox>)', () => {
     const results = await axe(cb);
     expect(results).toHaveNoViolations();
   });
+
+  it('moves the host id onto the native input so label and describedby resolve', () => {
+    document.body.innerHTML = `
+      <a11y-checkbox id="terms" label="I accept the terms"></a11y-checkbox>
+    `;
+    const el = document.querySelector('a11y-checkbox') as A11yCheckbox;
+    const input = el.querySelector('input') as HTMLInputElement;
+    const label = el.querySelector('label') as HTMLLabelElement;
+
+    expect(el.hasAttribute('id')).toBe(false);
+    expect(el.getAttribute('data-input-id')).toBe('terms');
+    expect(document.getElementById('terms')).toBe(input);
+    expect(label.control).toBe(input);
+
+    el.setAttribute('error', 'You must accept');
+    const describedBy = input.getAttribute('aria-describedby') as string;
+    expect(document.getElementById(describedBy)?.textContent).toBe('You must accept');
+  });
 });

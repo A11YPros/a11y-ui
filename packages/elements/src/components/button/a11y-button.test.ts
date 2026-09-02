@@ -86,4 +86,22 @@ describe('A11yButton (<a11y-button>)', () => {
     el.blur();
     expect(document.activeElement).not.toBe(button);
   });
+
+  it('submits the parent form exactly once per click when type="submit"', () => {
+    const form = document.createElement('form');
+    const btn = document.createElement('a11y-button') as A11yButton;
+    btn.setAttribute('type', 'submit');
+    btn.textContent = 'Send';
+    form.appendChild(btn);
+    document.body.appendChild(form);
+
+    let submits = 0;
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      submits++;
+    });
+
+    (btn.querySelector('button') as HTMLButtonElement).click();
+    expect(submits).toBe(1);
+  });
 });

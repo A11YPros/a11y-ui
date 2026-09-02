@@ -1,4 +1,5 @@
 let nextMenuId = 0;
+let nextMenuGroupId = 0;
 
 /**
  * Menu Divider component (<a11y-menu-divider>)
@@ -29,19 +30,23 @@ export class A11yMenuGroup extends HTMLElement {
   private _render(): void {
     const label = this.getAttribute('label');
     this.setAttribute('role', 'group');
-    if (label) this.setAttribute('aria-label', label);
     this.className = 'a11y-menu-group';
 
-    let labelEl = this.querySelector('.a11y-menu-group__label');
+    let labelEl = this.querySelector<HTMLElement>('.a11y-menu-group__label');
     if (label) {
       if (!labelEl) {
         labelEl = document.createElement('div');
         labelEl.className = 'a11y-menu-group__label';
+        labelEl.id = `a11y-menu-group-label-${++nextMenuGroupId}`;
         this.prepend(labelEl);
       }
       labelEl.textContent = label;
-    } else if (labelEl) {
-      labelEl.remove();
+      // Reference the visible label rather than duplicating it in aria-label.
+      this.setAttribute('aria-labelledby', labelEl.id);
+      this.removeAttribute('aria-label');
+    } else {
+      labelEl?.remove();
+      this.removeAttribute('aria-labelledby');
     }
   }
 }
@@ -259,6 +264,9 @@ export class A11yMenuItem extends HTMLElement {
  * </a11y-menu>
  * ```
  */
+const FOCUSABLE_TRIGGER_SELECTOR =
+  'button, a[href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+
 export class A11yMenu extends HTMLElement {
   private static readonly OBSERVED_ATTRS = ['label', 'open', 'placement', 'variant', 'size'];
 
@@ -269,6 +277,7 @@ export class A11yMenu extends HTMLElement {
   private _wrapper: HTMLDivElement | null = null;
   private _triggerBtn: HTMLElement | null = null;
   private _menuDropdown: HTMLDivElement | null = null;
+  private _hasCustomTrigger = false;
   private _uniqueId: string;
   private _isInitialized = false;
 
@@ -276,6 +285,13 @@ export class A11yMenu extends HTMLElement {
     super();
     this._uniqueId = `a11y-menu-${++nextMenuId}`;
   }
+
+  /** Close on outside click. Bound once so it can be removed on disconnect. */
+  private _onDocumentClick = (e: MouseEvent): void => {
+    if (this.open && this._wrapper && !this._wrapper.contains(e.target as Node)) {
+      this.open = false;
+    }
+  };
 
   get variant(): string {
     return this.getAttribute('variant') || 'secondary';
@@ -298,17 +314,12 @@ export class A11yMenu extends HTMLElement {
   }
 
   set open(val: boolean) {
-    const wasOpen = this.hasAttribute('open');
+    // attributeChangedCallback dispatches menu-open / menu-close exactly once
+    // for both the property and attribute paths.
     if (val) {
       this.setAttribute('open', '');
-      if (!wasOpen) {
-        this.dispatchEvent(new CustomEvent('menu-open', { bubbles: true, composed: true }));
-      }
     } else {
       this.removeAttribute('open');
-      if (wasOpen) {
-        this.dispatchEvent(new CustomEvent('menu-close', { bubbles: true, composed: true }));
-      }
     }
   }
 
@@ -334,16 +345,22 @@ export class A11yMenu extends HTMLElement {
       this._isInitialized = true;
     }
     this._updateState();
+    document.addEventListener('click', this._onDocumentClick);
+  }
+
+  disconnectedCallback(): void {
+    document.removeEventListener('click', this._onDocumentClick);
   }
 
   attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
     if (!this._isInitialized || oldValue === newValue) return;
     if (name === 'open') {
-      if (this.open) {
-        this.dispatchEvent(new CustomEvent('menu-open', { bubbles: true, composed: true }));
-      } else {
-        this.dispatchEvent(new CustomEvent('menu-close', { bubbles: true, composed: true }));
-      }
+      // Update ARIA before notifying listeners so handlers observe consistent state.
+      this._updateState();
+      this.dispatchEvent(
+        new CustomEvent(this.open ? 'menu-open' : 'menu-close', { bubbles: true, composed: true })
+      );
+      return;
     }
     this._updateState();
   }
@@ -369,9 +386,15 @@ export class A11yMenu extends HTMLElement {
     // Trigger
     const isMenubarItem = Boolean(this.closest('a11y-menubar'));
     let trigger: HTMLElement;
+    this._hasCustomTrigger = Boolean(triggerSlot);
     if (triggerSlot) {
-      triggerSlot.removeAttribute('slot');
-      trigger = triggerSlot as HTMLElement;
+      // Keep the author's markup intact. If the slotted element is a wrapper such
+      // as <a11y-button>, attach ARIA to its focusable descendant so assistive
+      // tech sees aria-expanded on the element that actually receives focus.
+      const focusable = triggerSlot.matches(FOCUSABLE_TRIGGER_SELECTOR)
+        ? (triggerSlot as HTMLElement)
+        : triggerSlot.querySelector<HTMLElement>(FOCUSABLE_TRIGGER_SELECTOR);
+      trigger = focusable || (triggerSlot as HTMLElement);
     } else {
       const btn = document.createElement('button');
       btn.type = 'button';
@@ -389,7 +412,10 @@ export class A11yMenu extends HTMLElement {
     trigger.setAttribute('aria-expanded', String(this.open));
     trigger.id = `${this._uniqueId}-trigger`;
 
-    trigger.addEventListener('click', (e) => {
+    // Attach to the slotted root (or the generated button) so a wrapper element's
+    // click still toggles the menu.
+    const triggerRoot = (triggerSlot as HTMLElement | null) || trigger;
+    triggerRoot.addEventListener('click', (e) => {
       e.stopPropagation();
       this.toggle();
     });
@@ -439,16 +465,9 @@ export class A11yMenu extends HTMLElement {
 
     dropdown.addEventListener('keydown', (e) => this._handleMenuKeyDown(e));
 
-    wrapper.appendChild(trigger);
+    wrapper.appendChild(triggerRoot);
     wrapper.appendChild(dropdown);
     this.appendChild(wrapper);
-
-    // Close on outside click
-    document.addEventListener('click', (e) => {
-      if (this.open && !wrapper.contains(e.target as Node)) {
-        this.open = false;
-      }
-    });
 
     this._wrapper = wrapper;
     this._triggerBtn = trigger;
@@ -517,13 +536,9 @@ export class A11yMenu extends HTMLElement {
 
     this._triggerBtn.setAttribute('aria-expanded', String(this.open));
     const isMenubarItem = Boolean(this.closest('a11y-menubar'));
-    if (!isMenubarItem && !this.querySelector('[slot="trigger"]')) {
-      this._triggerBtn.className = `btn btn--${this.variant} btn--${this.size}`;
-      if (this.label) {
-        this._triggerBtn.textContent = this.label;
-      }
-    } else if (isMenubarItem && !this.querySelector('[slot="trigger"]')) {
-      this._triggerBtn.className = '';
+    // Only the generated trigger is restyled/relabelled; a custom trigger is the author's.
+    if (!this._hasCustomTrigger) {
+      this._triggerBtn.className = isMenubarItem ? '' : `btn btn--${this.variant} btn--${this.size}`;
       if (this.label) {
         this._triggerBtn.textContent = this.label;
       }
@@ -540,6 +555,9 @@ export function registerMenu(): void {
     }
     if (!customElements.get('a11y-menu-item')) {
       customElements.define('a11y-menu-item', A11yMenuItem);
+    }
+    if (!customElements.get('a11y-menu-group')) {
+      customElements.define('a11y-menu-group', A11yMenuGroup);
     }
     if (!customElements.get('a11y-menu')) {
       customElements.define('a11y-menu', A11yMenu);

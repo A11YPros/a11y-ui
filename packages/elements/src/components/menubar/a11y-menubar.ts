@@ -33,6 +33,15 @@ export class A11yMenubar extends HTMLElement {
     this._uniqueId = `a11y-menubar-${++nextMenubarId}`;
   }
 
+  /** Close all menus when clicking outside the menubar. Bound once for removal. */
+  private _onDocumentClick = (e: MouseEvent): void => {
+    const bar = this._container;
+    if (!bar || bar.contains(e.target as Node)) return;
+    bar.querySelectorAll<any>('a11y-menu').forEach((m) => {
+      if (m.open) m.open = false;
+    });
+  };
+
   get orientation(): 'horizontal' | 'vertical' {
     return this.getAttribute('orientation') === 'vertical' ? 'vertical' : 'horizontal';
   }
@@ -55,6 +64,11 @@ export class A11yMenubar extends HTMLElement {
       this._isInitialized = true;
     }
     this._updateState();
+    document.addEventListener('click', this._onDocumentClick);
+  }
+
+  disconnectedCallback(): void {
+    document.removeEventListener('click', this._onDocumentClick);
   }
 
   attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
@@ -85,7 +99,8 @@ export class A11yMenubar extends HTMLElement {
       menu.setAttribute('role', 'none');
       const trigger = menu.querySelector<HTMLElement>('[aria-haspopup="menu"]');
       if (trigger) {
-        trigger.className = '';
+        // Only strip button styling from generated triggers; leave custom ones alone.
+        if (!menu.querySelector('[slot="trigger"]')) trigger.className = '';
         trigger.setAttribute('role', 'menuitem');
         trigger.tabIndex = index === 0 ? 0 : -1;
       }
@@ -100,16 +115,6 @@ export class A11yMenubar extends HTMLElement {
           m.open = false;
         }
       });
-    });
-
-    // Close all menus when clicking outside menubar
-    document.addEventListener('click', (e) => {
-      if (!bar.contains(e.target as Node)) {
-        const allMenus = bar.querySelectorAll<any>('a11y-menu');
-        allMenus.forEach((m) => {
-          if (m.open) m.open = false;
-        });
-      }
     });
 
     bar.addEventListener('keydown', (e) => this._handleKeyDown(e));

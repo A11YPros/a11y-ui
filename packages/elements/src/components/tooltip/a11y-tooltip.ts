@@ -1,5 +1,8 @@
 let nextTooltipId = 0;
 
+const FOCUSABLE_SELECTOR =
+  'button, a[href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+
 export type TooltipPlacement = 'top' | 'bottom' | 'left' | 'right';
 
 /**
@@ -37,6 +40,7 @@ export class A11yTooltip extends HTMLElement {
   private _tooltipElement: HTMLSpanElement | null = null;
   private _headingElement: HTMLElement | null = null;
   private _contentElement: HTMLSpanElement | null = null;
+  private _describedTarget: HTMLElement | null = null;
   private _uniqueId: string;
   private _isInitialized = false;
   private _observer: MutationObserver | null = null;
@@ -44,6 +48,35 @@ export class A11yTooltip extends HTMLElement {
   constructor() {
     super();
     this._uniqueId = `a11y-tooltip-${++nextTooltipId}`;
+  }
+
+  /**
+   * Point aria-describedby at the element that actually receives focus. A
+   * wrapper <span> has no role, so a description on it is never announced
+   * (WCAG 4.1.2 / 1.3.1). Re-run whenever the trigger content changes.
+   */
+  private _applyDescribedBy(): void {
+    if (!this._triggerWrapper || !this._tooltipElement) return;
+    const tooltipId = this._tooltipElement.id;
+    const target =
+      this._triggerWrapper.querySelector<HTMLElement>(FOCUSABLE_SELECTOR) || this._triggerWrapper;
+
+    if (this._describedTarget && this._describedTarget !== target) {
+      const remaining = (this._describedTarget.getAttribute('aria-describedby') || '')
+        .split(/\s+/)
+        .filter((id) => id && id !== tooltipId);
+      if (remaining.length > 0) {
+        this._describedTarget.setAttribute('aria-describedby', remaining.join(' '));
+      } else {
+        this._describedTarget.removeAttribute('aria-describedby');
+      }
+    }
+
+    const existing = (target.getAttribute('aria-describedby') || '').split(/\s+/).filter(Boolean);
+    if (!existing.includes(tooltipId)) {
+      target.setAttribute('aria-describedby', [...existing, tooltipId].join(' '));
+    }
+    this._describedTarget = target;
   }
 
   get content(): string {
@@ -164,8 +197,6 @@ export class A11yTooltip extends HTMLElement {
       triggerWrap.appendChild(defaultBtn);
     }
 
-    triggerWrap.setAttribute('aria-describedby', tooltipId);
-
     const tooltip = document.createElement('span');
     tooltip.id = tooltipId;
     tooltip.setAttribute('role', 'tooltip');
@@ -188,7 +219,14 @@ export class A11yTooltip extends HTMLElement {
     wrapper.appendChild(tooltip);
     this.appendChild(wrapper);
 
-    // Watch for late-bound children added by React/HTML parsers
+    this._wrapper = wrapper;
+    this._triggerWrapper = triggerWrap;
+    this._tooltipElement = tooltip;
+    this._applyDescribedBy();
+
+    // Watch for late-bound children added by React/HTML parsers, and for a
+    // slotted custom element (e.g. <a11y-button>) rendering its focusable
+    // descendant after we did.
     this._observer?.disconnect();
     this._observer = new MutationObserver(() => {
       const extraNodes = Array.from(this.childNodes).filter((n) => n !== wrapper);
@@ -197,8 +235,9 @@ export class A11yTooltip extends HTMLElement {
         defaultBtn?.remove();
         extraNodes.forEach((node) => triggerWrap.appendChild(node));
       }
+      this._applyDescribedBy();
     });
-    this._observer.observe(this, { childList: true });
+    this._observer.observe(this, { childList: true, subtree: true });
 
     // Event listeners on wrapper so both trigger element and dynamic children bubble
     wrapper.addEventListener('mouseenter', () => this.show());
@@ -211,9 +250,6 @@ export class A11yTooltip extends HTMLElement {
       }
     });
 
-    this._wrapper = wrapper;
-    this._triggerWrapper = triggerWrap;
-    this._tooltipElement = tooltip;
     this._headingElement = headingEl;
     this._contentElement = contentEl;
   }

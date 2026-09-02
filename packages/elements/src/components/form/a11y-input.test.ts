@@ -77,4 +77,25 @@ describe('A11yInput (<a11y-input>)', () => {
     const results = await axe(input);
     expect(results).toHaveNoViolations();
   });
+
+  it('preserves typed input when an unrelated attribute such as error changes', () => {
+    const el = document.createElement('a11y-input') as A11yInput;
+    el.setAttribute('label', 'Email');
+    document.body.appendChild(el);
+
+    const input = el.querySelector('input') as HTMLInputElement;
+    input.value = 'user@example.com';
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+
+    el.setAttribute('error', 'Invalid email');
+    el.setAttribute('helper-text', 'Helper');
+    el.setAttribute('disabled', '');
+
+    expect(input.value).toBe('user@example.com');
+    expect(el.value).toBe('user@example.com');
+
+    // The value attribute itself still drives the control
+    el.setAttribute('value', 'reset@example.com');
+    expect(input.value).toBe('reset@example.com');
+  });
 });
