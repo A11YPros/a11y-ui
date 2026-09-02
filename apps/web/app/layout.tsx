@@ -24,11 +24,11 @@ export const metadata: Metadata = {
     type: 'website',
     images: [
       {
-        url: '/og-image.jpg',
+        url: '/og-image.png',
         width: 1200,
         height: 627,
         alt: 'A11Y UI - Accessibility-First Web Components & React Components',
-        type: 'image/jpeg',
+        type: 'image/png',
       },
     ],
   },
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     title: 'A11Y UI - Accessibility-First Web Components & React Components',
     description:
       'Build inclusive interfaces faster with WCAG 2.1/2.2 AA & AAA compliant HTML5 Web Components and React components. Zero dependencies, 100% accessible.',
-    images: ['/og-image.jpg'],
+    images: ['/og-image.png'],
   },
   icons: {
     icon: '/favicon.ico',
