@@ -18,13 +18,16 @@ An opinionated, accessibility-first design system built with React, TypeScript, 
 
 ```
 ├── packages/
-│   └── design-system/     # Component library
-│       ├── src/
-│       │   ├── components/ # React components
-│       │   ├── tokens/     # Design tokens
-│       │   ├── hooks/      # Custom hooks
-│       │   ├── utils/      # Utility functions
-│       │   └── styles/     # Global styles
+│   ├── design-system/     # React Component library (@a11ypros/a11y-ui-components)
+│   │   ├── src/
+│   │   │   ├── components/ # React components
+│   │   │   ├── tokens/     # Design tokens
+│   │   │   ├── hooks/      # Custom hooks
+│   │   │   ├── utils/      # Utility functions
+│   │   │   └── styles/     # Global styles
+│   │   └── package.json
+│   └── elements/          # Web Components library (@a11ypros/a11y-ui-elements)
+│       ├── src/           # Framework-agnostic Custom Elements
 │       └── package.json
 ├── apps/
 │   └── web/               # Next.js app

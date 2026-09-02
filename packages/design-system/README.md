@@ -11,6 +11,9 @@ An accessibility-first React UI component library built with WCAG 2.1 / 2.2 Leve
 🌐 **Live Documentation & Demos**: [https://ui.a11ypros.com](https://ui.a11ypros.com)  
 🎨 **Storybook Playground**: [https://ui.a11ypros.com/storybook-static/index.html](https://ui.a11ypros.com/storybook-static/index.html)
 
+> **Looking for framework-agnostic Web Components?**  
+> Check out [**`@a11ypros/a11y-ui-elements`**](https://www.npmjs.com/package/@a11ypros/a11y-ui-elements) ([GitHub](../elements)) — standard, zero-dependency Custom Elements with 1:1 accessibility parity for Vue, Angular, Svelte, Astro, PHP, or vanilla HTML.
+
 ---
 
 ## Key Features
@@ -137,16 +140,28 @@ export function AppHeader() {
   return (
     <Menubar label="Application menu">
       <Menu trigger={<button type="button">File</button>}>
-        <MenuItem shortcut="⌘N" onClick={() => alert('New File')}>New File</MenuItem>
-        <MenuItem shortcut="⌘O" onClick={() => alert('Open')}>Open...</MenuItem>
-        <MenuItem shortcut="⌘S" onClick={() => alert('Save')}>Save</MenuItem>
+        <MenuItem shortcut="⌘N" onClick={() => alert('New File')}>
+          New File
+        </MenuItem>
+        <MenuItem shortcut="⌘O" onClick={() => alert('Open')}>
+          Open...
+        </MenuItem>
+        <MenuItem shortcut="⌘S" onClick={() => alert('Save')}>
+          Save
+        </MenuItem>
         <MenuDivider />
-        <MenuItem danger shortcut="⌘Q" onClick={() => alert('Quit')}>Quit</MenuItem>
+        <MenuItem danger shortcut="⌘Q" onClick={() => alert('Quit')}>
+          Quit
+        </MenuItem>
       </Menu>
 
       <Menu trigger={<button type="button">Edit</button>}>
-        <MenuItem shortcut="⌘Z" onClick={() => alert('Undo')}>Undo</MenuItem>
-        <MenuItem shortcut="⇧⌘Z" onClick={() => alert('Redo')}>Redo</MenuItem>
+        <MenuItem shortcut="⌘Z" onClick={() => alert('Undo')}>
+          Undo
+        </MenuItem>
+        <MenuItem shortcut="⇧⌘Z" onClick={() => alert('Redo')}>
+          Redo
+        </MenuItem>
         <MenuDivider />
         <MenuItem shortcut="⌘X">Cut</MenuItem>
         <MenuItem shortcut="⌘C">Copy</MenuItem>
