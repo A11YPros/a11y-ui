@@ -1,5 +1,11 @@
 # @a11ypros/a11y-ui-elements
 
+## 0.2.1
+
+### Patch Changes
+
+- e2a7497: docs: add cross-links to React package and document full component suite
+
 ## 0.2.0
 
 ### Minor Changes
