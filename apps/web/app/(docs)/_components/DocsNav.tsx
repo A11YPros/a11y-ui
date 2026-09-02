@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import packageMeta from '../../../../../packages/design-system/package.json';
 import { componentDocs } from '../components/component-docs';
 import { ThemeToggle } from '../../_components/ThemeToggle';
+import { FrameworkToggle } from './FrameworkToggle';
 
 export interface NavLink {
   href: string;
@@ -33,9 +34,12 @@ export const headerLinks: NavLink[] = [
   },
 ];
 
+export const gettingStartedLinks: NavLink[] = [
+  { href: '/getting-started', label: 'React Components' },
+  { href: '/web-components', label: 'HTML5 Web Components' },
+];
+
 export const guideLinks: NavLink[] = [
-  { href: '/getting-started', label: 'Getting Started' },
-  { href: '/web-components', label: 'Web Components' },
   { href: '/theming', label: 'Theming Guide' },
 ];
 export const NPM_VERSION = packageMeta.version;
@@ -134,6 +138,9 @@ export function DocsHeaderNav({ onItemClick }: { onItemClick?: () => void } = {}
             </li>
           );
         })}
+        <li className="docs-header__framework-item">
+          <FrameworkToggle />
+        </li>
         <li>
           <ThemeToggle className="docs-theme-toggle" />
         </li>
@@ -148,6 +155,28 @@ export function DocsSidebarNav({ onItemClick }: { onItemClick?: () => void } = {
 
   return (
     <nav aria-label="Documentation" className="docs-sidebar__nav">
+      <div className="docs-sidebar__framework">
+        <FrameworkToggle showLabel />
+      </div>
+
+      <p className="docs-sidebar__heading">Getting Started</p>
+      <ul>
+        {gettingStartedLinks.map((link) => {
+          const active = isActive(pathname, link.href, link.startsWith);
+          return (
+            <li key={link.href}>
+              <Link
+                href={link.href}
+                aria-current={active ? 'page' : undefined}
+                onClick={onItemClick}
+              >
+                {link.label}
+              </Link>
+            </li>
+          );
+        })}
+      </ul>
+
       <p className="docs-sidebar__heading">Guides</p>
       <ul>
         {guideLinks.map((link) => {

@@ -11,6 +11,8 @@ const SyntaxHighlighter = dynamic(
   { ssr: false }
 ) as unknown as ComponentType<SyntaxHighlighterProps>;
 
+import { useFramework } from './FrameworkContext';
+
 export interface CodeSnippet {
   label: string;
   code: string;
@@ -40,6 +42,7 @@ export function DocExample({
   children,
 }: DocExampleProps) {
   const codeTitleId = `${id}-code-title`;
+  const { framework, setFramework } = useFramework();
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
   const [copyState, setCopyState] = useState<'idle' | 'copied' | 'failed'>('idle');
   const [activeSnippetIndex, setActiveSnippetIndex] = useState(0);
@@ -119,8 +122,20 @@ export function DocExample({
   const [isRendering, setIsRendering] = useState(false);
   const renderTimeoutRef = useRef<number | null>(null);
 
-  const handleTabChange = (index: number) => {
+  const handleTabChange = (index: number, syncGlobal = true) => {
     if (index === activeSnippetIndex) return;
+
+    if (syncGlobal && snippets && snippets.length > 1) {
+      const selectedSnippet = snippets[index];
+      const isWc =
+        selectedSnippet?.label.toLowerCase().includes('component') ||
+        selectedSnippet?.label.toLowerCase().includes('html') ||
+        selectedSnippet?.language === 'html';
+      const targetFramework = isWc ? 'wc' : 'react';
+      if (targetFramework !== framework) {
+        setFramework(targetFramework);
+      }
+    }
 
     const prefersReducedMotion =
       typeof window !== 'undefined' &&
@@ -141,6 +156,26 @@ export function DocExample({
       setIsRendering(false);
     }, 800);
   };
+
+  // Synchronize with global framework switcher
+  useEffect(() => {
+    if (!snippets || snippets.length <= 1) return;
+
+    const targetIndex =
+      framework === 'wc'
+        ? snippets.findIndex(
+            (s) =>
+              s.label.toLowerCase().includes('component') ||
+              s.label.toLowerCase().includes('html') ||
+              s.language === 'html'
+          )
+        : snippets.findIndex((s) => s.label.toLowerCase().includes('react'));
+
+    const resolvedIndex = targetIndex >= 0 ? targetIndex : framework === 'wc' ? 1 : 0;
+    if (resolvedIndex !== activeSnippetIndex) {
+      handleTabChange(resolvedIndex, false);
+    }
+  }, [framework, snippets]);
 
   useEffect(() => {
     return () => {

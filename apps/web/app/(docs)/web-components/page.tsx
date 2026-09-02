@@ -22,22 +22,38 @@ export default function WebComponentsGuidePage() {
             <Link href="/">Home</Link>
           </li>
           <li>
-            <Link href="/components">Guides</Link>
+            <span>Getting Started</span>
           </li>
           <li>
-            <span aria-current="page">Web Components</span>
+            <span aria-current="page">HTML5 Web Components</span>
           </li>
         </ol>
       </nav>
 
       <header className="doc-page__header">
-        <h1>Web Components (HTML)</h1>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.5rem' }}>
+          <span className="doc-example__preview-badge doc-example__preview-badge--wc" aria-hidden="true">
+            <span className="doc-example__preview-badge-dot" />
+            Web Components Package (@a11ypros/a11y-ui-elements)
+          </span>
+        </div>
+        <h1>Getting Started with HTML5 Web Components</h1>
         <p>
           Standard, framework-agnostic Custom Elements built for WCAG 2.1/2.2 AA &amp; AAA
           compliance. Usable in plain HTML, Vue, Svelte, Angular, Astro, WordPress, Rails, and
           React.
         </p>
       </header>
+
+      <div className="doc-notice-card">
+        <p>
+          <strong>Building a dedicated React application?</strong> Check out the{' '}
+          <Link href="/getting-started">
+            <strong>Getting Started with React</strong>
+          </Link>{' '}
+          guide for idiomatic React props, forwardRefs, and hooks.
+        </p>
+      </div>
 
       {/* Why Web Components */}
       <section aria-labelledby="why-title" className="doc-section">
