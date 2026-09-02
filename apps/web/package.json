@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@a11ypros/a11y-ui-components": "*",
+    "@a11ypros/a11y-ui-elements": "*",
     "next": "^15.1.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

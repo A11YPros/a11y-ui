@@ -35,7 +35,11 @@ export default function MenuPage() {
         id="menu-basic-example"
         title="Basic Action Menu"
         githubUrl="https://github.com/A11YPros/a11y-ui/blob/main/packages/design-system/src/components/Menu/Menu.tsx"
-        code={`<Menu trigger={<Button variant="secondary">Actions ▾</Button>}>
+        snippets={[
+          {
+            label: 'React',
+            language: 'tsx',
+            code: `<Menu trigger={<Button variant="secondary">Actions ▾</Button>}>
   <MenuItem onClick={() => alert('Edit')}>Edit</MenuItem>
   <MenuItem onClick={() => alert('Duplicate')}>Duplicate</MenuItem>
   <MenuItem disabled>Archive (Disabled)</MenuItem>
@@ -43,25 +47,59 @@ export default function MenuPage() {
   <MenuItem danger onClick={() => alert('Delete')}>
     Delete
   </MenuItem>
-</Menu>`}
-      >
-        <div style={{ padding: '2rem 1rem 8rem 1rem' }}>
-          <Menu trigger={<Button variant="secondary">Actions ▾</Button>}>
-            <MenuItem onClick={() => alert('Edit selected')}>Edit</MenuItem>
-            <MenuItem onClick={() => alert('Duplicate selected')}>Duplicate</MenuItem>
-            <MenuItem disabled>Archive (Disabled)</MenuItem>
-            <MenuDivider />
-            <MenuItem danger onClick={() => alert('Delete selected')}>
-              Delete
-            </MenuItem>
-          </Menu>
-        </div>
-      </DocExample>
+</Menu>`,
+            preview: (
+              <div style={{ padding: '2rem 1rem 8rem 1rem' }}>
+                <Menu trigger={<Button variant="secondary">Actions ▾</Button>}>
+                  <MenuItem onClick={() => alert('Edit selected')}>Edit</MenuItem>
+                  <MenuItem onClick={() => alert('Duplicate selected')}>Duplicate</MenuItem>
+                  <MenuItem disabled>Archive (Disabled)</MenuItem>
+                  <MenuDivider />
+                  <MenuItem danger onClick={() => alert('Delete selected')}>
+                    Delete
+                  </MenuItem>
+                </Menu>
+              </div>
+            ),
+          },
+          {
+            label: 'Web Component (HTML)',
+            language: 'html',
+            code: `// Import once in your app or component
+import '@a11ypros/a11y-ui-elements/menu';
+
+<a11y-menu label="Actions ▾">
+  <a11y-menu-item onclick="alert('Edit selected')">Edit</a11y-menu-item>
+  <a11y-menu-item onclick="alert('Duplicate selected')">Duplicate</a11y-menu-item>
+  <a11y-menu-item disabled>Archive (Disabled)</a11y-menu-item>
+  <a11y-menu-divider></a11y-menu-divider>
+  <a11y-menu-item danger onclick="alert('Delete selected')">Delete</a11y-menu-item>
+</a11y-menu>`,
+            preview: (
+              <div style={{ padding: '2rem 1rem 8rem 1rem' }}>
+                <a11y-menu label="Actions ▾">
+                  <a11y-menu-item onClick={() => alert('Edit selected')}>Edit</a11y-menu-item>
+                  <a11y-menu-item onClick={() => alert('Duplicate selected')}>Duplicate</a11y-menu-item>
+                  <a11y-menu-item disabled>Archive (Disabled)</a11y-menu-item>
+                  <a11y-menu-divider></a11y-menu-divider>
+                  <a11y-menu-item danger onClick={() => alert('Delete selected')}>
+                    Delete
+                  </a11y-menu-item>
+                </a11y-menu>
+              </div>
+            ),
+          },
+        ]}
+      />
 
       <DocExample
         id="menu-icons-example"
         title="With Icons & Shortcuts"
-        code={`<Menu trigger={<Button variant="primary">Manage Project ▾</Button>}>
+        snippets={[
+          {
+            label: 'React',
+            language: 'tsx',
+            code: `<Menu trigger={<Button variant="primary">Manage Project ▾</Button>}>
   <MenuItem
     icon={<EditIcon />}
     shortcut="⌘E"
@@ -85,58 +123,94 @@ export default function MenuPage() {
   >
     Delete
   </MenuItem>
-</Menu>`}
-      >
-        <div style={{ padding: '2rem 1rem 8rem 1rem' }}>
-          <Menu trigger={<Button variant="primary">Manage Project ▾</Button>}>
-            <MenuItem
-              icon={
-                <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
-                  <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
-                </svg>
-              }
-              shortcut="⌘E"
-              onClick={() => alert('Edit')}
-            >
-              Edit Project
-            </MenuItem>
-            <MenuItem
-              icon={
-                <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
-                  <path d="M7 9a2 2 0 012-2h6a2 2 0 012 2v6a2 2 0 01-2 2H9a2 2 0 01-2-2V9z" />
-                  <path d="M5 3a2 2 0 00-2 2v6a2 2 0 002 2V5h8a2 2 0 00-2-2H5z" />
-                </svg>
-              }
-              shortcut="⌘D"
-              onClick={() => alert('Duplicate')}
-            >
-              Duplicate
-            </MenuItem>
-            <MenuDivider />
-            <MenuItem
-              danger
-              icon={
-                <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
-                  <path
-                    fillRule="evenodd"
-                    d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              }
-              shortcut="⌘⌫"
-              onClick={() => alert('Delete')}
-            >
-              Delete Project
-            </MenuItem>
-          </Menu>
-        </div>
-      </DocExample>
+</Menu>`,
+            preview: (
+              <div style={{ padding: '2rem 1rem 8rem 1rem' }}>
+                <Menu trigger={<Button variant="primary">Manage Project ▾</Button>}>
+                  <MenuItem
+                    icon={
+                      <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
+                        <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                      </svg>
+                    }
+                    shortcut="⌘E"
+                    onClick={() => alert('Edit')}
+                  >
+                    Edit Project
+                  </MenuItem>
+                  <MenuItem
+                    icon={
+                      <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
+                        <path d="M7 9a2 2 0 012-2h6a2 2 0 012 2v6a2 2 0 01-2 2H9a2 2 0 01-2-2V9z" />
+                        <path d="M5 3a2 2 0 00-2 2v6a2 2 0 002 2V5h8a2 2 0 00-2-2H5z" />
+                      </svg>
+                    }
+                    shortcut="⌘D"
+                    onClick={() => alert('Duplicate')}
+                  >
+                    Duplicate
+                  </MenuItem>
+                  <MenuDivider />
+                  <MenuItem
+                    danger
+                    icon={
+                      <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
+                        <path
+                          fillRule="evenodd"
+                          d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    }
+                    shortcut="⌘⌫"
+                    onClick={() => alert('Delete')}
+                  >
+                    Delete Project
+                  </MenuItem>
+                </Menu>
+              </div>
+            ),
+          },
+          {
+            label: 'Web Component (HTML)',
+            language: 'html',
+            code: `// Import once in your app or component
+import '@a11ypros/a11y-ui-elements/menu';
+
+<a11y-menu label="Manage Project ▾" variant="primary">
+  <a11y-menu-item shortcut="⌘E" onclick="alert('Edit')">Edit Project</a11y-menu-item>
+  <a11y-menu-item shortcut="⌘D" onclick="alert('Duplicate')">Duplicate</a11y-menu-item>
+  <a11y-menu-divider></a11y-menu-divider>
+  <a11y-menu-item danger shortcut="⌘⌫" onclick="alert('Delete')">Delete Project</a11y-menu-item>
+</a11y-menu>`,
+            preview: (
+              <div style={{ padding: '2rem 1rem 8rem 1rem' }}>
+                <a11y-menu label="Manage Project ▾" variant="primary">
+                  <a11y-menu-item shortcut="⌘E" onClick={() => alert('Edit')}>
+                    Edit Project
+                  </a11y-menu-item>
+                  <a11y-menu-item shortcut="⌘D" onClick={() => alert('Duplicate')}>
+                    Duplicate
+                  </a11y-menu-item>
+                  <a11y-menu-divider></a11y-menu-divider>
+                  <a11y-menu-item danger shortcut="⌘⌫" onClick={() => alert('Delete')}>
+                    Delete Project
+                  </a11y-menu-item>
+                </a11y-menu>
+              </div>
+            ),
+          },
+        ]}
+      />
 
       <DocExample
         id="menu-groups-example"
         title="Grouped Menu Sections"
-        code={`<Menu trigger={<Button variant="secondary">Account Options ▾</Button>}>
+        snippets={[
+          {
+            label: 'React',
+            language: 'tsx',
+            code: `<Menu trigger={<Button variant="secondary">Account Options ▾</Button>}>
   <MenuGroup label="Navigation">
     <MenuItem href="/profile">View Profile</MenuItem>
     <MenuItem href="/settings">Settings</MenuItem>
@@ -147,23 +221,61 @@ export default function MenuPage() {
       Sign Out
     </MenuItem>
   </MenuGroup>
-</Menu>`}
-      >
-        <div style={{ padding: '2rem 1rem 12rem 1rem' }}>
-          <Menu trigger={<Button variant="secondary">Account Options ▾</Button>}>
-            <MenuGroup label="Navigation">
-              <MenuItem href="#profile">View Profile</MenuItem>
-              <MenuItem href="#settings">Settings</MenuItem>
-            </MenuGroup>
-            <MenuDivider />
-            <MenuGroup label="Session">
-              <MenuItem danger onClick={() => alert('Signed out')}>
-                Sign Out
-              </MenuItem>
-            </MenuGroup>
-          </Menu>
-        </div>
-      </DocExample>
+</Menu>`,
+            preview: (
+              <div style={{ padding: '2rem 1rem 12rem 1rem' }}>
+                <Menu trigger={<Button variant="secondary">Account Options ▾</Button>}>
+                  <MenuGroup label="Navigation">
+                    <MenuItem href="#profile">View Profile</MenuItem>
+                    <MenuItem href="#settings">Settings</MenuItem>
+                  </MenuGroup>
+                  <MenuDivider />
+                  <MenuGroup label="Session">
+                    <MenuItem danger onClick={() => alert('Signed out')}>
+                      Sign Out
+                    </MenuItem>
+                  </MenuGroup>
+                </Menu>
+              </div>
+            ),
+          },
+          {
+            label: 'Web Component (HTML)',
+            language: 'html',
+            code: `// Import once in your app or component
+import '@a11ypros/a11y-ui-elements/menu';
+
+<a11y-menu label="Account Options ▾">
+  <a11y-menu-group label="Navigation">
+    <a11y-menu-item href="#profile">View Profile</a11y-menu-item>
+    <a11y-menu-item href="#settings">Settings</a11y-menu-item>
+  </a11y-menu-group>
+  <a11y-menu-divider></a11y-menu-divider>
+  <a11y-menu-group label="Session">
+    <a11y-menu-item danger onclick="alert('Signed out')">
+      Sign Out
+    </a11y-menu-item>
+  </a11y-menu-group>
+</a11y-menu>`,
+            preview: (
+              <div style={{ padding: '2rem 1rem 12rem 1rem' }}>
+                <a11y-menu label="Account Options ▾">
+                  <a11y-menu-group label="Navigation">
+                    <a11y-menu-item href="#profile">View Profile</a11y-menu-item>
+                    <a11y-menu-item href="#settings">Settings</a11y-menu-item>
+                  </a11y-menu-group>
+                  <a11y-menu-divider></a11y-menu-divider>
+                  <a11y-menu-group label="Session">
+                    <a11y-menu-item danger onClick={() => alert('Signed out')}>
+                      Sign Out
+                    </a11y-menu-item>
+                  </a11y-menu-group>
+                </a11y-menu>
+              </div>
+            ),
+          },
+        ]}
+      />
 
       <ApiReference sections={menuApi} />
 

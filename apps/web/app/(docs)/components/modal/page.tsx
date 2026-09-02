@@ -35,13 +35,86 @@ export default function ModalPage() {
         id="modal-example-title"
         title="Example"
         githubUrl="https://github.com/A11YPros/a11y-ui/blob/main/packages/design-system/src/components/Modal/Modal.tsx"
-        code={`const [isOpen, setIsOpen] = useState(false);
+        snippets={[
+          {
+            label: 'React',
+            language: 'tsx',
+            code: `const [isOpen, setIsOpen] = useState(false);
 
 <Button onClick={() => setIsOpen(true)}>Open Modal</Button>
 <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} title="Example Modal">
   <p>This is a modal dialog. Press ESC to close or click outside.</p>
   <Button onClick={() => setIsOpen(false)}>Close</Button>
-</Modal>`}
+</Modal>`,
+            preview: (
+              <div>
+                <Button onClick={() => setIsOpen(true)}>Open Modal</Button>
+                <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} title="Example Modal">
+                  <p>This is a modal dialog. Press ESC to close or click outside.</p>
+                  <div className="example-row example-row--spaced">
+                    <Button onClick={() => setIsOpen(false)}>Close</Button>
+                  </div>
+                </Modal>
+              </div>
+            ),
+          },
+          {
+            label: 'Web Component (HTML)',
+            language: 'html',
+            code: `// Import once in your app or component
+import '@a11ypros/a11y-ui-elements/modal';
+import '@a11ypros/a11y-ui-elements/button';
+
+<a11y-button id="open-btn" variant="primary">Open Modal</a11y-button>
+
+<a11y-modal id="my-modal" title="Example Modal">
+  <p>This is a modal dialog. Press ESC to close or click outside.</p>
+  <div class="example-row example-row--spaced">
+    <a11y-button id="close-btn">Close</a11y-button>
+  </div>
+</a11y-modal>
+
+<script>
+  const modal = document.getElementById('my-modal');
+  document.getElementById('open-btn').addEventListener('click', () => {
+    modal.showModal();
+  });
+  document.getElementById('close-btn').addEventListener('click', () => {
+    modal.close();
+  });
+</script>`,
+            preview: (
+              <div>
+                <a11y-button
+                  id="wc-open-modal-btn"
+                  variant="primary"
+                  onClick={() => {
+                    const m = document.getElementById('wc-doc-modal') as any;
+                    m?.showModal();
+                  }}
+                >
+                  Open Modal
+                </a11y-button>
+                <a11y-modal id="wc-doc-modal" title="Example Modal">
+                  <p>
+                    This is a native Web Component modal dialog using HTML5 &lt;dialog&gt;. Press
+                    ESC to close or click outside.
+                  </p>
+                  <div className="example-row example-row--spaced">
+                    <a11y-button
+                      onClick={() => {
+                        const m = document.getElementById('wc-doc-modal') as any;
+                        m?.close();
+                      }}
+                    >
+                      Close
+                    </a11y-button>
+                  </div>
+                </a11y-modal>
+              </div>
+            ),
+          },
+        ]}
       >
         <Button onClick={() => setIsOpen(true)}>Open Modal</Button>
         <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} title="Example Modal">

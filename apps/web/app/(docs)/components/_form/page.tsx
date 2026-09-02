@@ -2,14 +2,7 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
-import {
-  Input,
-  Textarea,
-  Select,
-  Checkbox,
-  Radio,
-  Fieldset,
-} from '@a11ypros/a11y-ui-components';
+import { Input, Textarea, Select, Checkbox, Radio, Fieldset } from '@a11ypros/a11y-ui-components';
 import { DocExample } from '../../_components/DocExample';
 import { ApiReference } from '../../_components/ApiReference';
 import { formOverviewApi } from '../api-reference-data';

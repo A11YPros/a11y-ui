@@ -14,9 +14,15 @@ export default function RadioPage() {
     <article className="doc-page">
       <nav aria-label="Breadcrumb" className="docs-breadcrumb">
         <ol>
-          <li><Link href="/">Home</Link></li>
-          <li><Link href="/components">Components</Link></li>
-          <li><span aria-current="page">Radio</span></li>
+          <li>
+            <Link href="/">Home</Link>
+          </li>
+          <li>
+            <Link href="/components">Components</Link>
+          </li>
+          <li>
+            <span aria-current="page">Radio</span>
+          </li>
         </ol>
       </nav>
 
@@ -29,7 +35,11 @@ export default function RadioPage() {
         id="radio-example-title"
         title="Example"
         githubUrl="https://github.com/A11YPros/a11y-ui/blob/main/packages/design-system/src/components/Form/Radio.tsx"
-        code={`const [value, setValue] = useState('');
+        snippets={[
+          {
+            label: 'React',
+            language: 'tsx',
+            code: `const [value, setValue] = useState('');
 
 <Radio
   name="contact-method"
@@ -41,20 +51,53 @@ export default function RadioPage() {
   ]}
   value={value}
   onChange={(event) => setValue(event.target.value)}
-/>`}
-      >
-        <Radio
-          name="contact-method"
-          label="Preferred contact method"
-          options={[
-            { value: 'email', label: 'Email' },
-            { value: 'phone', label: 'Phone' },
-            { value: 'sms', label: 'SMS' },
-          ]}
-          value={value}
-          onChange={(event) => setValue(event.target.value)}
-        />
-      </DocExample>
+/>`,
+            preview: (
+              <Radio
+                name="contact-method"
+                label="Preferred contact method"
+                options={[
+                  { value: 'email', label: 'Email' },
+                  { value: 'phone', label: 'Phone' },
+                  { value: 'sms', label: 'SMS' },
+                ]}
+                value={value}
+                onChange={(event) => setValue(event.target.value)}
+              />
+            ),
+          },
+          {
+            label: 'Web Component (HTML)',
+            language: 'html',
+            code: `// Import once in your app or component
+import '@a11ypros/a11y-ui-elements/radio';
+
+<a11y-radio
+  name="contact-method"
+  label="Preferred contact method"
+  options='[
+    {"value": "email", "label": "Email"},
+    {"value": "phone", "label": "Phone"},
+    {"value": "sms", "label": "SMS"}
+  ]'
+  value="email"
+></a11y-radio>`,
+            preview: (
+              <a11y-radio
+                name="contact-method-wc"
+                label="Preferred contact method"
+                value={value}
+                options={[
+                  { value: 'email', label: 'Email' },
+                  { value: 'phone', label: 'Phone' },
+                  { value: 'sms', label: 'SMS' },
+                ]}
+                onChange={(e: any) => setValue(e.detail?.value || e.target?.value)}
+              ></a11y-radio>
+            ),
+          },
+        ]}
+      />
 
       <ApiReference sections={radioApi} />
 
@@ -69,7 +112,10 @@ export default function RadioPage() {
 
       <section aria-labelledby="radio-playground-title" className="doc-section">
         <h2 id="radio-playground-title">Playground</h2>
-        <a className="playground-link" href="/storybook-static/index.html?path=/docs/components-form-radio--docs">
+        <a
+          className="playground-link"
+          href="/storybook-static/index.html?path=/docs/components-form-radio--docs"
+        >
           Open Radio stories
         </a>
       </section>

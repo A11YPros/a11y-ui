@@ -14,9 +14,15 @@ export default function TextareaPage() {
     <article className="doc-page">
       <nav aria-label="Breadcrumb" className="docs-breadcrumb">
         <ol>
-          <li><Link href="/">Home</Link></li>
-          <li><Link href="/components">Components</Link></li>
-          <li><span aria-current="page">Textarea</span></li>
+          <li>
+            <Link href="/">Home</Link>
+          </li>
+          <li>
+            <Link href="/components">Components</Link>
+          </li>
+          <li>
+            <span aria-current="page">Textarea</span>
+          </li>
         </ol>
       </nav>
 
@@ -29,7 +35,11 @@ export default function TextareaPage() {
         id="textarea-example-title"
         title="Example"
         githubUrl="https://github.com/A11YPros/a11y-ui/blob/main/packages/design-system/src/components/Form/Textarea.tsx"
-        code={`const [value, setValue] = useState('');
+        snippets={[
+          {
+            label: 'React',
+            language: 'tsx',
+            code: `const [value, setValue] = useState('');
 
 <Textarea
   label="Project notes"
@@ -38,17 +48,42 @@ export default function TextareaPage() {
   maxLength={280}
   showCount
   helperText="Share as much context as you need."
-/>`}
-      >
-        <Textarea
-          label="Project notes"
-          value={value}
-          onChange={(event) => setValue(event.target.value)}
-          maxLength={280}
-          showCount
-          helperText="Share as much context as you need."
-        />
-      </DocExample>
+/>`,
+            preview: (
+              <Textarea
+                label="Project notes"
+                value={value}
+                onChange={(event) => setValue(event.target.value)}
+                maxLength={280}
+                showCount
+                helperText="Share as much context as you need."
+              />
+            ),
+          },
+          {
+            label: 'Web Component (HTML)',
+            language: 'html',
+            code: `// Import once in your app or component
+import '@a11ypros/a11y-ui-elements/textarea';
+
+<a11y-textarea
+  label="Project notes"
+  max-length="280"
+  show-count
+  helper-text="Share as much context as you need."
+></a11y-textarea>`,
+            preview: (
+              <a11y-textarea
+                label="Project notes"
+                value={value}
+                max-length="280"
+                show-count
+                helper-text="Share as much context as you need."
+              ></a11y-textarea>
+            ),
+          },
+        ]}
+      />
 
       <ApiReference sections={textareaApi} />
 
@@ -63,7 +98,10 @@ export default function TextareaPage() {
 
       <section aria-labelledby="textarea-playground-title" className="doc-section">
         <h2 id="textarea-playground-title">Playground</h2>
-        <a className="playground-link" href="/storybook-static/index.html?path=/docs/components-form-textarea--docs">
+        <a
+          className="playground-link"
+          href="/storybook-static/index.html?path=/docs/components-form-textarea--docs"
+        >
           Open Textarea stories
         </a>
       </section>

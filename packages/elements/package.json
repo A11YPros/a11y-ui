@@ -1,0 +1,121 @@
+{
+  "name": "@a11ypros/a11y-ui-elements",
+  "version": "0.1.0",
+  "description": "Accessible, framework-agnostic Web Components (Custom Elements) built for WCAG 2.1/2.2 AA & AAA compliance.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "module": "./dist/index.js",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./switch": {
+      "types": "./dist/components/switch/a11y-switch.d.ts",
+      "import": "./dist/components/switch/a11y-switch.js"
+    },
+    "./button": {
+      "types": "./dist/components/button/a11y-button.d.ts",
+      "import": "./dist/components/button/a11y-button.js"
+    },
+    "./accordion": {
+      "types": "./dist/components/accordion/a11y-accordion.d.ts",
+      "import": "./dist/components/accordion/a11y-accordion.js"
+    },
+    "./modal": {
+      "types": "./dist/components/modal/a11y-modal.d.ts",
+      "import": "./dist/components/modal/a11y-modal.js"
+    },
+    "./input": {
+      "types": "./dist/components/form/a11y-input.d.ts",
+      "import": "./dist/components/form/a11y-input.js"
+    },
+    "./textarea": {
+      "types": "./dist/components/form/a11y-textarea.d.ts",
+      "import": "./dist/components/form/a11y-textarea.js"
+    },
+    "./select": {
+      "types": "./dist/components/form/a11y-select.d.ts",
+      "import": "./dist/components/form/a11y-select.js"
+    },
+    "./checkbox": {
+      "types": "./dist/components/form/a11y-checkbox.d.ts",
+      "import": "./dist/components/form/a11y-checkbox.js"
+    },
+    "./radio": {
+      "types": "./dist/components/form/a11y-radio.d.ts",
+      "import": "./dist/components/form/a11y-radio.js"
+    },
+    "./fieldset": {
+      "types": "./dist/components/form/a11y-fieldset.d.ts",
+      "import": "./dist/components/form/a11y-fieldset.js"
+    },
+    "./label": {
+      "types": "./dist/components/form/a11y-label.d.ts",
+      "import": "./dist/components/form/a11y-label.js"
+    },
+    "./banner": {
+      "types": "./dist/components/banner/a11y-banner.d.ts",
+      "import": "./dist/components/banner/a11y-banner.js"
+    },
+    "./link": {
+      "types": "./dist/components/link/a11y-link.d.ts",
+      "import": "./dist/components/link/a11y-link.js"
+    },
+    "./tabs": {
+      "types": "./dist/components/tabs/a11y-tabs.d.ts",
+      "import": "./dist/components/tabs/a11y-tabs.js"
+    },
+    "./tooltip": {
+      "types": "./dist/components/tooltip/a11y-tooltip.d.ts",
+      "import": "./dist/components/tooltip/a11y-tooltip.js"
+    },
+    "./menu": {
+      "types": "./dist/components/menu/a11y-menu.d.ts",
+      "import": "./dist/components/menu/a11y-menu.js"
+    },
+    "./menubar": {
+      "types": "./dist/components/menubar/a11y-menubar.d.ts",
+      "import": "./dist/components/menubar/a11y-menubar.js"
+    },
+    "./table": {
+      "types": "./dist/components/table/a11y-data-table.d.ts",
+      "import": "./dist/components/table/a11y-data-table.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/A11YPros/a11y-ui.git",
+    "directory": "packages/elements"
+  },
+  "bugs": {
+    "url": "https://github.com/A11YPros/a11y-ui/issues"
+  },
+  "homepage": "https://ui.a11ypros.com",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build:tsc": "tsc",
+    "build:bundle": "esbuild src/index.ts --bundle --outfile=dist/bundle.js --format=iife",
+    "build:css": "esbuild src/styles.css --bundle --outfile=dist/styles.css",
+    "build": "npm run build:tsc && npm run build:bundle && npm run build:css",
+    "prepublishOnly": "npm run build",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.0",
+    "typescript": "^5.3.3",
+    "vitest": "^1.1.0"
+  },
+  "author": "Ryan Mack <ryan@a11ypros.com>",
+  "license": "MIT"
+}

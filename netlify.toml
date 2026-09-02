@@ -3,8 +3,8 @@
 [build]
   # Base directory for the build
   base = "."
-  # Install dependencies, build Storybook, then build Next.js app
-  command = "yarn install && yarn build-storybook && yarn workspace @apps/web build && test -d apps/web/out && echo 'Build successful' || (echo 'Build failed' && exit 1)"
+  # Install dependencies, build Web Components, build Storybook, then build Next.js app
+  command = "yarn install && yarn workspace @a11ypros/a11y-ui-elements build && yarn build-storybook && yarn workspace @apps/web build && test -d apps/web/out && echo 'Build successful' || (echo 'Build failed' && exit 1)"
   # Publish directory - Next.js static export (includes Storybook in public/)
   publish = "apps/web/out"
 

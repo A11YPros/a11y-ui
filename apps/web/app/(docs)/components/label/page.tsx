@@ -9,9 +9,15 @@ export default function LabelPage() {
     <article className="doc-page">
       <nav aria-label="Breadcrumb" className="docs-breadcrumb">
         <ol>
-          <li><Link href="/">Home</Link></li>
-          <li><Link href="/components">Components</Link></li>
-          <li><span aria-current="page">Label</span></li>
+          <li>
+            <Link href="/">Home</Link>
+          </li>
+          <li>
+            <Link href="/components">Components</Link>
+          </li>
+          <li>
+            <span aria-current="page">Label</span>
+          </li>
         </ol>
       </nav>
 
@@ -24,20 +30,52 @@ export default function LabelPage() {
         id="label-example-title"
         title="Example"
         githubUrl="https://github.com/A11YPros/a11y-ui/blob/main/packages/design-system/src/components/Form/Label.tsx"
-        code={`<div className="example-column">
+        snippets={[
+          {
+            label: 'React',
+            language: 'tsx',
+            code: `<div className="example-column">
   <Label htmlFor="full-name" required>
     Full name
   </Label>
   <Input id="full-name" name="fullName" placeholder="Taylor Morgan" required />
-</div>`}
-      >
-        <div className="example-column">
-          <Label htmlFor="full-name" required>
-            Full name
-          </Label>
-          <Input id="full-name" name="fullName" placeholder="Taylor Morgan" required />
-        </div>
-      </DocExample>
+</div>`,
+            preview: (
+              <div className="example-column">
+                <Label htmlFor="full-name" required>
+                  Full name
+                </Label>
+                <Input id="full-name" name="fullName" placeholder="Taylor Morgan" required />
+              </div>
+            ),
+          },
+          {
+            label: 'Web Component (HTML)',
+            language: 'html',
+            code: `// Import once in your app or component
+import '@a11ypros/a11y-ui-elements/label';
+import '@a11ypros/a11y-ui-elements/input';
+
+<div class="example-column">
+  <a11y-label for="full-name" required>Full name</a11y-label>
+  <a11y-input id="full-name" name="fullName" placeholder="Taylor Morgan" required></a11y-input>
+</div>`,
+            preview: (
+              <div className="example-column">
+                <a11y-label for="full-name-wc" required>
+                  Full name
+                </a11y-label>
+                <a11y-input
+                  id="full-name-wc"
+                  name="fullName"
+                  placeholder="Taylor Morgan"
+                  required
+                ></a11y-input>
+              </div>
+            ),
+          },
+        ]}
+      />
 
       <ApiReference sections={labelApi} />
 
@@ -52,7 +90,10 @@ export default function LabelPage() {
 
       <section aria-labelledby="label-playground-title" className="doc-section">
         <h2 id="label-playground-title">Playground</h2>
-        <a className="playground-link" href="/storybook-static/index.html?path=/docs/components-form-input--docs">
+        <a
+          className="playground-link"
+          href="/storybook-static/index.html?path=/docs/components-form-input--docs"
+        >
           Open Form stories
         </a>
       </section>

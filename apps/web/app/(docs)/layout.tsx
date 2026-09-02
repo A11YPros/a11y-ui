@@ -3,10 +3,12 @@ import Image from 'next/image';
 import { DocsHeaderNav, DocsSidebarNav } from './_components/DocsNav';
 import { MobileNavDrawer } from './_components/MobileNavDrawer';
 import { UiLogo } from '../_components/UiLogo';
+import { FrameworkProvider } from './_components/FrameworkContext';
 
 export default function DocsLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="docs-shell">
+    <FrameworkProvider>
+      <div className="docs-shell">
       <header className="docs-header">
         <div className="docs-header__inner">
           <div className="docs-header__brand-group">
@@ -57,5 +59,6 @@ export default function DocsLayout({ children }: { children: React.ReactNode }) 
         </a>
       </footer>
     </div>
+    </FrameworkProvider>
   );
 }

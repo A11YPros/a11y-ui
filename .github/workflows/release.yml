@@ -35,10 +35,10 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build
-        run: npm run build
+      - name: Build packages
+        run: npm run build:packages
 
-      - name: Validate changesets target design-system only
+      - name: Validate changesets
         run: npm run changeset:validate
 
       - name: Create release PR or publish (PAT)

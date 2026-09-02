@@ -4,6 +4,7 @@ const config: StorybookConfig = {
   stories: [
     '../.storybook/welcome.mdx',
     '../packages/design-system/src/**/*.stories.@(js|jsx|ts|tsx|mdx)',
+    '../packages/elements/src/**/*.stories.@(js|jsx|ts|tsx|mdx)',
   ],
   addons: ['@storybook/addon-links', '@storybook/addon-a11y', '@storybook/addon-docs'],
   framework: {

@@ -53,9 +53,7 @@ export default function ComponentsPage() {
 
       <section aria-labelledby="components-playground-title" className="doc-section">
         <h2 id="components-playground-title">Playground</h2>
-        <p>
-          Use the interactive Storybook surface to test props and visual states in isolation.
-        </p>
+        <p>Use the interactive Storybook surface to test props and visual states in isolation.</p>
         <p>
           <a className="playground-link" href="/storybook-static/index.html">
             Open Storybook Playground

@@ -40,14 +40,67 @@ export default function AccordionPage() {
         id="accordion-example-title"
         title="Example"
         githubUrl="https://github.com/A11YPros/a11y-ui/blob/main/packages/design-system/src/components/Accordion/Accordion.tsx"
-        code={`<Accordion>
+        snippets={[
+          {
+            label: 'React',
+            language: 'tsx',
+            code: `import { Accordion, AccordionItem } from '@a11ypros/a11y-ui-components';
+
+<Accordion>
   <AccordionItem id="acc-shipping" title="Shipping policy">
     <p>Orders are processed within two business days and include tracking information.</p>
   </AccordionItem>
   <AccordionItem id="acc-returns" title="Returns policy">
     <p>Returns are accepted within 30 days of delivery for unused products.</p>
   </AccordionItem>
-</Accordion>`}
+</Accordion>`,
+            preview: (
+              <Accordion>
+                <AccordionItem id="acc-shipping" title="Shipping policy">
+                  <p>
+                    Orders are processed within two business days and include tracking information.
+                  </p>
+                </AccordionItem>
+                <AccordionItem id="acc-returns" title="Returns policy">
+                  <p>Returns are accepted within 30 days of delivery for unused products.</p>
+                </AccordionItem>
+                <AccordionItem id="acc-support" title="Support hours">
+                  <p>Live support is available Monday to Friday, 9am to 5pm Eastern Time.</p>
+                </AccordionItem>
+              </Accordion>
+            ),
+          },
+          {
+            label: 'Web Component (HTML)',
+            language: 'html',
+            code: `// Import once in your app or component
+import '@a11ypros/a11y-ui-elements/accordion';
+
+<a11y-accordion>
+  <a11y-accordion-item title="Shipping policy">
+    <p>Orders are processed within two business days and include tracking information.</p>
+  </a11y-accordion-item>
+  <a11y-accordion-item title="Returns policy">
+    <p>Returns are accepted within 30 days of delivery for unused products.</p>
+  </a11y-accordion-item>
+</a11y-accordion>`,
+            preview: (
+              <a11y-accordion>
+                <a11y-accordion-item title="Shipping policy">
+                  <p>
+                    Orders are processed within two business days and include tracking information.
+                  </p>
+                </a11y-accordion-item>
+                <a11y-accordion-item title="Returns policy">
+                  <p>Returns are accepted within 30 days of delivery for unused products.</p>
+                </a11y-accordion-item>
+                <a11y-accordion-item title="Support hours">
+                  <p>Live support is available Monday to Friday, 9am to 5pm Eastern Time.</p>
+                </a11y-accordion-item>
+              </a11y-accordion>
+            ),
+          },
+        ]}
       >
         <Accordion>
           <AccordionItem id="acc-shipping" title="Shipping policy">

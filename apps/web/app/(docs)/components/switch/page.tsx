@@ -36,14 +36,43 @@ export default function SwitchPage() {
         id="switch-example-title"
         title="Interactive Example"
         githubUrl="https://github.com/A11YPros/a11y-ui/blob/main/packages/design-system/src/components/Switch/Switch.tsx"
-        code={`const [airplaneMode, setAirplaneMode] = useState(false);
+        snippets={[
+          {
+            label: 'React',
+            language: 'tsx',
+            code: `const [airplaneMode, setAirplaneMode] = useState(false);
 
 <Switch
   id="airplane-mode"
   label="Airplane Mode"
   checked={airplaneMode}
   onChange={(checked) => setAirplaneMode(checked)}
-/>`}
+/>`,
+            preview: (
+              <Switch
+                id="airplane-mode"
+                label="Airplane Mode"
+                checked={airplaneMode}
+                onChange={(checked) => setAirplaneMode(checked)}
+              />
+            ),
+          },
+          {
+            label: 'Web Component (HTML)',
+            language: 'html',
+            code: `// Import once in your app or component
+import '@a11ypros/a11y-ui-elements/switch';
+
+<a11y-switch id="airplane-mode" label="Airplane Mode"></a11y-switch>`,
+            preview: (
+              <a11y-switch
+                id="airplane-mode"
+                label="Airplane Mode"
+                checked={airplaneMode ? '' : undefined}
+              />
+            ),
+          },
+        ]}
       >
         <Switch
           id="airplane-mode"
@@ -56,14 +85,54 @@ export default function SwitchPage() {
       <DocExample
         id="switch-helper-title"
         title="With Helper Text and Sizes"
-        code={`<Switch
+        snippets={[
+          {
+            label: 'React',
+            language: 'tsx',
+            code: `<Switch
   id="notifications"
   size="md"
   label="Push notifications"
   helperText="Receive real-time alerts on your device"
   checked={notifications}
   onChange={(checked) => setNotifications(checked)}
-/>`}
+/>`,
+            preview: (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                <Switch
+                  id="notifications"
+                  size="md"
+                  label="Push notifications"
+                  helperText="Receive real-time alerts on your device"
+                  checked={notifications}
+                  onChange={(checked) => setNotifications(checked)}
+                />
+              </div>
+            ),
+          },
+          {
+            label: 'Web Component (HTML)',
+            language: 'html',
+            code: `<a11y-switch
+  id="notifications"
+  size="md"
+  label="Push notifications"
+  helper-text="Receive real-time alerts on your device"
+  checked
+></a11y-switch>`,
+            preview: (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                <a11y-switch
+                  id="notifications"
+                  size="md"
+                  label="Push notifications"
+                  helper-text="Receive real-time alerts on your device"
+                  checked={notifications ? '' : undefined}
+                />
+              </div>
+            ),
+          },
+        ]}
       >
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
           <Switch

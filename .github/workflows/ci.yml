@@ -1,0 +1,46 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+      - 'feat/**'
+  pull_request:
+    branches:
+      - main
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ci:
+    name: Test & Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Validate Changesets
+        run: npm run changeset:validate
+
+      - name: Build Packages
+        run: npm run build:packages
+
+      - name: Test React Library (@a11ypros/a11y-ui-components)
+        run: npm --prefix packages/design-system test
+
+      - name: Test Web Components (@a11ypros/a11y-ui-elements)
+        run: npm --prefix packages/elements test
+
+      - name: Build Documentation Site (@apps/web)
+        run: npm --prefix apps/web run build

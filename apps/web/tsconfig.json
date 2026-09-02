@@ -20,7 +20,9 @@
       }
     ],
     "paths": {
-      "@a11ypros/a11y-ui-components": ["../../packages/design-system/src"]
+      "@a11ypros/a11y-ui-components": ["../../packages/design-system/src"],
+      "@a11ypros/a11y-ui-elements": ["../../packages/elements/dist"],
+      "@a11ypros/a11y-ui-elements/*": ["../../packages/elements/dist/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

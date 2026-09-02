@@ -1,7 +1,13 @@
 import type { Preview } from '@storybook/react';
 import React, { useEffect } from 'react';
 import '../packages/design-system/src/styles/global.css';
+import '../packages/elements/src/styles.css';
 import './custom.css';
+import { registerAllElements } from '../packages/elements/src/index';
+
+if (typeof window !== 'undefined') {
+  registerAllElements();
+}
 
 const withTheme = (Story, context) => {
   const theme = context.globals.theme || 'light';
@@ -47,6 +53,13 @@ const preview: Preview = {
     },
   },
   parameters: {
+    options: {
+      storySort: {
+        method: 'alphabetical',
+        order: ['Welcome', 'Components', 'Web Components'],
+        locales: 'en-US',
+      },
+    },
     actions: { argTypesRegex: '^on[A-Z].*' },
     backgrounds: {
       disable: true, // Disable since we're handling it with theme

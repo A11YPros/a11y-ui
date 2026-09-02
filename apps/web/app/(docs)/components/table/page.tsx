@@ -50,52 +50,102 @@ export default function TablePage() {
         id="table-example-title"
         title="Example"
         githubUrl="https://github.com/A11YPros/a11y-ui/blob/main/packages/design-system/src/components/DataTable/DataTable.tsx"
-        code={`import { useState } from 'react';
-import { DataTable } from '@a11ypros/a11y-ui-components';
+        snippets={[
+          {
+            label: 'React',
+            language: 'tsx',
+            code: `<DataTable
+  data={sampleData}
+  columns={columns}
+  getRowId={(row) => row.id}
+  selectable
+  selectedRows={selectedRows}
+  onSelectionChange={setSelectedRows}
+  sortConfig={sortConfig}
+  onSortChange={(column, direction) => setSortConfig({ column, direction })}
+  caption="User list"
+/>`,
+            preview: (
+              <DataTable
+                data={sampleData}
+                columns={columns}
+                getRowId={(row) => row.id}
+                selectable
+                selectedRows={selectedRows}
+                onSelectionChange={setSelectedRows}
+                sortConfig={sortConfig}
+                onSortChange={(column, direction) => setSortConfig({ column, direction })}
+                caption="User list"
+              />
+            ),
+          },
+          {
+            label: 'Web Component (HTML)',
+            language: 'html',
+            code: `// Import once in your app or component
+import '@a11ypros/a11y-ui-elements/table';
 
-const sampleData = [
-  { id: '1', name: 'John Doe', email: 'john@example.com', role: 'Admin' },
-  { id: '2', name: 'Jane Smith', email: 'jane@example.com', role: 'User' },
-  { id: '3', name: 'Bob Johnson', email: 'bob@example.com', role: 'User' },
-];
-
-const columns = [
-  { key: 'name', header: 'Name', sortable: true },
-  { key: 'email', header: 'Email', sortable: true },
-  { key: 'role', header: 'Role', sortable: true },
-];
-
-export function Example() {
-  const [selectedRows, setSelectedRows] = useState<string[]>([]);
-  const [sortConfig, setSortConfig] = useState<{ column: string; direction: 'asc' | 'desc' }>();
-
-  return (
-    <DataTable
-      data={sampleData}
-      columns={columns}
-      getRowId={(row) => row.id}
-      selectable
-      selectedRows={selectedRows}
-      onSelectionChange={setSelectedRows}
-      sortConfig={sortConfig}
-      onSortChange={(column, direction) => setSortConfig({ column, direction })}
-      caption="User list"
-    />
-  );
-}`}
-      >
-        <DataTable
-          data={sampleData}
-          columns={columns}
-          getRowId={(row) => row.id}
-          selectable
-          selectedRows={selectedRows}
-          onSelectionChange={setSelectedRows}
-          sortConfig={sortConfig}
-          onSortChange={(column, direction) => setSortConfig({ column, direction })}
-          caption="User list"
-        />
-      </DocExample>
+<a11y-data-table caption="User directory" selectable>
+  <table>
+    <thead>
+      <tr>
+        <th data-sortable>Name</th>
+        <th data-sortable>Email</th>
+        <th>Role</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>John Doe</td>
+        <td>john@example.com</td>
+        <td>Admin</td>
+      </tr>
+      <tr>
+        <td>Jane Smith</td>
+        <td>jane@example.com</td>
+        <td>User</td>
+      </tr>
+      <tr>
+        <td>Bob Johnson</td>
+        <td>bob@example.com</td>
+        <td>User</td>
+      </tr>
+    </tbody>
+  </table>
+</a11y-data-table>`,
+            preview: (
+              <a11y-data-table caption="User directory" selectable>
+                <table>
+                  <thead>
+                    <tr>
+                      <th data-sortable>Name</th>
+                      <th data-sortable>Email</th>
+                      <th>Role</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>John Doe</td>
+                      <td>john@example.com</td>
+                      <td>Admin</td>
+                    </tr>
+                    <tr>
+                      <td>Jane Smith</td>
+                      <td>jane@example.com</td>
+                      <td>User</td>
+                    </tr>
+                    <tr>
+                      <td>Bob Johnson</td>
+                      <td>bob@example.com</td>
+                      <td>User</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </a11y-data-table>
+            ),
+          },
+        ]}
+      />
 
       <ApiReference sections={dataTableApi} />
 

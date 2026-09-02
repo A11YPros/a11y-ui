@@ -36,7 +36,11 @@ export default function MenubarPage() {
         id="menubar-basic-example"
         title="Application Menu Bar"
         githubUrl="https://github.com/A11YPros/a11y-ui/blob/main/packages/design-system/src/components/Menubar/Menubar.tsx"
-        code={`<Menubar label="Application menu">
+        snippets={[
+          {
+            label: 'React',
+            language: 'tsx',
+            code: `<Menubar label="Application menu">
   <Menu trigger={<button type="button">File</button>}>
     <MenuItem shortcut="⌘N" onClick={() => alert('New File')}>New File</MenuItem>
     <MenuItem shortcut="⌘O" onClick={() => alert('Open')}>Open...</MenuItem>
@@ -53,70 +57,161 @@ export default function MenubarPage() {
     <MenuItem shortcut="⌘C">Copy</MenuItem>
     <MenuItem shortcut="⌘V">Paste</MenuItem>
   </Menu>
+</Menubar>`,
+            preview: (
+              <div style={{ padding: '2rem 1rem 14rem 1rem' }}>
+                <Menubar label="Application menu">
+                  <Menu trigger={<button type="button">File</button>}>
+                    <MenuItem shortcut="⌘N" onClick={() => alert('New File')}>
+                      New File
+                    </MenuItem>
+                    <MenuItem shortcut="⌘O" onClick={() => alert('Open')}>
+                      Open...
+                    </MenuItem>
+                    <MenuItem shortcut="⌘S" onClick={() => alert('Save')}>
+                      Save
+                    </MenuItem>
+                    <MenuDivider />
+                    <MenuItem danger shortcut="⌘Q" onClick={() => alert('Quit')}>
+                      Quit Application
+                    </MenuItem>
+                  </Menu>
 
-  <Menu trigger={<button type="button">View</button>}>
-    <MenuItem shortcut="⌘+">Zoom In</MenuItem>
-    <MenuItem shortcut="⌘-">Zoom Out</MenuItem>
-    <MenuDivider />
-    <MenuItem shortcut="⌃⌘F">Full Screen</MenuItem>
-  </Menu>
+                  <Menu trigger={<button type="button">Edit</button>}>
+                    <MenuItem shortcut="⌘Z" onClick={() => alert('Undo')}>
+                      Undo
+                    </MenuItem>
+                    <MenuItem shortcut="⇧⌘Z" onClick={() => alert('Redo')}>
+                      Redo
+                    </MenuItem>
+                    <MenuDivider />
+                    <MenuItem shortcut="⌘X" onClick={() => alert('Cut')}>Cut</MenuItem>
+                    <MenuItem shortcut="⌘C" onClick={() => alert('Copy')}>Copy</MenuItem>
+                    <MenuItem shortcut="⌘V" onClick={() => alert('Paste')}>Paste</MenuItem>
+                  </Menu>
 
-  <Menu trigger={<button type="button">Help</button>}>
-    <MenuItem href="/getting-started">Documentation</MenuItem>
-    <MenuItem onClick={() => alert('About A11y UI')}>About</MenuItem>
-  </Menu>
-</Menubar>`}
-      >
-        <div style={{ padding: '2rem 1rem 14rem 1rem' }}>
-          <Menubar label="Application menu">
-            <Menu trigger={<button type="button">File</button>}>
-              <MenuItem shortcut="⌘N" onClick={() => alert('New File')}>
-                New File
-              </MenuItem>
-              <MenuItem shortcut="⌘O" onClick={() => alert('Open')}>
-                Open...
-              </MenuItem>
-              <MenuItem shortcut="⌘S" onClick={() => alert('Save')}>
-                Save
-              </MenuItem>
-              <MenuDivider />
-              <MenuItem danger shortcut="⌘Q" onClick={() => alert('Quit')}>
-                Quit Application
-              </MenuItem>
-            </Menu>
+                  <Menu trigger={<button type="button">View</button>}>
+                    <MenuItem shortcut="⌘+" onClick={() => alert('Zoom In')}>Zoom In</MenuItem>
+                    <MenuItem shortcut="⌘-" onClick={() => alert('Zoom Out')}>Zoom Out</MenuItem>
+                    <MenuDivider />
+                    <MenuItem shortcut="⌃⌘F" onClick={() => alert('Full Screen')}>Full Screen</MenuItem>
+                  </Menu>
 
-            <Menu trigger={<button type="button">Edit</button>}>
-              <MenuItem shortcut="⌘Z" onClick={() => alert('Undo')}>
-                Undo
-              </MenuItem>
-              <MenuItem shortcut="⇧⌘Z" onClick={() => alert('Redo')}>
-                Redo
-              </MenuItem>
-              <MenuDivider />
-              <MenuItem shortcut="⌘X">Cut</MenuItem>
-              <MenuItem shortcut="⌘C">Copy</MenuItem>
-              <MenuItem shortcut="⌘V">Paste</MenuItem>
-            </Menu>
+                  <Menu trigger={<button type="button">Help</button>}>
+                    <MenuItem href="/getting-started">Documentation</MenuItem>
+                    <MenuItem onClick={() => alert('About A11y UI')}>About</MenuItem>
+                  </Menu>
+                </Menubar>
+              </div>
+            ),
+          },
+          {
+            label: 'Web Component (HTML)',
+            language: 'html',
+            code: `// Import once in your app or component
+import '@a11ypros/a11y-ui-elements/menubar';
+import '@a11ypros/a11y-ui-elements/menu';
 
-            <Menu trigger={<button type="button">View</button>}>
-              <MenuItem shortcut="⌘+">Zoom In</MenuItem>
-              <MenuItem shortcut="⌘-">Zoom Out</MenuItem>
-              <MenuDivider />
-              <MenuItem shortcut="⌃⌘F">Full Screen</MenuItem>
-            </Menu>
+<a11y-menubar label="Application menu">
+  <a11y-menu label="File">
+    <a11y-menu-item shortcut="⌘N" onclick="alert('New File')">New File</a11y-menu-item>
+    <a11y-menu-item shortcut="⌘O" onclick="alert('Open')">Open...</a11y-menu-item>
+    <a11y-menu-item shortcut="⌘S" onclick="alert('Save')">Save</a11y-menu-item>
+    <a11y-menu-divider></a11y-menu-divider>
+    <a11y-menu-item danger shortcut="⌘Q" onclick="alert('Quit')">Quit Application</a11y-menu-item>
+  </a11y-menu>
 
-            <Menu trigger={<button type="button">Help</button>}>
-              <MenuItem href="/getting-started">Documentation</MenuItem>
-              <MenuItem onClick={() => alert('About A11y UI')}>About</MenuItem>
-            </Menu>
-          </Menubar>
-        </div>
-      </DocExample>
+  <a11y-menu label="Edit">
+    <a11y-menu-item shortcut="⌘Z" onclick="alert('Undo')">Undo</a11y-menu-item>
+    <a11y-menu-item shortcut="⇧⌘Z" onclick="alert('Redo')">Redo</a11y-menu-item>
+    <a11y-menu-divider></a11y-menu-divider>
+    <a11y-menu-item shortcut="⌘X" onclick="alert('Cut')">Cut</a11y-menu-item>
+    <a11y-menu-item shortcut="⌘C" onclick="alert('Copy')">Copy</a11y-menu-item>
+    <a11y-menu-item shortcut="⌘V" onclick="alert('Paste')">Paste</a11y-menu-item>
+  </a11y-menu>
+
+  <a11y-menu label="View">
+    <a11y-menu-item shortcut="⌘+" onclick="alert('Zoom In')">Zoom In</a11y-menu-item>
+    <a11y-menu-item shortcut="⌘-" onclick="alert('Zoom Out')">Zoom Out</a11y-menu-item>
+    <a11y-menu-divider></a11y-menu-divider>
+    <a11y-menu-item shortcut="⌃⌘F" onclick="alert('Full Screen')">Full Screen</a11y-menu-item>
+  </a11y-menu>
+
+  <a11y-menu label="Help">
+    <a11y-menu-item href="/getting-started">Documentation</a11y-menu-item>
+    <a11y-menu-item onclick="alert('About A11y UI')">About</a11y-menu-item>
+  </a11y-menu>
+</a11y-menubar>`,
+            preview: (
+              <div style={{ padding: '2rem 1rem 14rem 1rem' }}>
+                <a11y-menubar label="Application menu">
+                  <a11y-menu label="File">
+                    <a11y-menu-item shortcut="⌘N" onClick={() => alert('New File')}>
+                      New File
+                    </a11y-menu-item>
+                    <a11y-menu-item shortcut="⌘O" onClick={() => alert('Open')}>
+                      Open...
+                    </a11y-menu-item>
+                    <a11y-menu-item shortcut="⌘S" onClick={() => alert('Save')}>
+                      Save
+                    </a11y-menu-item>
+                    <a11y-menu-divider></a11y-menu-divider>
+                    <a11y-menu-item danger shortcut="⌘Q" onClick={() => alert('Quit')}>
+                      Quit Application
+                    </a11y-menu-item>
+                  </a11y-menu>
+
+                  <a11y-menu label="Edit">
+                    <a11y-menu-item shortcut="⌘Z" onClick={() => alert('Undo')}>
+                      Undo
+                    </a11y-menu-item>
+                    <a11y-menu-item shortcut="⇧⌘Z" onClick={() => alert('Redo')}>
+                      Redo
+                    </a11y-menu-item>
+                    <a11y-menu-divider></a11y-menu-divider>
+                    <a11y-menu-item shortcut="⌘X" onClick={() => alert('Cut')}>
+                      Cut
+                    </a11y-menu-item>
+                    <a11y-menu-item shortcut="⌘C" onClick={() => alert('Copy')}>
+                      Copy
+                    </a11y-menu-item>
+                    <a11y-menu-item shortcut="⌘V" onClick={() => alert('Paste')}>
+                      Paste
+                    </a11y-menu-item>
+                  </a11y-menu>
+
+                  <a11y-menu label="View">
+                    <a11y-menu-item shortcut="⌘+" onClick={() => alert('Zoom In')}>
+                      Zoom In
+                    </a11y-menu-item>
+                    <a11y-menu-item shortcut="⌘-" onClick={() => alert('Zoom Out')}>
+                      Zoom Out
+                    </a11y-menu-item>
+                    <a11y-menu-divider></a11y-menu-divider>
+                    <a11y-menu-item shortcut="⌃⌘F" onClick={() => alert('Full Screen')}>
+                      Full Screen
+                    </a11y-menu-item>
+                  </a11y-menu>
+
+                  <a11y-menu label="Help">
+                    <a11y-menu-item href="/getting-started">Documentation</a11y-menu-item>
+                    <a11y-menu-item onClick={() => alert('About A11y UI')}>About</a11y-menu-item>
+                  </a11y-menu>
+                </a11y-menubar>
+              </div>
+            ),
+          },
+        ]}
+      />
 
       <DocExample
         id="menubar-icons-example"
         title="With Icons & Section Groups"
-        code={`<Menubar label="Workspace tools">
+        snippets={[
+          {
+            label: 'React',
+            language: 'tsx',
+            code: `<Menubar label="Workspace tools">
   <Menu trigger={<button type="button">Project</button>}>
     <MenuItem
       icon={<FolderIcon />}
@@ -144,52 +239,115 @@ export default function MenubarPage() {
       <MenuItem>Keybindings</MenuItem>
     </MenuGroup>
   </Menu>
-</Menubar>`}
-      >
-        <div style={{ padding: '2rem 1rem 14rem 1rem' }}>
-          <Menubar label="Workspace tools">
-            <Menu trigger={<button type="button">Project</button>}>
-              <MenuItem
-                icon={
-                  <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
-                    <path d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" />
-                  </svg>
-                }
-                shortcut="⌘P"
-                onClick={() => alert('Open Project')}
-              >
-                Open Project...
-              </MenuItem>
-              <MenuItem
-                icon={
-                  <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
-                    <path
-                      fillRule="evenodd"
-                      d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                }
-                shortcut="⌘E"
-                onClick={() => alert('Export')}
-              >
-                Export Archive
-              </MenuItem>
-            </Menu>
+</Menubar>`,
+            preview: (
+              <div style={{ padding: '2rem 1rem 14rem 1rem' }}>
+                <Menubar label="Workspace tools">
+                  <Menu trigger={<button type="button">Project</button>}>
+                    <MenuItem
+                      icon={
+                        <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
+                          <path d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" />
+                        </svg>
+                      }
+                      shortcut="⌘P"
+                      onClick={() => alert('Open Project')}
+                    >
+                      Open Project...
+                    </MenuItem>
+                    <MenuItem
+                      icon={
+                        <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
+                          <path
+                            fillRule="evenodd"
+                            d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                      }
+                      shortcut="⌘E"
+                      onClick={() => alert('Export')}
+                    >
+                      Export Archive
+                    </MenuItem>
+                  </Menu>
 
-            <Menu trigger={<button type="button">Preferences</button>}>
-              <MenuGroup label="Editor">
-                <MenuItem>Color Theme</MenuItem>
-                <MenuItem>Font Family</MenuItem>
-              </MenuGroup>
-              <MenuDivider />
-              <MenuGroup label="System">
-                <MenuItem>Keybindings</MenuItem>
-              </MenuGroup>
-            </Menu>
-          </Menubar>
-        </div>
-      </DocExample>
+                  <Menu trigger={<button type="button">Preferences</button>}>
+                    <MenuGroup label="Editor">
+                      <MenuItem>Color Theme</MenuItem>
+                      <MenuItem>Font Family</MenuItem>
+                    </MenuGroup>
+                    <MenuDivider />
+                    <MenuGroup label="System">
+                      <MenuItem>Keybindings</MenuItem>
+                    </MenuGroup>
+                  </Menu>
+                </Menubar>
+              </div>
+            ),
+          },
+          {
+            label: 'Web Component (HTML)',
+            language: 'html',
+            code: `// Import once in your app or component
+import '@a11ypros/a11y-ui-elements/menubar';
+import '@a11ypros/a11y-ui-elements/menu';
+
+<a11y-menubar label="Workspace tools">
+  <a11y-menu label="Project">
+    <a11y-menu-item shortcut="⌘P" onclick="alert('Open Project')">
+      Open Project...
+    </a11y-menu-item>
+    <a11y-menu-item shortcut="⌘E" onclick="alert('Export')">
+      Export Archive
+    </a11y-menu-item>
+  </a11y-menu>
+
+  <a11y-menu label="Preferences">
+    <a11y-menu-group label="Editor">
+      <a11y-menu-item>Color Theme</a11y-menu-item>
+      <a11y-menu-item>Font Family</a11y-menu-item>
+    </a11y-menu-group>
+    <a11y-menu-divider></a11y-menu-divider>
+    <a11y-menu-group label="System">
+      <a11y-menu-item>Keybindings</a11y-menu-item>
+    </a11y-menu-group>
+  </a11y-menu>
+</a11y-menubar>`,
+            preview: (
+              <div style={{ padding: '2rem 1rem 14rem 1rem' }}>
+                <a11y-menubar label="Workspace tools">
+                  <a11y-menu label="Project">
+                    <a11y-menu-item
+                      shortcut="⌘P"
+                      onClick={() => alert('Open Project')}
+                    >
+                      Open Project...
+                    </a11y-menu-item>
+                    <a11y-menu-item
+                      shortcut="⌘E"
+                      onClick={() => alert('Export')}
+                    >
+                      Export Archive
+                    </a11y-menu-item>
+                  </a11y-menu>
+
+                  <a11y-menu label="Preferences">
+                    <a11y-menu-group label="Editor">
+                      <a11y-menu-item>Color Theme</a11y-menu-item>
+                      <a11y-menu-item>Font Family</a11y-menu-item>
+                    </a11y-menu-group>
+                    <a11y-menu-divider></a11y-menu-divider>
+                    <a11y-menu-group label="System">
+                      <a11y-menu-item>Keybindings</a11y-menu-item>
+                    </a11y-menu-group>
+                  </a11y-menu>
+                </a11y-menubar>
+              </div>
+            ),
+          },
+        ]}
+      />
 
       <ApiReference sections={menubarApi} />
 
