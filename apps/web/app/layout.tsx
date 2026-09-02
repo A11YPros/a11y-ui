@@ -26,7 +26,7 @@ export const metadata: Metadata = {
       {
         url: '/og-image.png',
         width: 1200,
-        height: 630,
+        height: 627,
         alt: 'A11Y UI - Accessibility-First Web Components & React Components',
       },
     ],
