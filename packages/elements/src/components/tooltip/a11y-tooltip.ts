@@ -18,7 +18,15 @@ export type TooltipPlacement = 'top' | 'bottom' | 'left' | 'right';
  * ```
  */
 export class A11yTooltip extends HTMLElement {
-  private static readonly OBSERVED_ATTRS = ['content', 'heading', 'placement', 'open'];
+  private static readonly OBSERVED_ATTRS = [
+    'content',
+    'text',
+    'heading',
+    'contentheading',
+    'placement',
+    'position',
+    'open',
+  ];
 
   public static get observedAttributes(): string[] {
     return A11yTooltip.OBSERVED_ATTRS;
@@ -31,6 +39,7 @@ export class A11yTooltip extends HTMLElement {
   private _contentElement: HTMLSpanElement | null = null;
   private _uniqueId: string;
   private _isInitialized = false;
+  private _observer: MutationObserver | null = null;
 
   constructor() {
     super();
@@ -38,15 +47,23 @@ export class A11yTooltip extends HTMLElement {
   }
 
   get content(): string {
-    return this.getAttribute('content') || '';
+    return this.getAttribute('content') || this.getAttribute('text') || '';
   }
 
   set content(val: string) {
     this.setAttribute('content', val);
   }
 
+  get text(): string {
+    return this.content;
+  }
+
+  set text(val: string) {
+    this.setAttribute('content', val);
+  }
+
   get heading(): string {
-    return this.getAttribute('heading') || '';
+    return this.getAttribute('heading') || this.getAttribute('contentheading') || '';
   }
 
   set heading(val: string) {
@@ -54,11 +71,19 @@ export class A11yTooltip extends HTMLElement {
   }
 
   get placement(): TooltipPlacement {
-    const p = this.getAttribute('placement');
-    return p === 'top' || p === 'bottom' || p === 'left' ? p : 'right';
+    const p = this.getAttribute('placement') || this.getAttribute('position');
+    return p === 'top' || p === 'bottom' || p === 'left' || p === 'right' ? p : 'top';
   }
 
   set placement(val: TooltipPlacement) {
+    this.setAttribute('placement', val);
+  }
+
+  get position(): TooltipPlacement {
+    return this.placement;
+  }
+
+  set position(val: TooltipPlacement) {
     this.setAttribute('placement', val);
   }
 
@@ -80,6 +105,11 @@ export class A11yTooltip extends HTMLElement {
       this._isInitialized = true;
     }
     this._updateState();
+  }
+
+  disconnectedCallback(): void {
+    this._observer?.disconnect();
+    this._observer = null;
   }
 
   attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
@@ -142,13 +172,13 @@ export class A11yTooltip extends HTMLElement {
     tooltip.className = `a11y-tooltip a11y-tooltip--${this.placement}`;
 
     const arrow = document.createElement('span');
-    arrow.className = 'a11y-tooltip-arrow';
+    arrow.className = 'a11y-tooltip__arrow';
 
     const headingEl = document.createElement('strong');
-    headingEl.className = 'a11y-tooltip-heading';
+    headingEl.className = 'a11y-tooltip__heading';
 
     const contentEl = document.createElement('span');
-    contentEl.className = 'a11y-tooltip-content';
+    contentEl.className = 'a11y-tooltip__content';
 
     tooltip.appendChild(arrow);
     tooltip.appendChild(headingEl);
@@ -158,13 +188,24 @@ export class A11yTooltip extends HTMLElement {
     wrapper.appendChild(tooltip);
     this.appendChild(wrapper);
 
-    // Event listeners
-    const trigger = triggerWrap.firstElementChild || triggerWrap;
-    trigger.addEventListener('mouseenter', () => this.show());
-    trigger.addEventListener('mouseleave', () => this.hide());
-    trigger.addEventListener('focusin', () => this.show());
-    trigger.addEventListener('focusout', () => this.hide());
-    trigger.addEventListener('keydown', (e: Event) => {
+    // Watch for late-bound children added by React/HTML parsers
+    this._observer?.disconnect();
+    this._observer = new MutationObserver(() => {
+      const extraNodes = Array.from(this.childNodes).filter((n) => n !== wrapper);
+      if (extraNodes.length > 0) {
+        const defaultBtn = triggerWrap.querySelector('.a11y-tooltip-icon-btn');
+        defaultBtn?.remove();
+        extraNodes.forEach((node) => triggerWrap.appendChild(node));
+      }
+    });
+    this._observer.observe(this, { childList: true });
+
+    // Event listeners on wrapper so both trigger element and dynamic children bubble
+    wrapper.addEventListener('mouseenter', () => this.show());
+    wrapper.addEventListener('mouseleave', () => this.hide());
+    wrapper.addEventListener('focusin', () => this.show());
+    wrapper.addEventListener('focusout', () => this.hide());
+    wrapper.addEventListener('keydown', (e: Event) => {
       if ((e as KeyboardEvent).key === 'Escape' && this.open) {
         this.hide();
       }

@@ -38,6 +38,28 @@ describe('A11yTooltip (<a11y-tooltip>)', () => {
     expect(tip.open).toBe(false);
   });
 
+  it('supports text and position attribute aliases and heading', () => {
+    const tip = document.createElement('a11y-tooltip') as A11yTooltip;
+    tip.setAttribute('text', 'Shortcut details');
+    tip.setAttribute('position', 'bottom');
+    tip.setAttribute('heading', 'Shortcut');
+    tip.setAttribute('open', '');
+    tip.innerHTML = '<button type="button">Trigger</button>';
+    document.body.appendChild(tip);
+
+    expect(tip.content).toBe('Shortcut details');
+    expect(tip.placement).toBe('bottom');
+
+    const heading = tip.querySelector('.a11y-tooltip__heading');
+    expect(heading?.textContent).toBe('Shortcut');
+
+    const content = tip.querySelector('.a11y-tooltip__content');
+    expect(content?.textContent).toBe('Shortcut details');
+
+    const arrow = tip.querySelector('.a11y-tooltip__arrow');
+    expect(arrow).not.toBeNull();
+  });
+
   it('passes axe accessibility audit with zero violations', async () => {
     const tip = document.createElement('a11y-tooltip') as A11yTooltip;
     tip.setAttribute('content', 'Accessible description');

@@ -1,5 +1,16 @@
 let nextTableId = 0;
 
+export interface TableColumn {
+  key: string;
+  label: string;
+  sortable?: boolean;
+}
+
+export interface TableRowData {
+  id?: string | number;
+  [key: string]: any;
+}
+
 /**
  * Accessible Data Table Web Component (<a11y-data-table>)
  *
@@ -7,10 +18,11 @@ let nextTableId = 0;
  * - WCAG 1.3.1 Info and Relationships: Semantic <table>, <caption>, <thead>, <tbody>, <th> with scope="col"
  * - WCAG 4.1.2 Name, Role, Value: aria-sort="ascending|descending|none"
  * - Light DOM rendering preserving CSS classes 1:1 with DataTable.css
+ * - Supports both declarative <table> markup and programmatic .columns / .data assignment
  *
  * @example
  * ```html
- * <a11y-data-table caption="User Directory">
+ * <a11y-data-table caption="User Directory" selectable>
  *   <table>
  *     <thead>
  *       <tr>
@@ -42,6 +54,9 @@ export class A11yDataTable extends HTMLElement {
   private _captionEl: HTMLTableCaptionElement | null = null;
   private _uniqueId: string;
   private _isInitialized = false;
+  private _columns: TableColumn[] | null = null;
+  private _data: TableRowData[] | null = null;
+  private _observer: MutationObserver | null = null;
 
   constructor() {
     super();
@@ -68,27 +83,110 @@ export class A11yDataTable extends HTMLElement {
     }
   }
 
+  get columns(): TableColumn[] | null {
+    return this._columns;
+  }
+
+  set columns(val: TableColumn[] | null) {
+    this._columns = val;
+    this._render();
+  }
+
+  get data(): TableRowData[] | null {
+    return this._data;
+  }
+
+  set data(val: TableRowData[] | null) {
+    this._data = val;
+    this._render();
+  }
+
   connectedCallback(): void {
-    if (!this._isInitialized) {
-      this._render();
-      this._isInitialized = true;
-    }
+    this._render();
     this._updateState();
+  }
+
+  disconnectedCallback(): void {
+    this._observer?.disconnect();
+    this._observer = null;
   }
 
   attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
-    if (!this._isInitialized || oldValue === newValue) return;
+    if (oldValue === newValue) return;
     this._updateState();
   }
 
-  private _render(): void {
-    let existingTable = this.querySelector('table');
+  private _buildTableFromData(): HTMLTableElement {
+    const table = document.createElement('table');
 
-    if (!existingTable) {
-      existingTable = document.createElement('table');
+    if (this.caption) {
+      const caption = document.createElement('caption');
+      caption.className = 'data-table-caption';
+      caption.textContent = this.caption;
+      table.appendChild(caption);
     }
 
-    this.innerHTML = '';
+    const thead = document.createElement('thead');
+    const headerRow = document.createElement('tr');
+    (this._columns || []).forEach((col) => {
+      const th = document.createElement('th');
+      th.textContent = col.label;
+      if (col.sortable) {
+        th.setAttribute('data-sortable', '');
+      }
+      headerRow.appendChild(th);
+    });
+    thead.appendChild(headerRow);
+    table.appendChild(thead);
+
+    const tbody = document.createElement('tbody');
+    (this._data || []).forEach((row) => {
+      const tr = document.createElement('tr');
+      (this._columns || []).forEach((col) => {
+        const td = document.createElement('td');
+        td.textContent = row[col.key] !== undefined ? String(row[col.key]) : '';
+        tr.appendChild(td);
+      });
+      tbody.appendChild(tr);
+    });
+    table.appendChild(tbody);
+
+    return table;
+  }
+
+  private _render(): void {
+    let existingTable = this.querySelector<HTMLTableElement>(':scope > table, :scope > .data-table-wrapper > table');
+
+    // If programmatic columns/data are provided, construct or replace the table
+    if (this._columns && this._columns.length > 0) {
+      existingTable = this._buildTableFromData();
+    } else if (!existingTable) {
+      // If table is not attached yet (common with React/HTML parsers appending children after attach),
+      // watch for child additions to populate the table.
+      this._observer?.disconnect();
+      this._observer = new MutationObserver(() => {
+        const lateTable = this.querySelector<HTMLTableElement>(':scope > table');
+        if (lateTable && !lateTable.closest('.data-table-wrapper')) {
+          this._observer?.disconnect();
+          this._observer = null;
+          this._render();
+        }
+      });
+      this._observer.observe(this, { childList: true, subtree: true });
+      return;
+    }
+
+    if (!existingTable) return;
+
+    this._observer?.disconnect();
+    this._observer = null;
+
+    // Clean up any previous wrapper or loose table before attaching wrapper
+    Array.from(this.children).forEach((child) => {
+      if (child !== existingTable) {
+        child.remove();
+      }
+    });
 
     const wrapper = document.createElement('div');
     wrapper.className = 'data-table-wrapper';
@@ -125,6 +223,18 @@ export class A11yDataTable extends HTMLElement {
       }
     }
 
+    // Status live region for screen reader announcements
+    let liveRegion = this.querySelector<HTMLDivElement>('.data-table-live-region');
+    if (!liveRegion) {
+      liveRegion = document.createElement('div');
+      liveRegion.className = 'data-table-live-region sr-only';
+      liveRegion.setAttribute('aria-live', 'polite');
+      liveRegion.setAttribute('aria-atomic', 'true');
+      liveRegion.style.cssText =
+        'position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border-width: 0;';
+      wrapper.appendChild(liveRegion);
+    }
+
     // Enhance headers
     const ths = existingTable.querySelectorAll('th');
     ths.forEach((th, index) => {
@@ -138,12 +248,18 @@ export class A11yDataTable extends HTMLElement {
           th.setAttribute('aria-sort', 'none');
         }
 
-        let button = th.querySelector('button');
+        const headerText =
+          th.querySelector('.data-table-sort-button')?.childNodes[0]?.textContent?.trim() ||
+          th.textContent?.trim() ||
+          '';
+
+        let button = th.querySelector<HTMLButtonElement>('.data-table-sort-button');
         if (!button) {
           button = document.createElement('button');
           button.type = 'button';
           button.className = 'data-table-sort-button';
-          button.textContent = th.textContent || '';
+          button.textContent = headerText;
+          button.setAttribute('aria-label', `Sort by ${headerText}`);
           th.innerHTML = '';
           th.appendChild(button);
         }
@@ -155,10 +271,66 @@ export class A11yDataTable extends HTMLElement {
           ths.forEach((otherTh) => {
             if (otherTh !== th && otherTh.hasAttribute('data-sortable')) {
               otherTh.setAttribute('aria-sort', 'none');
+              const otherBtn = otherTh.querySelector<HTMLButtonElement>('.data-table-sort-button');
+              if (otherBtn) {
+                const otherIndicator = otherBtn.querySelector('.data-table-sort-indicator');
+                otherIndicator?.remove();
+                const otherText =
+                  otherBtn.childNodes[0]?.textContent?.trim() ||
+                  otherTh.textContent?.trim() ||
+                  '';
+                otherBtn.setAttribute('aria-label', `Sort by ${otherText}`);
+              }
             }
           });
 
           th.setAttribute('aria-sort', nextSort);
+
+          // Update or add sort indicator
+          let indicator = button.querySelector('.data-table-sort-indicator');
+          if (!indicator) {
+            indicator = document.createElement('span');
+            indicator.className = 'data-table-sort-indicator';
+            indicator.setAttribute('aria-hidden', 'true');
+            button.appendChild(indicator);
+          }
+          indicator.textContent = nextSort === 'ascending' ? ' ↑' : ' ↓';
+
+          button.setAttribute(
+            'aria-label',
+            `${headerText}, sorted ${nextSort}, activate to sort ${nextSort === 'ascending' ? 'descending' : 'ascending'}`
+          );
+
+          // Sort rows in the tbody
+          const tbody = existingTable.querySelector('tbody');
+          if (tbody) {
+            const rows = Array.from(tbody.querySelectorAll('tr'));
+            rows.sort((rowA, rowB) => {
+              const cellA = rowA.children[index]?.textContent?.trim() || '';
+              const cellB = rowB.children[index]?.textContent?.trim() || '';
+
+              const numA = parseFloat(cellA.replace(/[^0-9.-]+/g, ''));
+              const numB = parseFloat(cellB.replace(/[^0-9.-]+/g, ''));
+              const isNumeric = !isNaN(numA) && !isNaN(numB) && cellA !== '' && cellB !== '';
+
+              let cmp = 0;
+              if (isNumeric) {
+                cmp = numA - numB;
+              } else {
+                cmp = cellA.localeCompare(cellB, undefined, { numeric: true, sensitivity: 'base' });
+              }
+
+              return nextSort === 'ascending' ? cmp : -cmp;
+            });
+
+            rows.forEach((row) => tbody.appendChild(row));
+          }
+
+          // Announce to screen readers
+          if (liveRegion) {
+            liveRegion.textContent = `Sorted by ${headerText}, ${nextSort}`;
+          }
+
           this.dispatchEvent(
             new CustomEvent('sort', {
               bubbles: true,
@@ -264,12 +436,16 @@ export class A11yDataTable extends HTMLElement {
       td.classList.add('data-table-cell');
     });
 
-    wrapper.appendChild(existingTable);
+    if (existingTable.parentElement !== wrapper) {
+      existingTable.remove();
+      wrapper.appendChild(existingTable);
+    }
     this.appendChild(wrapper);
 
     this._wrapper = wrapper;
     this._table = existingTable;
     this._captionEl = captionEl;
+    this._isInitialized = true;
   }
 
   private _updateState(): void {

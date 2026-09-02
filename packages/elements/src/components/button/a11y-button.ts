@@ -32,7 +32,7 @@ export class A11yButton extends HTMLElement {
 
   private _buttonElement: HTMLButtonElement | null = null;
   private _contentSlot: HTMLSpanElement | null = null;
-  private _spinnerElement: SVGElement | null = null;
+  private _spinnerElement: HTMLSpanElement | null = null;
   private _statusElement: HTMLSpanElement | null = null;
   private _isInitialized = false;
   private _observer: MutationObserver | null = null;
@@ -137,16 +137,20 @@ export class A11yButton extends HTMLElement {
     const button = document.createElement('button');
     button.type = this.type;
 
-    // Spinner SVG for loading state
+    // Spinner container matching React Button.tsx structure exactly
+    const spinnerWrap = document.createElement('span');
+    spinnerWrap.className = 'btn__spinner';
+    spinnerWrap.setAttribute('aria-hidden', 'true');
+    spinnerWrap.style.display = 'none';
+
     const svgNS = 'http://www.w3.org/2000/svg';
     const svg = document.createElementNS(svgNS, 'svg');
-    svg.setAttribute('class', 'btn__spinner btn__spinner-icon');
+    svg.setAttribute('class', 'btn__spinner-icon');
     svg.setAttribute('viewBox', '0 0 16 16');
     svg.setAttribute('width', '16');
     svg.setAttribute('height', '16');
     svg.setAttribute('fill', 'none');
     svg.setAttribute('aria-hidden', 'true');
-    svg.style.display = 'none';
 
     const circle = document.createElementNS(svgNS, 'circle');
     circle.setAttribute('class', 'btn__spinner-circle');
@@ -160,6 +164,7 @@ export class A11yButton extends HTMLElement {
     circle.setAttribute('stroke-dashoffset', '31.416');
 
     svg.appendChild(circle);
+    spinnerWrap.appendChild(svg);
 
     // Text content container matching React .btn__content exactly
     const contentSpan = document.createElement('span');
@@ -174,7 +179,7 @@ export class A11yButton extends HTMLElement {
     statusSpan.style.cssText =
       'position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;display:none;';
 
-    button.appendChild(svg);
+    button.appendChild(spinnerWrap);
     button.appendChild(contentSpan);
     button.appendChild(statusSpan);
     this.appendChild(button);
@@ -209,7 +214,7 @@ export class A11yButton extends HTMLElement {
     });
 
     this._buttonElement = button;
-    this._spinnerElement = svg;
+    this._spinnerElement = spinnerWrap;
     this._contentSlot = contentSpan;
     this._statusElement = statusSpan;
   }

@@ -67,6 +67,11 @@ describe('A11yButton (<a11y-button>)', () => {
 
     const status = el.querySelector('.btn__sr-status');
     expect(status?.textContent).toBe('Loading...');
+
+    const spinner = el.querySelector('.btn__spinner');
+    expect(spinner).not.toBeNull();
+    const spinnerIcon = spinner?.querySelector('svg.btn__spinner-icon');
+    expect(spinnerIcon).not.toBeNull();
   });
 
   it('allows programmatic focus and blur', () => {

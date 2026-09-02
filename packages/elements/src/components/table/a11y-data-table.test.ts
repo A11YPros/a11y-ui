@@ -69,6 +69,40 @@ describe('A11yDataTable (<a11y-data-table>)', () => {
     expect(th.getAttribute('aria-sort')).toBe('descending');
   });
 
+  it('sorts tbody rows numerically and alphabetically when clicking sortable header', () => {
+    const table = document.createElement('a11y-data-table') as A11yDataTable;
+    table.innerHTML = `
+      <table>
+        <thead>
+          <tr>
+            <th data-sortable>Name</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Charlie</td></tr>
+          <tr><td>Alice</td></tr>
+          <tr><td>Bob</td></tr>
+        </tbody>
+      </table>
+    `;
+    document.body.appendChild(table);
+
+    const sortBtn = table.querySelector('.data-table-sort-button') as HTMLButtonElement;
+    // Ascending
+    sortBtn.click();
+    let rows = table.querySelectorAll('tbody tr td');
+    expect(Array.from(rows).map((td) => td.textContent)).toEqual(['Alice', 'Bob', 'Charlie']);
+
+    const indicator = table.querySelector('.data-table-sort-indicator');
+    expect(indicator?.textContent).toBe(' ↑');
+
+    // Descending
+    sortBtn.click();
+    rows = table.querySelectorAll('tbody tr td');
+    expect(Array.from(rows).map((td) => td.textContent)).toEqual(['Charlie', 'Bob', 'Alice']);
+    expect(indicator?.textContent).toBe(' ↓');
+  });
+
   it('supports selectable rows with auto-injected checkboxes and selection events', () => {
     const table = document.createElement('a11y-data-table') as A11yDataTable;
     table.setAttribute('caption', 'Selectable Items');
@@ -118,6 +152,53 @@ describe('A11yDataTable (<a11y-data-table>)', () => {
     expect(rowCheckboxes[0].checked).toBe(true);
     expect(rowCheckboxes[1].checked).toBe(true);
     expect(selectedIndices).toEqual([0, 1]);
+  });
+
+  it('renders table constructed programmatically from columns and data', () => {
+    const table = document.createElement('a11y-data-table') as A11yDataTable;
+    table.caption = 'Programmatic Inventory';
+    table.selectable = true;
+    table.columns = [
+      { key: 'name', label: 'Component', sortable: true },
+      { key: 'category', label: 'Category' },
+    ];
+    table.data = [
+      { name: 'Button', category: 'Core' },
+      { name: 'Switch', category: 'Form' },
+    ];
+    document.body.appendChild(table);
+
+    const caption = table.querySelector('.data-table-caption');
+    expect(caption?.textContent).toBe('Programmatic Inventory');
+
+    const headers = table.querySelectorAll('th');
+    // +1 for selectable checkbox column
+    expect(headers.length).toBe(3);
+
+    const rows = table.querySelectorAll('tbody tr');
+    expect(rows.length).toBe(2);
+
+    const firstCell = rows[0].querySelectorAll('td')[1];
+    expect(firstCell.textContent).toBe('Button');
+  });
+
+  it('correctly enhances table when table element is appended after connection', async () => {
+    const table = document.createElement('a11y-data-table') as A11yDataTable;
+    table.setAttribute('caption', 'Late Bound');
+    document.body.appendChild(table);
+
+    const nativeTable = document.createElement('table');
+    nativeTable.innerHTML = `
+      <thead><tr><th data-sortable>Title</th></tr></thead>
+      <tbody><tr><td>Article 1</td></tr></tbody>
+    `;
+    table.appendChild(nativeTable);
+
+    await new Promise((resolve) => setTimeout(resolve, 20));
+
+    const sortBtn = table.querySelector('.data-table-sort-button');
+    expect(sortBtn).not.toBeNull();
+    expect(sortBtn?.textContent).toBe('Title');
   });
 
   it('passes axe accessibility audit with zero violations', async () => {
